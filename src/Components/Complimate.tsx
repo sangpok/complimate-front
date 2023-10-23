@@ -1,8 +1,6 @@
-import React from 'react';
-
 import { ReactComponent as LogoInner } from '../Icons/complimate-logo.svg';
-import { Text } from './Atomic/Text';
 import { styled } from '../stitches.config';
+import { Text } from './Atomic/Text';
 
 const Wrapper = styled('div', {
   display: 'flex',
