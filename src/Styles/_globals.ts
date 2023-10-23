@@ -13,6 +13,10 @@ export const globalStyle = {
     userSelect: 'none',
   },
 
+  body: {
+    overflow: 'hidden',
+  },
+
   '@initial': {
     ':root': {
       fontSize: 'calc(100vw / 22.5)',
