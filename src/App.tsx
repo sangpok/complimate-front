@@ -1,7 +1,7 @@
-import RootLayout from '@Layouts/RootLayout';
 import LandingPage from '@Page/LandingPage';
 import LoginPage from '@Page/LoginPage';
 import RegisterPage from '@Page/RegisterPage';
+import { AnimatePresence, MotionConfig } from 'framer-motion';
 import {
   Route,
   RouterProvider,
@@ -16,9 +16,9 @@ const globalStyles = globalCss(globalStyle);
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<RootLayout />}>
-      <Route index element={<LandingPage />} />
-      <Route path="register" element={<RegisterPage />} />
+    <Route path="/">
+      <Route key="landing" index element={<LandingPage />} />
+      <Route key="register" path="register" element={<RegisterPage />} />
       <Route path="login" element={<LoginPage />} />
     </Route>
   )
@@ -31,7 +31,11 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />
+      <MotionConfig transition={{ type: 'spring', bounce: 0, duration: 0.3 }}>
+        <AnimatePresence>
+          <RouterProvider router={router} />
+        </AnimatePresence>
+      </MotionConfig>
     </ThemeProvider>
   );
 };
