@@ -24,12 +24,14 @@ export const { styled, css, globalCss, keyframes, theme, config } = createStitch
       3: '.75rem', // 12
       4: '1.5rem', // 24
       5: '3rem', // 48
+      6: '5rem', // 80
 
       small: '$1',
       smaller: '$2',
       default: '$3',
       double: '$4',
       quard: '$5',
+      content: '$6',
     },
     fontSizes: {
       1: '.5625rem', // 9
@@ -57,6 +59,7 @@ export const { styled, css, globalCss, keyframes, theme, config } = createStitch
       author: '$5',
       time: '$3',
       content: '$4',
+      input: '$4',
     },
     fonts: {},
     fontWeights: {},
