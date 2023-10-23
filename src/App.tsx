@@ -1,25 +1,48 @@
+import { Box, Button, Container, Text } from './Components/Atomic';
+
+import Complimate from './Components/Complimate';
+import { Theme, ThemeProvider } from './Components/ThemeProvider';
+import { globalCss, styled } from './stitches.config';
+import { globalStyle } from './Styles/_globals';
+
+import { ReactComponent as GoogleIconInner } from './Icons/google.svg';
+
+const globalStyles = globalCss(globalStyle);
+
+const InitialContainer = styled(Container, {
+  marginTop: '$quard',
+  alignItems: 'center',
+});
+
+const GoogleIcon = styled(GoogleIconInner, {
+  width: '$icon-sm',
+  height: '$icon-sm',
+});
+
 const App = () => {
+  globalStyles();
+
+  const theme: Theme = 'light';
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100dvw',
-        height: '100dvh',
-      }}
-    >
-      <p
-        style={{
-          fontSize: '2rem',
-          fontWeight: 'bolder',
-        }}
-      >
-        Hi, This is CompliMate
-      </p>
-      <p>스켈레톤 서버 테스트 중입니다.</p>
-    </div>
+    <ThemeProvider theme={theme}>
+      <InitialContainer spacing="lg">
+        <Complimate />
+
+        <Box>
+          <Text type="caption">우리의 컴플리메이트가 되어주세요!</Text>
+          <Button size="lg">3단계로 끝내는 회원가입</Button>
+        </Box>
+
+        <Box>
+          <Text type="caption">이미 계정이 있으신가요?</Text>
+          <Button size="lg">이메일로 로그인하기</Button>
+          <Button size="lg" type="google" icon={<GoogleIcon />}>
+            구글로 로그인하기
+          </Button>
+        </Box>
+      </InitialContainer>
+    </ThemeProvider>
   );
 };
 
