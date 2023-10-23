@@ -24,6 +24,18 @@ export const Text = styled('p', {
         color: '$bg',
         textAlign: 'center',
       },
+      textButton: {
+        fontSize: '$button-text',
+        fontWeight: 'bolder',
+        color: '$point',
+        textAlign: 'center',
+      },
+      header: {
+        fontSize: '$header',
+        fontWeight: '600',
+        color: '$body',
+        textAlign: 'left',
+      },
     },
   },
 });

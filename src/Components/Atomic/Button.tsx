@@ -1,7 +1,7 @@
-import { styled } from '../../stitches.config';
+import { css, styled } from '@/stitches.config';
 import type * as Stitches from '@stitches/react';
 
-const ButtonInner = styled('button', {
+export const buttonStyles = css({
   all: 'unset',
 
   display: 'flex',
@@ -37,6 +37,8 @@ const ButtonInner = styled('button', {
     type: 'normal',
   },
 });
+
+const ButtonInner = styled('button', buttonStyles);
 
 type ButtonProp = {
   icon?: React.ReactNode;
