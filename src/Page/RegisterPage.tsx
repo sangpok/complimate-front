@@ -1,7 +1,6 @@
 import { styled } from '@/stitches.config';
 import { Box, Text } from '@Components/Atomic';
 import FixedHeader from '@Components/FixedHeader';
-import React from 'react';
 
 const PageContent = styled('div', {
   marginTop: '$content',

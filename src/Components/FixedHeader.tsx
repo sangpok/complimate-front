@@ -1,6 +1,6 @@
 import { styled } from '@/stitches.config';
 import { Link } from 'react-router-dom';
-import { Container, Text } from './Atomic';
+import { Text } from './Atomic';
 
 import { ReactComponent as LeftIconInner } from '@Icons/mdi_chevron-left.svg';
 
