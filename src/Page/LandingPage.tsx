@@ -6,7 +6,6 @@ import Complimate from '@Components/Complimate';
 import PageTransition from '@Components/PageTransition';
 
 import { ReactComponent as GoogleIconInner } from '@Icons/google.svg';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const LandingContainer = styled(Container, {

@@ -3,9 +3,9 @@ import { Box, Text } from '@Components/Atomic';
 import FixedHeader from '@Components/FixedHeader';
 import PageTransition from '@Components/PageTransition';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Input = styled('input', {
   all: 'unset',
