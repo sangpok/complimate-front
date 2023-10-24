@@ -1,116 +1,121 @@
-import { styled } from '@/stitches.config';
-import { Box, Text } from '@Components/Atomic';
-import FixedHeader from '@Components/FixedHeader';
-import PageTransition from '@Components/PageTransition';
-
-import { AnimatePresence, motion } from 'framer-motion';
+/** React 관련 */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import type { FormEvent } from 'react';
 
-const Input = styled('input', {
-  all: 'unset',
-  border: '1px solid $point',
-  borderRadius: '$small',
-  padding: '$small $default',
-  fontSize: '$input',
-});
+/** Style */
+import { PageContent } from './RegisterPage.styled';
 
-const PageContent = styled(motion.div, {
-  position: 'absolute',
-  padding: '0 $default',
-  width: '100%',
-});
+/** Animation */
+import { AnimatePresence } from 'framer-motion';
+import PageTransition from '@Components/PageTransition';
+
+/** Component */
+import FixedHeader from '@Components/FixedHeader';
+
+/** Hook */
+import useMultiStepForm from '@/Hooks/useMultiStepForm';
+
+/** Form */
+import { EmailForm, NicknameForm, PasswordForm } from './RegisterPage.Form';
+
+type FormDataProps = {
+  email: string;
+  password: string;
+  passwordConfirm: string;
+  nickname: string;
+};
+
+const initialFormData = {
+  email: '',
+  password: '',
+  passwordConfirm: '',
+  nickname: '',
+};
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [moveDirection, setMoveDirection] = useState(1);
 
-  const registerFormList = [
+  const [formData, setFormData] = useState(initialFormData);
+
+  const updateFields = (fields: Partial<FormDataProps>) => {
+    setFormData((prev) => ({ ...prev, ...fields }));
+  };
+
+  const multiFormList = [
     {
-      id: 0,
       title: '이메일 입력',
-      element: <ContentEmail />,
+      element: <EmailForm {...formData} updateFields={updateFields} />,
     },
+
     {
-      id: 1,
       title: '비밀번호 입력',
-      element: <ContentPassword />,
+      element: <PasswordForm {...formData} updateFields={updateFields} />,
     },
     {
-      id: 0,
       title: '닉네임 입력',
-      element: <ContentNickname />,
+      element: <NicknameForm {...formData} updateFields={updateFields} />,
     },
   ];
 
-  const { title: currentTitle, element: currentElement } = registerFormList[currentIndex];
+  const {
+    currentTitle,
+    currentStep,
+    currentStepIndex,
+    prev: prevForm,
+    next: nextForm,
+    isFirstStep,
+    isLastStep,
+    progressDirection,
+  } = useMultiStepForm(multiFormList);
 
-  const handlePrevClick = () => {
-    setMoveDirection(-1);
-    if (currentIndex === 0) {
-      navigate('..');
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (isLastStep) {
+      // TODO: Request form
+      return alert(Object.entries(formData).toString());
     }
-    setCurrentIndex((prev) => (prev - 1 < 0 ? 0 : prev - 1));
+
+    nextForm();
   };
 
-  const handleNextClick = () => {
-    setMoveDirection(1);
-    setCurrentIndex((prev) => (prev + 1 > 2 ? 2 : prev + 1));
+  const handlePrevClick = () => {
+    if (isFirstStep) {
+      return navigate('..');
+    }
+
+    prevForm();
   };
 
   return (
     <PageTransition>
-      <FixedHeader
-        onPrevClick={handlePrevClick}
-        onNextClick={handleNextClick}
-        title={currentTitle}
-        nextButtonName={currentIndex === 2 ? '완료' : '다음'}
-      />
-      <AnimatePresence custom={moveDirection} initial={false}>
-        <PageContent
-          key={currentIndex}
-          custom={moveDirection}
-          variants={{
-            initial: (moveDirection) => ({ x: `${100 * moveDirection}%` }),
-            normal: { x: 0 },
-            exit: (moveDirection) => ({ x: `${-100 * moveDirection}%` }),
-          }}
-          initial="initial"
-          animate="normal"
-          exit="exit"
-        >
-          {currentElement}
-        </PageContent>
-      </AnimatePresence>
+      <FixedHeader.Root onSubmit={handleSubmit}>
+        <FixedHeader
+          onPrevClick={handlePrevClick}
+          progressDirection={progressDirection}
+          title={currentTitle}
+          nextContent={isLastStep ? '완료' : '다음'}
+        />
+
+        <AnimatePresence custom={progressDirection} initial={false}>
+          <PageContent
+            key={currentStepIndex}
+            custom={progressDirection}
+            variants={{
+              initial: (moveDirection) => ({ x: `${100 * moveDirection}%` }),
+              normal: { x: 0 },
+              exit: (moveDirection) => ({ x: `${-100 * moveDirection}%` }),
+            }}
+            initial="initial"
+            animate="normal"
+            exit="exit"
+          >
+            {currentStep}
+          </PageContent>
+        </AnimatePresence>
+      </FixedHeader.Root>
     </PageTransition>
-  );
-};
-
-const ContentEmail = () => {
-  return (
-    <Box>
-      <Text type="header">이메일</Text>
-      <Input type="email" />
-    </Box>
-  );
-};
-
-const ContentPassword = () => {
-  return (
-    <Box>
-      <Text type="header">비밀번호</Text>
-      <Input type="password" />
-    </Box>
-  );
-};
-
-const ContentNickname = () => {
-  return (
-    <Box>
-      <Text type="header">닉네임</Text>
-      <Input type="text" />
-    </Box>
   );
 };
 
