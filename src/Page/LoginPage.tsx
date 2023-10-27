@@ -1,6 +1,6 @@
 import { StepProp } from '@/Hooks/useMultiStepForm';
 import * as PageLayout from '@Layouts/PageLayout';
-import { ActionFunction, useSubmit } from 'react-router-dom';
+import { ActionFunction, redirect, useSubmit } from 'react-router-dom';
 import { LoginForm } from './LoginPage.form';
 
 const initialFormData = {
@@ -14,9 +14,9 @@ export const action: ActionFunction = async ({ request }) => {
   const email = formData.get('email');
   const password = formData.get('password');
 
-  console.log({ email, password });
+  alert(new URLSearchParams(formData).toString());
 
-  return null;
+  return redirect('/test');
 };
 
 const LoginPage = () => {

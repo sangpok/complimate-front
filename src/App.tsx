@@ -13,6 +13,7 @@ import { globalStyle } from './Styles/_globals';
 import { globalCss } from './stitches.config';
 import TutorialPage from '@Page/TutorialPage';
 import TestPage from '@Page/TestPage';
+import HomePage from '@Page/HomePage';
 
 const globalStyles = globalCss(globalStyle);
 
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
       <Route path="login" element={<LoginPage />} action={loginAction} />
       <Route path="tutorial" element={<TutorialPage />} />
       <Route path="test" element={<TestPage />} />
+      <Route path="home" element={<HomePage />} />
     </Route>
   )
 );

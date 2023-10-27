@@ -25,6 +25,7 @@ export const { styled, css, globalCss, keyframes, theme, config } = createStitch
       4: '1.5rem', // 24
       5: '3rem', // 48
       6: '5rem', // 80
+      7: '2rem', // 32
 
       small: '$1',
       smaller: '$2',
@@ -32,6 +33,7 @@ export const { styled, css, globalCss, keyframes, theme, config } = createStitch
       double: '$4',
       quard: '$5',
       content: '$6',
+      'tutorial-body': '$7',
     },
     fontSizes: {
       1: '.5625rem', // 9
@@ -55,7 +57,7 @@ export const { styled, css, globalCss, keyframes, theme, config } = createStitch
       'button-text': '$5',
       header: '$5',
       'tutorial-title': '$7',
-      'tutorial-content': '$8',
+      'tutorial-content': '$5',
       author: '$5',
       time: '$3',
       content: '$4',
@@ -64,7 +66,10 @@ export const { styled, css, globalCss, keyframes, theme, config } = createStitch
     },
     fonts: {},
     fontWeights: {},
-    lineHeights: {},
+    lineHeights: {
+      1: '1.75rem',
+      'tutorial-content': '$1',
+    },
     letterSpacings: {},
     sizes: {
       1: '.5625rem', // 9
