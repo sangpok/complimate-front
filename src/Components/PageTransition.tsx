@@ -1,10 +1,11 @@
-import { motion } from 'framer-motion';
+import { AnimationDefinition, motion } from 'framer-motion';
 
 type PageTransitionProp = {
+  onAnimationComplete?: (definition: AnimationDefinition) => void;
   children?: React.ReactNode;
 };
 
-const PageTransition = ({ children }: PageTransitionProp) => {
+const PageTransition = ({ onAnimationComplete, children }: PageTransitionProp) => {
   return (
     <motion.div
       variants={{
@@ -14,6 +15,7 @@ const PageTransition = ({ children }: PageTransitionProp) => {
       initial="fadeOut"
       animate="fadeIn"
       exit="fadeOut"
+      onAnimationComplete={onAnimationComplete}
     >
       {children}
     </motion.div>

@@ -12,9 +12,20 @@ export const buttonStyles = css({
 
   borderRadius: '$small',
 
+  textAlign: 'center',
+
+  '&:focus-visible': {
+    border: '3px solid lightblue',
+  },
+
   variants: {
     size: {
       lg: {
+        padding: '$double 0',
+        fontSize: '$button-lg',
+        fontWeight: 'bold',
+      },
+      sm: {
         padding: '$default 0',
         fontSize: '$button-lg',
         fontWeight: 'bold',

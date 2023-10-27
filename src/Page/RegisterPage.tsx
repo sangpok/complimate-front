@@ -1,23 +1,7 @@
-/** React 관련 */
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import type { FormEvent } from 'react';
-
-/** Style */
-import { PageContent } from './RegisterPage.styled';
-
-/** Animation */
-import { AnimatePresence } from 'framer-motion';
-import PageTransition from '@Components/PageTransition';
-
-/** Component */
-import FixedHeader from '@Components/FixedHeader';
-
-/** Hook */
-import useMultiStepForm from '@/Hooks/useMultiStepForm';
-
-/** Form */
-import { EmailForm, NicknameForm, PasswordForm } from './RegisterPage.Form';
+import { StepProp } from '@/Hooks/useMultiStepForm';
+import * as PageLayout from '@Layouts/PageLayout';
+import { ActionFunction, useSubmit } from 'react-router-dom';
+import { EmailForm, NicknameForm, PasswordForm } from './RegisterPage.form';
 
 type FormDataProps = {
   email: string;
@@ -26,96 +10,52 @@ type FormDataProps = {
   nickname: string;
 };
 
-const initialFormData = {
+const initialFormData: FormDataProps = {
   email: '',
   password: '',
   passwordConfirm: '',
   nickname: '',
 };
 
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+
+  const email = formData.get('email');
+  const password = formData.get('password');
+  const nickname = formData.get('nickname');
+
+  alert(new URLSearchParams(formData).toString());
+
+  return null;
+};
+
 const RegisterPage = () => {
-  const navigate = useNavigate();
+  const submit = useSubmit();
 
-  const [formData, setFormData] = useState(initialFormData);
-
-  const updateFields = (fields: Partial<FormDataProps>) => {
-    setFormData((prev) => ({ ...prev, ...fields }));
-  };
-
-  const multiFormList = [
+  const multiFormList: StepProp[] = [
     {
       title: '이메일 입력',
-      element: <EmailForm {...formData} updateFields={updateFields} />,
+      Component: EmailForm,
     },
-
     {
       title: '비밀번호 입력',
-      element: <PasswordForm {...formData} updateFields={updateFields} />,
+      Component: PasswordForm,
     },
     {
       title: '닉네임 입력',
-      element: <NicknameForm {...formData} updateFields={updateFields} />,
+      Component: NicknameForm,
     },
   ];
 
-  const {
-    currentTitle,
-    currentStep,
-    currentStepIndex,
-    prev: prevForm,
-    next: nextForm,
-    isFirstStep,
-    isLastStep,
-    progressDirection,
-  } = useMultiStepForm(multiFormList);
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (isLastStep) {
-      // TODO: Request form
-      return alert(Object.entries(formData).toString());
-    }
-
-    nextForm();
-  };
-
-  const handlePrevClick = () => {
-    if (isFirstStep) {
-      return navigate('..');
-    }
-
-    prevForm();
+  const handleSubmit = (formData: object) => {
+    submit(formData, { method: 'post' });
   };
 
   return (
-    <PageTransition>
-      <FixedHeader.Root onSubmit={handleSubmit}>
-        <FixedHeader
-          onPrevClick={handlePrevClick}
-          progressDirection={progressDirection}
-          title={currentTitle}
-          nextContent={isLastStep ? '완료' : '다음'}
-        />
-
-        <AnimatePresence custom={progressDirection} initial={false}>
-          <PageContent
-            key={currentStepIndex}
-            custom={progressDirection}
-            variants={{
-              initial: (moveDirection) => ({ x: `${100 * moveDirection}%` }),
-              normal: { x: 0 },
-              exit: (moveDirection) => ({ x: `${-100 * moveDirection}%` }),
-            }}
-            initial="initial"
-            animate="normal"
-            exit="exit"
-          >
-            {currentStep}
-          </PageContent>
-        </AnimatePresence>
-      </FixedHeader.Root>
-    </PageTransition>
+    <PageLayout.Root stepList={multiFormList} onSubmit={handleSubmit} fieldData={initialFormData}>
+      <PageLayout.Header />
+      <PageLayout.Content />
+    </PageLayout.Root>
   );
 };
 
