@@ -1,6 +1,9 @@
 import { styled } from '@/stitches.config';
 import * as Form from '@radix-ui/react-form';
-import type { ChangeEvent } from 'react';
+import { forwardRef, useEffect, type ChangeEvent } from 'react';
+
+import * as Input from '@Components/Atomic/Input';
+import * as Icon from '@Icons/index';
 
 type FormDataProps = {
   email: string;
@@ -37,77 +40,114 @@ const FormMessage = styled(Form.Message, {
 });
 
 type EmailFormProps = {
-  updateFields: (field: Partial<FormDataProps>) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 } & Partial<FormDataProps>;
 
-export const EmailForm = ({ email, updateFields }: EmailFormProps) => {
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    updateFields({ email: e.target.value });
-  };
+export const EmailForm = forwardRef(({ email, onChange }: EmailFormProps, ref) => {
+  // const firstInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    ref.current.focus();
+  }, [ref.current]);
 
   return (
     <FormField name="email">
       <FormLabel htmlFor="email">이메일</FormLabel>
-      <FormControl id="email" type="email" value={email} onChange={handleChange} required />
-      <FormMessage match="valueMissing">이메일을 입력해보시오</FormMessage>
+      <Form.Control asChild>
+        <Input.Content
+          icon={<Icon.Email />}
+          id="email"
+          type="email"
+          value={email}
+          onChange={onChange}
+          placeholder="email@complimate.com"
+          data-role="firstinput"
+          required
+          ref={ref}
+          enterKeyHint="next"
+        />
+      </Form.Control>
+      <FormMessage match="valueMissing" name="email">
+        이메일을 입력해보시오
+      </FormMessage>
       <FormMessage match="typeMismatch">이메일 형식을 확인해보쇼</FormMessage>
     </FormField>
   );
-};
+});
 
 type PasswordFormProps = {
-  updateFields: (field: Partial<FormDataProps>) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 } & Partial<FormDataProps>;
 
-export const PasswordForm = ({ password, passwordConfirm, updateFields }: PasswordFormProps) => {
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    updateFields({ [e.target.id]: e.target.value });
-  };
+export const PasswordForm = forwardRef(
+  ({ password, passwordConfirm, onChange }: PasswordFormProps, ref) => {
+    return (
+      <>
+        <FormField name="password">
+          <FormLabel htmlFor="password">비밀번호</FormLabel>
 
-  return (
-    <>
-      <FormField name="password">
-        <FormLabel htmlFor="password">비밀번호</FormLabel>
-        <FormControl
-          type="password"
-          id="password"
-          value={password}
-          onChange={handleChange}
-          required
-          enterKeyHint="next"
-        />
-        <FormMessage match="valueMissing">비밀번호를 입력해보셔요</FormMessage>
-      </FormField>
+          <Form.Control asChild>
+            <Input.Content
+              icon={<Icon.Password />}
+              id="password"
+              type="password"
+              value={password}
+              onChange={onChange}
+              placeholder="비밀번호"
+              data-role="firstinput"
+              enterKeyHint="next"
+              required
+              ref={ref}
+              // autoFocus
+            />
+          </Form.Control>
+          <FormMessage match="valueMissing">비밀번호를 입력해보셔요</FormMessage>
+        </FormField>
 
-      <FormField name="passwordConfirm">
-        <FormLabel htmlFor="passwordConfirm">비밀번호 확인</FormLabel>
-        <FormControl
-          type="password"
-          id="passwordConfirm"
-          value={passwordConfirm}
-          onChange={handleChange}
-          required
-        />
-        <FormMessage match="valueMissing">비밀번호 확인을 입력해요</FormMessage>
-      </FormField>
-    </>
-  );
-};
+        <FormField name="passwordConfirm">
+          <FormLabel htmlFor="passwordConfirm">비밀번호 확인</FormLabel>
+
+          <Form.Control asChild>
+            <Input.Content
+              icon={<Icon.Password />}
+              id="passwordConfirm"
+              type="password"
+              value={passwordConfirm}
+              onChange={onChange}
+              placeholder="비밀번호 확인"
+              enterKeyHint="next"
+              required
+            />
+          </Form.Control>
+          <FormMessage match="valueMissing">비밀번호 확인을 입력해요</FormMessage>
+        </FormField>
+      </>
+    );
+  }
+);
 
 type NicknameFormProps = {
-  updateFields: (field: Partial<FormDataProps>) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 } & Partial<FormDataProps>;
 
-export const NicknameForm = ({ nickname, updateFields }: NicknameFormProps) => {
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    updateFields({ nickname: e.target.value });
-  };
-
+export const NicknameForm = forwardRef(({ nickname, onChange }: NicknameFormProps, ref) => {
   return (
     <FormField name="nickname">
       <FormLabel htmlFor="nickname">닉네임</FormLabel>
-      <FormControl type="text" id="nickname" value={nickname} onChange={handleChange} required />
+      <Form.Control asChild>
+        <Input.Content
+          icon={<></>}
+          id="nickname"
+          type="text"
+          value={nickname}
+          onChange={onChange}
+          placeholder="닉네임"
+          data-role="firstinput"
+          required
+          ref={ref}
+        />
+      </Form.Control>
       <FormMessage match="valueMissing">닉네임 입력해보쇼</FormMessage>
     </FormField>
   );
-};
+});

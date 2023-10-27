@@ -1,13 +1,32 @@
-import { useState, ReactElement } from 'react';
+import { ComponentType, useState } from 'react';
 
-type StepProp = {
+export type StepProp = {
   title: string;
-  element: ReactElement;
+  Component: ComponentType<any>;
 };
 
-const useMultiStepForm = (steps: StepProp[]) => {
+export type MultiStepFormType = {
+  currentStepIndex: number;
+  currentTitle: string;
+  isFirstStep: boolean;
+  isLastStep: boolean;
+  progressDirection: number;
+  CurrentStepComponent: ComponentType<any>;
+  prev: () => void;
+  next: () => void;
+  formData: object;
+  updateFields: (field: object) => void;
+};
+
+const useMultiStepForm = (steps: StepProp[], initialFormData: object): MultiStepFormType => {
+  const [formData, setFormData] = useState(initialFormData);
+
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [progressDirection, setProgressDirection] = useState(1);
+
+  const updateFields = (field: object) => {
+    setFormData((prev) => ({ ...prev, ...field }));
+  };
 
   const prev = () => {
     setCurrentStepIndex((index) => (index <= 0 ? 0 : index - 1));
@@ -22,12 +41,15 @@ const useMultiStepForm = (steps: StepProp[]) => {
   return {
     currentStepIndex,
     currentTitle: steps[currentStepIndex].title,
-    currentStep: steps[currentStepIndex].element,
+    CurrentStepComponent: steps[currentStepIndex].Component,
     isFirstStep: currentStepIndex === 0,
     isLastStep: currentStepIndex === steps.length - 1,
     progressDirection,
     prev,
     next,
+
+    formData,
+    updateFields,
   };
 };
 

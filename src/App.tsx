@@ -1,6 +1,6 @@
 import LandingPage from '@Page/LandingPage';
-import LoginPage from '@Page/LoginPage';
-import RegisterPage from '@Page/RegisterPage';
+import LoginPage, { action as loginAction } from '@Page/LoginPage';
+import RegisterPage, { action as registerAction } from '@Page/RegisterPage';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import {
   Route,
@@ -11,15 +11,19 @@ import {
 import { Theme, ThemeProvider } from './Components/ThemeProvider';
 import { globalStyle } from './Styles/_globals';
 import { globalCss } from './stitches.config';
+import TutorialPage from '@Page/TutorialPage';
+import TestPage from '@Page/TestPage';
 
 const globalStyles = globalCss(globalStyle);
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/">
-      <Route key="landing" index element={<LandingPage />} />
-      <Route key="register" path="register" element={<RegisterPage />} />
-      <Route path="login" element={<LoginPage />} />
+      <Route index element={<LandingPage />} />
+      <Route path="register" element={<RegisterPage />} action={registerAction} />
+      <Route path="login" element={<LoginPage />} action={loginAction} />
+      <Route path="tutorial" element={<TutorialPage />} />
+      <Route path="test" element={<TestPage />} />
     </Route>
   )
 );

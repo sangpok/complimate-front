@@ -4,16 +4,16 @@ import * as Form from '@radix-ui/react-form';
 
 import { Text } from './Atomic';
 
-import { Header, LeftIcon, Title, TitleWrapper } from './FixedHeader.styled';
+import { Header, LeftIcon, Title, TitleWrapper } from './PageHeader.styled';
 
-type FixedHeaderProp = {
+type PageHeader = {
   onPrevClick: () => void;
   progressDirection: number;
   title: string;
   nextContent: string;
 };
 
-const FixedHeader = ({ onPrevClick, progressDirection, title, nextContent }: FixedHeaderProp) => {
+const Content = ({ onPrevClick, progressDirection, title, nextContent }: PageHeader) => {
   return (
     <Header>
       <button type="button" onClick={onPrevClick}>
@@ -47,6 +47,6 @@ const FixedHeader = ({ onPrevClick, progressDirection, title, nextContent }: Fix
   );
 };
 
-FixedHeader.Root = Form.Root;
+const Root = Form.Root;
 
-export default FixedHeader;
+export { Content, Root };

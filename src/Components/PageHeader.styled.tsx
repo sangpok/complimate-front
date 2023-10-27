@@ -14,6 +14,12 @@ export const Header = styled('div', {
   backgroundColor: '$bg',
   padding: '$double',
 
+  position: 'fixed',
+  top: 0,
+  left: 0,
+
+  width: '100%',
+
   a: {
     all: 'unset',
   },
@@ -27,6 +33,7 @@ export const Header = styled('div', {
 export const TitleWrapper = styled('div', {
   flex: 1,
   height: '1.3125rem',
+  width: '100%',
   overflow: 'hidden',
   position: 'relative',
 });

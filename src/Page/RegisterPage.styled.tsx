@@ -8,4 +8,5 @@ export const PageContent = styled(motion.div, {
   position: 'absolute',
   padding: '0 $default',
   width: '100%',
+  marginTop: '$content',
 });
