@@ -12,20 +12,6 @@ const FormField = styled(Form.Field, {
   padding: '0 $default',
 });
 
-const FormLabel = styled(Form.Label, {
-  fontSize: '$header',
-  fontWeight: '500',
-});
-
-const FormControl = styled(Form.Control, {
-  all: 'unset',
-
-  padding: '$default',
-  border: '.0625rem solid $point',
-  borderRadius: '$small',
-  fontSize: '$input',
-});
-
 const FormMessage = styled(Form.Message, {
   color: '$red',
   fontSize: '$label-status',

@@ -1,19 +1,23 @@
-import LandingPage from '@Page/LandingPage';
-import LoginPage, { action as loginAction } from '@Page/LoginPage';
-import RegisterPage, { action as registerAction } from '@Page/RegisterPage';
-import { AnimatePresence, MotionConfig } from 'framer-motion';
 import {
   Route,
   RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
+
+import HomePage, { loader as homeLoader } from '@Page/HomePage';
+import LandingPage from '@Page/LandingPage';
+import LoginPage, { action as loginAction } from '@Page/LoginPage';
+import RegisterPage, { action as registerAction } from '@Page/RegisterPage';
+import TestPage from '@Page/TestPage';
+import TutorialPage from '@Page/TutorialPage';
+
+import { MotionConfig } from 'framer-motion';
+
+import { Suspense } from 'react';
 import { Theme, ThemeProvider } from './Components/ThemeProvider';
 import { globalStyle } from './Styles/_globals';
 import { globalCss } from './stitches.config';
-import TutorialPage from '@Page/TutorialPage';
-import TestPage from '@Page/TestPage';
-import HomePage from '@Page/HomePage';
 
 const globalStyles = globalCss(globalStyle);
 
@@ -25,10 +29,21 @@ const router = createBrowserRouter(
       <Route path="login" element={<LoginPage />} action={loginAction} />
       <Route path="tutorial" element={<TutorialPage />} />
       <Route path="test" element={<TestPage />} />
-      <Route path="home" element={<HomePage />} />
+      <Route
+        path="home"
+        element={
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <HomePage />
+          </Suspense>
+        }
+        errorElement={<h1>Loading...</h1>}
+        loader={homeLoader}
+      />
     </Route>
   )
 );
+
+const motionTransition = { type: 'spring', bounce: 0, duration: 0.4 };
 
 const App = () => {
   globalStyles();
@@ -37,10 +52,8 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <MotionConfig transition={{ type: 'spring', bounce: 0, duration: 0.3 }}>
-        <AnimatePresence>
-          <RouterProvider router={router} />
-        </AnimatePresence>
+      <MotionConfig transition={motionTransition}>
+        <RouterProvider router={router} />
       </MotionConfig>
     </ThemeProvider>
   );
