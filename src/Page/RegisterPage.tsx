@@ -1,6 +1,6 @@
 import { StepProp } from '@/Hooks/useMultiStepForm';
 import * as PageLayout from '@Layouts/PageLayout';
-import { ActionFunction, useSubmit } from 'react-router-dom';
+import { ActionFunction, redirect, useSubmit } from 'react-router-dom';
 import { EmailForm, NicknameForm, PasswordForm } from './RegisterPage.form';
 
 type FormDataProps = {
@@ -18,15 +18,15 @@ const initialFormData: FormDataProps = {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
+  const formData: unknown = await request.formData();
 
-  const email = formData.get('email');
-  const password = formData.get('password');
-  const nickname = formData.get('nickname');
+  // const email = formData.get('email');
+  // const password = formData.get('password');
+  // const nickname = formData.get('nickname');
 
-  alert(new URLSearchParams(formData).toString());
+  alert(new URLSearchParams(formData as Record<string, string>).toString());
 
-  return null;
+  return redirect('/tutorial');
 };
 
 const RegisterPage = () => {
@@ -48,7 +48,7 @@ const RegisterPage = () => {
   ];
 
   const handleSubmit = (formData: object) => {
-    submit(formData, { method: 'post' });
+    submit(formData as FormData, { method: 'post' });
   };
 
   return (

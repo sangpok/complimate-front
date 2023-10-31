@@ -2,9 +2,9 @@ import { styled } from '@/stitches.config';
 
 import { forwardRef, type InputHTMLAttributes, type ReactNode } from 'react';
 
-const Container = styled('div', {
-  width: '100%',
-});
+// const Container = styled('div', {
+//   width: '100%',
+// });
 
 const InputContainer = styled('div', {
   display: 'flex',

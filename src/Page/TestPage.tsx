@@ -1,9 +1,9 @@
 import { styled } from '@/stitches.config';
-import React, { useState } from 'react';
-import * as Icon from '@Icons/index';
-import { Text } from '@Components/Atomic';
 import { tutorials } from '@/tutorials';
+import { Text } from '@Components/Atomic';
+import * as Icon from '@Icons/index';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const FullPage = styled('div', {

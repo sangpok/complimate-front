@@ -9,11 +9,16 @@ export const globalStyle = {
     boxSizing: 'border-box',
     fontFamily: 'Pretendard Variable',
     WebkitTapHighlightColor: 'transparent',
+  },
+
+  html: {
     touchAction: 'none',
     userSelect: 'none',
   },
 
   body: {
+    margin: 0,
+    padding: 0,
     overflow: 'hidden',
   },
 

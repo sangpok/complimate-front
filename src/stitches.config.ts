@@ -68,7 +68,9 @@ export const { styled, css, globalCss, keyframes, theme, config } = createStitch
     fontWeights: {},
     lineHeights: {
       1: '1.75rem',
+      2: '1.625rem',
       'tutorial-content': '$1',
+      'cc-content': '$2',
     },
     letterSpacings: {},
     sizes: {
