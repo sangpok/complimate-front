@@ -1,5 +1,5 @@
 /** React */
-import { PointerEvent, useRef, useState } from 'react';
+import { PointerEvent, useRef, useState, useEffect } from 'react';
 
 /** Style */
 import * as S from './ContentCard.styled';
@@ -40,17 +40,20 @@ const DialogContent = styled(motion(Dialog.Content), {
   top: '$content',
   left: 0,
   width: '100dvw',
-  height: '100%',
-  background: 'white',
-  padding: '30px',
+  height: 'calc(100% - 5rem)',
+  background: '$depth1',
+  padding: '$double',
   zIndex: 99,
   willChange: 'transform',
   borderRadius: '$large',
+  boxShadow: '0 0 25px 1px rgba(0, 0, 0, .1)',
 });
 
-const ContentCard = ({ post, onTransitionRaise }: ContentCardProp) => {
+const ContentCard = ({ post, onTransitionRaise, drawerRef, onCommentClick }: ContentCardProp) => {
   const containerDragControls = useDragControls();
   const bodyDragControls = useDragControls();
+
+  // const [drawerRef, setDrawerRef] = useState(null);
 
   const [scope, animate] = useAnimate();
   const [scopee, animatee] = useAnimate();
@@ -119,8 +122,6 @@ const ContentCard = ({ post, onTransitionRaise }: ContentCardProp) => {
       return;
     }
 
-    console.log('머여? 그러면 되야하는 거 아녀?');
-
     couldTransition.current = false;
     bodyDragControls.start(event);
   };
@@ -161,15 +162,17 @@ const ContentCard = ({ post, onTransitionRaise }: ContentCardProp) => {
     // setOpen(open);
     if (!open) {
       Promise.all([
-        animate(scope.current, { opacity: 0 }),
+        // animate(scope.current, { opacity: 0 }),
         animatee(scopee.current, { y: '100%' }),
       ]).then(() => {
         setOpen(false);
       });
     }
   };
+
   return (
     <S.CardContainer
+      key={JSON.stringify(bodyBounds)}
       drag="y"
       dragConstraints={{ top: 0, bottom: 0 }}
       dragListener={false}
@@ -201,6 +204,7 @@ const ContentCard = ({ post, onTransitionRaise }: ContentCardProp) => {
         ref={mergeRefs([cardBodyRef, bodyRef])}
       >
         <motion.div
+          key={JSON.stringify(bodyBounds)}
           ref={bodyContentRef}
           style={{ y }}
           drag="y"
@@ -258,95 +262,345 @@ const ContentCard = ({ post, onTransitionRaise }: ContentCardProp) => {
             </div>
           </div>
 
-          <Dialog.Trigger asChild>
+          <S.MoreButton onClick={() => onCommentClick()}>
+            <Icon.Comment css={{ color: '$point' }} />
+            <span>{post.bestComments.length}개의 댓글 더 보기</span>
+          </S.MoreButton>
+
+          {/* <Dialog.Trigger asChild>
             <S.MoreButton onClick={() => setOpen(true)}>
               <Icon.Comment css={{ color: '$point' }} />
               <span>{post.bestComments.length}개의 댓글 더 보기</span>
             </S.MoreButton>
-          </Dialog.Trigger>
+          </Dialog.Trigger> */}
 
-          <Dialog.Portal>
-            <DialogOverlay ref={scope} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <DialogContent ref={scopee} initial={{ y: '100%' }} animate={{ y: 0 }}>
-                뭘봐ㅋㅋ
-              </DialogContent>
-            </DialogOverlay>
-          </Dialog.Portal>
+          {/* <Dialog.Portal container={drawerRef}>
+            <DialogContent ref={scopee} initial={{ y: '100%' }} animate={{ y: 0 }}>
+              <S.Drawer className="댓글 Drawer">
+                <S.DrawerHandle className="Drawer Handle Wrapper">
+                  <div className="handle" />
+                </S.DrawerHandle>
+
+                <S.DrawerBody className="Drawer Content">
+                  <div className="inner">
+                    <S.DrawerHead className="댓글 개수 및 필터">
+                      <p className="댓글 개수">총 3개의 댓글</p>
+                      <button className="필터">
+                        <Icon.Sort
+                          css={{
+                            width: '$icon-comment',
+                            height: '$icon-comment',
+                            color: '$point',
+                          }}
+                        />
+                        공감순
+                      </button>
+                    </S.DrawerHead>
+
+                    <S.CommentSection className="댓글 목록">
+                      <div className="댓글 컨테이너">
+                        <S.Comment className="댓글 원글">
+                          <S.CommentContainer className="댓글 원글 콘텐츠">
+                            <div className="top">
+                              <S.CommentHead className="header">
+                                <div className="left">
+                                  <InlineProfile
+                                    type="normal"
+                                    nickname="박봉자"
+                                    profile="./tet.jpg"
+                                  />
+                                  <p className="time">4시간 전</p>
+                                </div>
+
+                                <button>
+                                  <Icon.More
+                                    css={{
+                                      width: '$icon-comment',
+                                      height: '$icon-comment',
+                                    }}
+                                  />
+                                </button>
+                              </S.CommentHead>
+                              <p className="body">
+                                그래 우리 재민이가 부끄러운데도 발표를 해서 친구들을 웃겨줬다니
+                                기분이 좋았겠구나 아줌마는 회사에서 부장한테 웃기지도 않는 농담을
+                                듣고 웃어야 해서 기분이 안 좋아요~
+                              </p>
+                            </div>
+                            <S.CommentFoot className="footer">
+                              <button>
+                                <Icon.Comment
+                                  css={{
+                                    width: '$icon-comment',
+                                    height: '$icon-comment',
+                                    lineHeight: 0,
+                                    color: '$point',
+                                  }}
+                                />
+                                3
+                              </button>
+                              <button>
+                                <Icon.Heart
+                                  css={{
+                                    width: '$icon-comment',
+                                    height: '$icon-comment',
+                                    lineHeight: 0,
+                                    color: '$point',
+                                  }}
+                                />
+                                48
+                              </button>
+                            </S.CommentFoot>
+                          </S.CommentContainer>
+                        </S.Comment>
+
+                        <S.ReplyComment className="대댓 목록">
+                          <S.Comment className="댓글 원글">
+                            <S.CommentContainer className="댓글 원글 콘텐츠">
+                              <div className="top">
+                                <S.CommentHead className="header">
+                                  <div className="left">
+                                    <InlineProfile
+                                      type="normal"
+                                      nickname="박봉자"
+                                      profile="./tet.jpg"
+                                    />
+                                    <p className="time">4시간 전</p>
+                                  </div>
+
+                                  <button>
+                                    <Icon.More
+                                      css={{
+                                        width: '$icon-comment',
+                                        height: '$icon-comment',
+                                      }}
+                                    />
+                                  </button>
+                                </S.CommentHead>
+                                <p className="body">ㅋㅋㅋ</p>
+                              </div>
+                              <S.CommentFoot className="footer">
+                                <button>
+                                  <Icon.Heart
+                                    css={{
+                                      width: '$icon-comment',
+                                      height: '$icon-comment',
+                                      lineHeight: 0,
+                                      color: '$point',
+                                    }}
+                                  />
+                                  48
+                                </button>
+                              </S.CommentFoot>
+                            </S.CommentContainer>
+                          </S.Comment>
+
+                          <S.Comment className="댓글 원글">
+                            <S.CommentContainer className="댓글 원글 콘텐츠">
+                              <div className="top">
+                                <S.CommentHead className="header">
+                                  <div className="left">
+                                    <InlineProfile
+                                      type="normal"
+                                      nickname="박봉자"
+                                      profile="./tet.jpg"
+                                    />
+                                    <p className="time">4시간 전</p>
+                                  </div>
+
+                                  <button>
+                                    <Icon.More
+                                      css={{
+                                        width: '$icon-comment',
+                                        height: '$icon-comment',
+                                      }}
+                                    />
+                                  </button>
+                                </S.CommentHead>
+                                <p className="body">ㅋㅋㅋ</p>
+                              </div>
+                              <S.CommentFoot className="footer">
+                                <button>
+                                  <Icon.Heart
+                                    css={{
+                                      width: '$icon-comment',
+                                      height: '$icon-comment',
+                                      lineHeight: 0,
+                                      color: '$point',
+                                    }}
+                                  />
+                                  48
+                                </button>
+                              </S.CommentFoot>
+                            </S.CommentContainer>
+                          </S.Comment>
+                        </S.ReplyComment>
+                      </div>
+                      <div className="댓글 컨테이너">
+                        <S.Comment className="댓글 원글">
+                          <S.CommentContainer className="댓글 원글 콘텐츠">
+                            <div className="top">
+                              <S.CommentHead className="header">
+                                <div className="left">
+                                  <InlineProfile
+                                    type="normal"
+                                    nickname="박봉자"
+                                    profile="./tet.jpg"
+                                  />
+                                  <p className="time">4시간 전</p>
+                                </div>
+
+                                <button>
+                                  <Icon.More
+                                    css={{
+                                      width: '$icon-comment',
+                                      height: '$icon-comment',
+                                    }}
+                                  />
+                                </button>
+                              </S.CommentHead>
+                              <p className="body">
+                                그래 우리 재민이가 부끄러운데도 발표를 해서 친구들을 웃겨줬다니
+                                기분이 좋았겠구나 아줌마는 회사에서 부장한테 웃기지도 않는 농담을
+                                듣고 웃어야 해서 기분이 안 좋아요~
+                              </p>
+                            </div>
+                            <S.CommentFoot className="footer">
+                              <button>
+                                <Icon.Comment
+                                  css={{
+                                    width: '$icon-comment',
+                                    height: '$icon-comment',
+                                    lineHeight: 0,
+                                    color: '$point',
+                                  }}
+                                />
+                                3
+                              </button>
+                              <button>
+                                <Icon.Heart
+                                  css={{
+                                    width: '$icon-comment',
+                                    height: '$icon-comment',
+                                    lineHeight: 0,
+                                    color: '$point',
+                                  }}
+                                />
+                                48
+                              </button>
+                            </S.CommentFoot>
+                          </S.CommentContainer>
+                        </S.Comment>
+
+                        <S.ReplyComment className="대댓 목록">
+                          <S.Comment className="댓글 원글">
+                            <S.CommentContainer className="댓글 원글 콘텐츠">
+                              <div className="top">
+                                <S.CommentHead className="header">
+                                  <div className="left">
+                                    <InlineProfile
+                                      type="normal"
+                                      nickname="박봉자"
+                                      profile="./tet.jpg"
+                                    />
+                                    <p className="time">4시간 전</p>
+                                  </div>
+
+                                  <button>
+                                    <Icon.More
+                                      css={{
+                                        width: '$icon-comment',
+                                        height: '$icon-comment',
+                                      }}
+                                    />
+                                  </button>
+                                </S.CommentHead>
+                                <p className="body">ㅋㅋㅋ</p>
+                              </div>
+                              <S.CommentFoot className="footer">
+                                <button>
+                                  <Icon.Heart
+                                    css={{
+                                      width: '$icon-comment',
+                                      height: '$icon-comment',
+                                      lineHeight: 0,
+                                      color: '$point',
+                                    }}
+                                  />
+                                  48
+                                </button>
+                              </S.CommentFoot>
+                            </S.CommentContainer>
+                          </S.Comment>
+
+                          <S.Comment className="댓글 원글">
+                            <S.CommentContainer className="댓글 원글 콘텐츠">
+                              <div className="top">
+                                <S.CommentHead className="header">
+                                  <div className="left">
+                                    <InlineProfile
+                                      type="normal"
+                                      nickname="박봉자"
+                                      profile="./tet.jpg"
+                                    />
+                                    <p className="time">4시간 전</p>
+                                  </div>
+
+                                  <button>
+                                    <Icon.More
+                                      css={{
+                                        width: '$icon-comment',
+                                        height: '$icon-comment',
+                                      }}
+                                    />
+                                  </button>
+                                </S.CommentHead>
+                                <p className="body">ㅋㅋㅋ</p>
+                              </div>
+                              <S.CommentFoot className="footer">
+                                <button>
+                                  <Icon.Heart
+                                    css={{
+                                      width: '$icon-comment',
+                                      height: '$icon-comment',
+                                      lineHeight: 0,
+                                      color: '$point',
+                                    }}
+                                  />
+                                  48
+                                </button>
+                              </S.CommentFoot>
+                            </S.CommentContainer>
+                          </S.Comment>
+                        </S.ReplyComment>
+                      </div>
+
+                      <div className="댓글 더 불럴오기" />
+                    </S.CommentSection>
+                  </div>
+                </S.DrawerBody>
+
+                <S.DrawerFooter className="댓글 작성란">
+                  <S.WriteInputBox className="입력란">
+                    <S.ReplyTargetBox className="답글 정보">
+                      <button className="답글 취소">
+                        <Icon.Delete />
+                      </button>
+                      <div className="답글 정보 콘텐츠">
+                        <InlineProfile nickname="박봉자" profile="./tet.jpg" type="replay-target" />
+                      </div>
+                    </S.ReplyTargetBox>
+
+                    <input placeholder="칭찬을 달아주세요" />
+                  </S.WriteInputBox>
+
+                  <button class="입력 버튼">등록</button>
+                </S.DrawerFooter>
+              </S.Drawer>
+            </DialogContent>
+          </Dialog.Portal> */}
         </S.BestCommentSection>
       </Dialog.Root>
-      {/* 
-            <section className="댓글 Drawer">
-              <div className="Drawer Handle" />
-              <div className="Drawer Content">
-                <div className="댓글 개수 및 필터">
-                  <p className="댓글 개수">총 3개의 댓글</p>
-                  <button className="필터">공감순</button>
-                </div>
-
-                <div className="댓글 목록">
-                  <div className="댓글 컨테이너">
-                    <div className="댓글 원글">
-                      <div className="댓글 원글 콘텐츠">
-                        <div className="header" />
-                        <div className="body" />
-                        <div className="footer" />
-                      </div>
-                    </div>
-
-                    <div className="대댓 목록">
-                      <div className="대댓">
-                        <div className="headaer" />
-                        <div className="body" />
-                        <div className="footer" />
-                      </div>
-
-                      <div className="대댓">
-                        <div className="headaer" />
-                        <div className="body" />
-                        <div className="footer" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="댓글 컨테이너">
-                    <div className="댓글 원글">
-                      <div className="댓글 원글 콘텐츠">
-                        <div className="header" />
-                        <div className="body" />
-                        <div className="footer" />
-                      </div>
-                    </div>
-
-                    <div className="대댓 목록">
-                      <div className="대댓">
-                        <div className="headaer" />
-                        <div className="body" />
-                        <div className="footer" />
-                      </div>
-
-                      <div className="대댓">
-                        <div className="headaer" />
-                        <div className="body" />
-                        <div className="footer" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="댓글 더 불럴오기" />
-                </div>
-
-                <div className="댓글 작성란">
-                  <div className="입력란">
-                    <div className="답글 정보">
-                      <button className="답글 취소" />
-                      <div className="답글 정보 콘텐츠" />
-                    </div>
-
-                    <div className="입력 상자" />
-                  </div>
-
-                  <div className="입력 버튼" />
-                </div>
-              </div>
-            </section> */}
     </S.CardContainer>
   );
 };

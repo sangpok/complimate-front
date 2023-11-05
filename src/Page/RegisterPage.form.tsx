@@ -1,58 +1,26 @@
-import { styled } from '@/stitches.config';
-import * as Form from '@radix-ui/react-form';
-import { forwardRef, useEffect, type ChangeEvent } from 'react';
-
 import * as Input from '@Components/Atomic/Input';
 import * as Icon from '@Icons/index';
+import * as Form from '@radix-ui/react-form';
+import * as S from './RegisterPage.styled';
 
-type FormDataProps = {
-  email: string;
-  password: string;
-  passwordConfirm: string;
-  nickname: string;
-};
+import { forwardRef, useEffect } from 'react';
+import { EmailFormProps, NicknameFormProps, PasswordFormProps } from './RegisterPage.types';
 
-const FormField = styled(Form.Field, {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '$default',
-  padding: '0 $default',
-});
-
-const FormLabel = styled(Form.Label, {
-  fontSize: '$header',
-  fontWeight: '500',
-});
-
-const FormControl = styled(Form.Control, {
-  all: 'unset',
-
-  padding: '$default',
-  border: '.0625rem solid $point',
-  borderRadius: '$small',
-  fontSize: '$input',
-});
-
-const FormMessage = styled(Form.Message, {
-  color: '$red',
-  fontSize: '$label-status',
-  fontWeight: 500,
-});
-
-type EmailFormProps = {
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-} & Partial<FormDataProps>;
-
-export const EmailForm = forwardRef(({ email, onChange }: EmailFormProps, ref) => {
-  // const firstInputRef = useRef<HTMLInputElement>(null);
-
+export const EmailForm = forwardRef(({ email, disabled, onChange }: EmailFormProps, ref) => {
+  /**
+   * 원래 Animation이 끝나기 전에 Focus가 먼저 가면 포커스가 된 입력상자를 우선적으로 보여주기 때문에
+   * layout이 망가지면서 원하는 화면 전환이 안 나오는데
+   * 이건 첫 번째 step이고 + 이전을 눌러도 왼쪽에서 나오기 때문에 상관 없는 듯...?
+   */
   useEffect(() => {
-    ref.current.focus();
+    if (ref.current !== null) {
+      ref.current.focus();
+    }
   }, [ref.current]);
 
   return (
-    <FormField name="email">
-      <FormLabel htmlFor="email">이메일</FormLabel>
+    <S.FormField name="email">
+      <S.FormLabel htmlFor="email">이메일</S.FormLabel>
       <Form.Control asChild>
         <Input.Content
           icon={<Icon.Email />}
@@ -65,26 +33,24 @@ export const EmailForm = forwardRef(({ email, onChange }: EmailFormProps, ref) =
           required
           ref={ref}
           enterKeyHint="next"
+          // autoFocus
+          disabled={disabled}
         />
       </Form.Control>
-      <FormMessage match="valueMissing" name="email">
+      <S.FormMessage match="valueMissing" name="email">
         이메일을 입력해보시오
-      </FormMessage>
-      <FormMessage match="typeMismatch">이메일 형식을 확인해보쇼</FormMessage>
-    </FormField>
+      </S.FormMessage>
+      <S.FormMessage match="typeMismatch">이메일 형식을 확인해보쇼</S.FormMessage>
+    </S.FormField>
   );
 });
 
-type PasswordFormProps = {
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-} & Partial<FormDataProps>;
-
 export const PasswordForm = forwardRef(
-  ({ password, passwordConfirm, onChange }: PasswordFormProps, ref) => {
+  ({ password, passwordConfirm, onChange, disabled }: PasswordFormProps, ref) => {
     return (
       <>
-        <FormField name="password">
-          <FormLabel htmlFor="password">비밀번호</FormLabel>
+        <S.FormField name="password">
+          <S.FormLabel htmlFor="password">비밀번호</S.FormLabel>
 
           <Form.Control asChild>
             <Input.Content
@@ -99,13 +65,14 @@ export const PasswordForm = forwardRef(
               required
               ref={ref}
               // autoFocus
+              disabled={disabled}
             />
           </Form.Control>
-          <FormMessage match="valueMissing">비밀번호를 입력해보셔요</FormMessage>
-        </FormField>
+          <S.FormMessage match="valueMissing">비밀번호를 입력해보셔요</S.FormMessage>
+        </S.FormField>
 
-        <FormField name="passwordConfirm">
-          <FormLabel htmlFor="passwordConfirm">비밀번호 확인</FormLabel>
+        <S.FormField name="passwordConfirm">
+          <S.FormLabel htmlFor="passwordConfirm">비밀번호 확인</S.FormLabel>
 
           <Form.Control asChild>
             <Input.Content
@@ -117,37 +84,37 @@ export const PasswordForm = forwardRef(
               placeholder="비밀번호 확인"
               enterKeyHint="next"
               required
+              disabled={disabled}
             />
           </Form.Control>
-          <FormMessage match="valueMissing">비밀번호 확인을 입력해요</FormMessage>
-        </FormField>
+          <S.FormMessage match="valueMissing">비밀번호 확인을 입력해요</S.FormMessage>
+        </S.FormField>
       </>
     );
   }
 );
 
-type NicknameFormProps = {
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-} & Partial<FormDataProps>;
-
-export const NicknameForm = forwardRef(({ nickname, onChange }: NicknameFormProps, ref) => {
-  return (
-    <FormField name="nickname">
-      <FormLabel htmlFor="nickname">닉네임</FormLabel>
-      <Form.Control asChild>
-        <Input.Content
-          icon={<></>}
-          id="nickname"
-          type="text"
-          value={nickname}
-          onChange={onChange}
-          placeholder="닉네임"
-          data-role="firstinput"
-          required
-          ref={ref}
-        />
-      </Form.Control>
-      <FormMessage match="valueMissing">닉네임 입력해보쇼</FormMessage>
-    </FormField>
-  );
-});
+export const NicknameForm = forwardRef(
+  ({ nickname, disabled, onChange }: NicknameFormProps, ref) => {
+    return (
+      <S.FormField name="nickname">
+        <S.FormLabel htmlFor="nickname">닉네임</S.FormLabel>
+        <Form.Control asChild>
+          <Input.Content
+            icon={<></>}
+            id="nickname"
+            type="text"
+            value={nickname}
+            onChange={onChange}
+            placeholder="닉네임"
+            data-role="firstinput"
+            required
+            ref={ref}
+            disabled={disabled}
+          />
+        </Form.Control>
+        <S.FormMessage match="valueMissing">닉네임 입력해보쇼</S.FormMessage>
+      </S.FormField>
+    );
+  }
+);

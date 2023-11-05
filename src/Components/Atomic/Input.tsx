@@ -56,6 +56,10 @@ const InputInner = styled('input', {
   width: '100%',
   border: '.0625rem solid transparent',
   background: '$input',
+
+  '&:disabled': {
+    color: '$depth2',
+  },
 });
 
 const Root = ({ children }: { children: ReactNode }) => {

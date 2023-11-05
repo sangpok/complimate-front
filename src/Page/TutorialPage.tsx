@@ -1,10 +1,27 @@
 import { tutorials } from '@/tutorials';
 import { Text } from '@Components/Atomic';
 import * as Icon from '@Icons/index';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, PanInfo } from 'framer-motion';
 import { useState } from 'react';
 
 import * as S from './TutorialPage.styled';
+
+const logoVariant = {
+  initial: { opacity: 0 },
+  first: { y: '4rem', opacity: 1 },
+  after: { y: 0, opacity: 1 },
+};
+
+const contentVariant = {
+  initial: (direction: number) => ({ x: `${100 * direction}%` }),
+  normal: { x: 0 },
+  exit: (direction: number) => ({ x: `${-100 * direction}%` }),
+};
+
+const buttonVariant = {
+  hide: { y: '400%' },
+  show: { y: 0 },
+};
 
 const TutorialPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -13,14 +30,29 @@ const TutorialPage = () => {
   const isLastStep = currentIndex === tutorials.length - 1;
   const isFirstStep = currentIndex === 0;
 
+  const handleDragEnd = (_: unknown, panInfo: PanInfo) => {
+    const { offset, velocity } = panInfo;
+    const currentDirection = offset.x < 0 ? 1 : -1;
+
+    if (isFirstStep && currentDirection === -1) return;
+    if (isLastStep && currentDirection === 1) return;
+
+    setDirection(currentDirection);
+
+    const isOverOffset = Math.abs(offset.x) > document.body.clientWidth / 2;
+    const isOverVelocity = Math.abs(velocity.x) > 100;
+    const couldTransition = isOverOffset || isOverVelocity;
+
+    if (couldTransition) {
+      setCurrentIndex((prev) => prev + currentDirection);
+    }
+  };
+
   return (
     <S.FullPage>
       <S.LogoWrapper
-        variants={{
-          first: { y: '4rem', opacity: 1 },
-          after: { y: 0, opacity: 1 },
-        }}
-        initial={{ opacity: 0 }}
+        variants={logoVariant}
+        initial="initial"
         animate={currentIndex === 0 ? 'first' : 'after'}
       >
         <Icon.Logo />
@@ -31,29 +63,13 @@ const TutorialPage = () => {
         <S.Content
           key={currentIndex}
           custom={direction}
-          variants={{
-            initial: (direction) => ({ x: `${100 * direction}%` }),
-            normal: { x: 0 },
-            exit: (direction) => ({ x: `${-100 * direction}%` }),
-          }}
+          variants={contentVariant}
           initial="initial"
           animate="normal"
           exit="exit"
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
-          onDragEnd={(_, panInfo) => {
-            const { offset, velocity } = panInfo;
-            const currentDirection = offset.x < 0 ? 1 : -1;
-
-            if (isFirstStep && currentDirection === -1) return;
-            if (isLastStep && currentDirection === 1) return;
-
-            setDirection(currentDirection);
-
-            if (Math.abs(offset.x) > document.body.clientWidth / 2 || Math.abs(velocity.x) > 100) {
-              setCurrentIndex((prev) => prev + currentDirection);
-            }
-          }}
+          onDragEnd={handleDragEnd}
         >
           <h1>{tutorials[currentIndex].title}</h1>
           <p>{tutorials[currentIndex].body}</p>
@@ -67,10 +83,7 @@ const TutorialPage = () => {
       </S.Nav>
 
       <S.ButtonSection
-        variants={{
-          hide: { y: '400%' },
-          show: { y: 0 },
-        }}
+        variants={buttonVariant}
         initial={false}
         animate={currentIndex === tutorials.length - 1 ? 'show' : 'hide'}
       >

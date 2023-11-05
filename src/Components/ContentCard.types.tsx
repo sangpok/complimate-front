@@ -5,5 +5,7 @@ export enum TransitionDirection {
 
 export type ContentCardProp = {
   post: unknown;
+  drawerRef: unknown;
   onTransitionRaise: (direction: TransitionDirection) => void;
+  onCommentClick: () => void;
 };

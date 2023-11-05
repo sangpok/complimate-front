@@ -20,6 +20,18 @@ export const Container = styled('div', {
           color: '$depth3',
         },
       },
+      'replay-target': {
+        gap: '.25rem',
+
+        '& span': {
+          fontSize: '$caption',
+          color: '$depth3',
+
+          strong: {
+            color: '$body',
+          },
+        },
+      },
     },
   },
 });
@@ -32,4 +44,13 @@ export const Profile = styled('div', {
   borderRadius: '9999px',
   backgroundPosition: 'center',
   backgroundSize: 'cover',
+
+  variants: {
+    type: {
+      'replay-target': {
+        width: '$profile-replay-target',
+        height: '$profile-replay-target',
+      },
+    },
+  },
 });

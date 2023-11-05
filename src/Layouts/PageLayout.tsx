@@ -49,19 +49,20 @@ const Root = ({ children, onSubmit, stepList, fieldData }: PageRootProp) => {
   };
 
   return (
-    <PageTransition>
-      <PageHeader.Root onSubmit={handleSubmit}>
-        <PageContext.Provider value={multiStepForm}>{children}</PageContext.Provider>
-      </PageHeader.Root>
-    </PageTransition>
+    // <PageTransition>
+    <PageHeader.Root onSubmit={handleSubmit}>
+      <PageContext.Provider value={multiStepForm}>{children}</PageContext.Provider>
+    </PageHeader.Root>
+    // </PageTransition>
   );
 };
 
 type HeaderProp = {
   submitText?: string;
+  submitting?: boolean;
 };
 
-const Header = ({ submitText = '완료' }: HeaderProp) => {
+const Header = ({ submitText = '완료', submitting = false }: HeaderProp) => {
   const navigate = useNavigate();
 
   const multiStepForm = useContext(PageContext);
@@ -87,6 +88,7 @@ const Header = ({ submitText = '완료' }: HeaderProp) => {
       progressDirection={progressDirection}
       title={currentTitle}
       nextContent={isLastStep ? submitText : '다음'}
+      submitting={submitting}
     />
   );
 };

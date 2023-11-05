@@ -15,9 +15,10 @@ export const Header = styled('header', {
 
   button: {
     all: 'unset',
+    display: 'flex',
   },
 
-  '& div.right': {
+  '& div.group': {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
