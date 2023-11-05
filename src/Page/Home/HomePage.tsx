@@ -1,11 +1,11 @@
 import * as Layout from '@Layouts/DefaultLayout';
 import * as Header from '@Components/HomeHeader';
-import * as C from './HomePage.component';
+import * as C from './Components';
 import * as Dialog from '@radix-ui/react-dialog';
 import { LegacyRef, useRef, useState } from 'react';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import { AnimatePresence, useAnimate } from 'framer-motion';
-import { TransitionDirection } from '@Components/ContentCard.types';
+import { TransitionDirection } from '@Page/Home/Components/ContentCard/ContentCard.types';
 
 const commentList = [
   {

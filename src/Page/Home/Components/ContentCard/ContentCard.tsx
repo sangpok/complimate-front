@@ -6,8 +6,8 @@ import * as S from './ContentCard.styled';
 import * as Dialog from '@radix-ui/react-dialog';
 
 /** Component */
-import InlineProfile from './InlineProfile';
-import PostUserInfo from './PostUserInfo';
+import InlineProfile from '../../../../Components/InlineProfile';
+import PostUserInfo from '../../../../Components/PostUserInfo';
 
 /** Icon */
 import * as Icon from '@Icons/index';
@@ -22,7 +22,7 @@ import useMeasure from 'react-use-measure';
 /** Type */
 import { ContentCardProp, TransitionDirection } from './ContentCard.types';
 import { styled } from '@/stitches.config';
-import PostImageList from './PostImageList';
+import PostImageList from '../../../../Components/PostImageList';
 
 const DialogOverlay = styled(motion(Dialog.Overlay), {
   background: 'rgba(0 0 0 / 0.5)',

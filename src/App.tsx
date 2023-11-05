@@ -8,14 +8,14 @@ import {
   useOutlet,
 } from 'react-router-dom';
 
-import HomePage, { loader as homeLoader } from '@Page/HomePage';
-import LandingPage from '@Page/LandingPage';
-import LoginPage, { action as loginAction } from '@Page/LoginPage';
-import RegisterPage, { action as registerAction } from '@Page/RegisterPage';
-import SettingPage from '@Page/SettingPage';
-import TestPage from '@Page/TestPage';
-import TutorialPage from '@Page/TutorialPage';
-import WritePage, { action as writeAction } from '@Page/WritePage';
+import HomePage, { loader as homeLoader } from '@Page/Home/HomePage';
+import LandingPage from '@Page/Landing/LandingPage';
+import LoginPage, { action as loginAction } from '@Page/Login/LoginPage';
+import RegisterPage, { action as registerAction } from '@Page/Register/RegisterPage';
+import SettingPage from '@Page/Setting/SettingPage';
+import TestPage from '@Page/Test/TestPage';
+import TutorialPage from '@Page/Tutorial/TutorialPage';
+import WritePage, { action as writeAction } from '@Page/Write/WritePage';
 
 import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 

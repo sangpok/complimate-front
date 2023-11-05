@@ -13,11 +13,11 @@ import * as Dialog from '@radix-ui/react-dialog';
 import * as S from './HomePage.styled';
 import * as Icon from '@Icons/index';
 
-import ContentCard from '@Components/ContentCard';
+import ContentCard from '@Page/Home/Components/ContentCard/ContentCard';
 import HomeHeader from '@Components/HomeHeader';
 
 import { styled } from '@/stitches.config';
-import { TransitionDirection } from '@Components/ContentCard.types';
+import { TransitionDirection } from '@Page/Home/Components/ContentCard/ContentCard.types';
 import { AnimatePresence, motion, useAnimate } from 'framer-motion';
 import Complimate from '@Components/Complimate';
 
