@@ -48,6 +48,7 @@ export const { styled, css, globalCss, keyframes, theme, config } = createStitch
       10: '3rem', // 48
       11: '4rem', // 64
       12: '8rem', // 128
+      13: '1.25rem', // 20
 
       logo: '$8',
       caption: '$3',
@@ -63,14 +64,18 @@ export const { styled, css, globalCss, keyframes, theme, config } = createStitch
       content: '$4',
       input: '$5',
       'label-status': '$4',
+      menu: '$13',
+      comment: '$4',
     },
     fonts: {},
     fontWeights: {},
     lineHeights: {
       1: '1.75rem',
       2: '1.625rem',
+      3: '1.375rem',
       'tutorial-content': '$1',
       'cc-content': '$2',
+      comment: '$3',
     },
     letterSpacings: {},
     sizes: {
@@ -90,11 +95,15 @@ export const { styled, css, globalCss, keyframes, theme, config } = createStitch
       nav: '$1',
       icon: '$8',
       'icon-sm': '$6',
+      'icon-menu': '$7',
+      'icon-comment': '$5',
       logo: '$12',
       'logo-sm': '$8',
+      'profile-replay-target': '$2',
       'profile-sm': '$5',
       'profile-md': '$9',
       'profile-lg': '$12',
+      'header-title': '$5',
     },
     borderWidths: {
       default: '.0625rem', // 1px

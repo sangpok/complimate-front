@@ -6,7 +6,17 @@ import * as S from './HomeHeader.styled';
 import { useAnimate } from 'framer-motion';
 import type { HomeHeaderProp } from './HomeHeader.types';
 
-const HomeHeader = ({ onHamburgerClick, onRefreshClick, onWriteClick }: HomeHeaderProp) => {
+const Root = S.Header;
+
+const Hamburger = ({ onClick }) => {
+  return (
+    <button onClick={onClick}>
+      <Icon.Hamburger />
+    </button>
+  );
+};
+
+const Refresh = ({ onClick }) => {
   const [refreshScope, animateScope] = useAnimate();
   const refreshState = useRef('idle');
 
@@ -26,26 +36,28 @@ const HomeHeader = ({ onHamburgerClick, onRefreshClick, onWriteClick }: HomeHead
   const handleRefreshClick = () => {
     if (refreshState.current !== 'idle') return;
 
-    onRefreshClick();
+    onClick();
     animateRefresh();
   };
 
   return (
-    <S.Header>
-      <button onClick={onHamburgerClick}>
-        <Icon.Hamburger />
-      </button>
-
-      <div className="right">
-        <button ref={refreshScope} onClick={handleRefreshClick}>
-          <Icon.Refresh />
-        </button>
-        <button onClick={onWriteClick}>
-          <Icon.Write />
-        </button>
-      </div>
-    </S.Header>
+    <button ref={refreshScope} onClick={handleRefreshClick}>
+      <Icon.Refresh />
+    </button>
   );
 };
 
-export default HomeHeader;
+const Write = ({ onClick }) => {
+  return (
+    <button onClick={onClick}>
+      <Icon.Write />
+    </button>
+  );
+};
+
+const Group = ({ children }) => {
+  return <div className="group">{children}</div>;
+};
+
+// export default HomeHeader;
+export { Root, Hamburger, Refresh, Write, Group };
