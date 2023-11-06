@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import * as S from './CommentDrawer.styled';
 import * as C from './CommentDrawer.component';
 
@@ -7,61 +8,104 @@ import * as Layout from '@Layouts/DefaultLayout';
 
 import * as Icon from '@Icons/index';
 import InlineProfile from '@Components/InlineProfile';
+import { CommentDrawerProp } from './CommentDrawer.types';
+import { useDragControls, motion } from 'framer-motion';
+import { TransitionDirection } from '../ContentCard/ContentCard.types';
 
-export const CommentDrawer = ({ comments, container, drawerScope }: CommentDrawerProp) => {
+const MotionedHead = motion(Layout.Head);
+
+/**
+ * TODO: HomePage에서 sortTypeIndex 관리하기
+ */
+export const CommentDrawer = ({
+  comments,
+  // sortTypeIndex,
+  container,
+  drawerScope,
+  onCommentItemClick,
+  onSortClick,
+  onClose,
+}: CommentDrawerProp) => {
+  const dragControls = useDragControls();
+
   return (
     <Dialog.Portal container={container}>
-      <S.DrawerContent ref={drawerScope} initial={{ y: '100%' }} animate={{ y: 0 }}>
-        <Layout.Root>
-          <S.DrawerLayout>
-            <Layout.Head>
-              <S.DrawerHandle>
-                <div className="handle" />
-              </S.DrawerHandle>
-            </Layout.Head>
+      <Dialog.Content asChild>
+        <S.DrawerContent
+          ref={drawerScope}
+          initial={{ y: '100%' }}
+          animate={{ y: 0 }}
+          drag="y"
+          dragListener={false}
+          dragControls={dragControls}
+          dragConstraints={{ top: 0, bottom: 0 }}
+          onDragEnd={(_, panInfo) => {
+            const { offset, velocity } = panInfo;
 
-            <Layout.Body css={{ overflowY: 'scroll' }}>
-              <Layout.Head>
-                <div>
-                  <h2>총 {comments.length}개의 댓글</h2>
-                  <button className="필터">
-                    <Icon.Sort
-                      css={{
-                        width: '$icon-comment',
-                        height: '$icon-comment',
-                        color: '$point',
-                      }}
-                    />
-                    공감순
-                  </button>
-                </div>
-              </Layout.Head>
+            const curDirection = offset.y < 0 ? TransitionDirection.Up : TransitionDirection.Down;
 
-              <C.List comments={comments} />
-            </Layout.Body>
+            const offsetThreshold = document.body.clientHeight / 3;
+            const veloctiyThreshold = 100;
 
-            <Layout.Foot>
-              <S.WriteContainer>
-                <S.WriteInputBox>
-                  <S.ReplyTargetBox className="답글 정보">
-                    <button className="답글 취소">
-                      <Icon.Delete />
+            const overOffset = Math.abs(offset.y) > offsetThreshold;
+            const overVelocity = Math.abs(velocity.y) > veloctiyThreshold;
+            const couldTransition = overOffset || overVelocity;
+
+            if (couldTransition && curDirection === TransitionDirection.Down) {
+              onClose();
+            }
+          }}
+        >
+          <Layout.Root>
+            <S.DrawerLayout>
+              <MotionedHead
+                // drag
+                onPointerDown={(event) => {
+                  console.log(event);
+                  dragControls.start(event);
+                }}
+              >
+                <S.DrawerHandle>
+                  <div className="handle" />
+                </S.DrawerHandle>
+              </MotionedHead>
+
+              <Layout.Body css={{ overflowY: 'scroll', marginBottom: '1rem' }}>
+                <Layout.Head>
+                  <S.DrawerHead>
+                    <h2>총 {comments.length}개의 댓글</h2>
+                    <button className="필터" onClick={() => onSortClick('정렬 버튼 눌렀음 암튼')}>
+                      <C.CommentIcon IconInner={Icon.Sort} color="$point" />
+                      공감순
                     </button>
-                    <div className="답글 정보 콘텐츠">
-                      <InlineProfile nickname="박봉자" profile="./tet.jpg" type="replay-target" />
-                    </div>
-                  </S.ReplyTargetBox>
+                  </S.DrawerHead>
+                </Layout.Head>
 
-                  <input placeholder="칭찬을 달아주세요" />
-                </S.WriteInputBox>
+                <C.List comments={comments} onItemClick={onCommentItemClick} />
+              </Layout.Body>
 
-                <button className="입력 버튼">등록</button>
-              </S.WriteContainer>
-            </Layout.Foot>
-          </S.DrawerLayout>
-        </Layout.Root>
-        {/* <S.Drawer className="댓글 Drawer"> */}
-        {/* <S.DrawerHandle className="Drawer Handle Wrapper">
+              <Layout.Foot>
+                <S.WriteContainer>
+                  <S.WriteInputBox>
+                    <S.ReplyTargetBox className="답글 정보">
+                      <button className="답글 취소">
+                        <Icon.Delete />
+                      </button>
+                      <div className="답글 정보 콘텐츠">
+                        <InlineProfile nickname="박봉자" profile="./tet.jpg" type="replay-target" />
+                      </div>
+                    </S.ReplyTargetBox>
+
+                    <input placeholder="칭찬을 달아주세요" />
+                  </S.WriteInputBox>
+
+                  <button className="입력 버튼">등록</button>
+                </S.WriteContainer>
+              </Layout.Foot>
+            </S.DrawerLayout>
+          </Layout.Root>
+          {/* <S.Drawer className="댓글 Drawer"> */}
+          {/* <S.DrawerHandle className="Drawer Handle Wrapper">
               <div className="handle" />
             </S.DrawerHandle>
 
@@ -372,8 +416,9 @@ export const CommentDrawer = ({ comments, container, drawerScope }: CommentDrawe
 
               <button class="입력 버튼">등록</button>
             </S.DrawerFooter> */}
-        {/* </S.Drawer> */}
-      </S.DrawerContent>
+          {/* </S.Drawer> */}
+        </S.DrawerContent>
+      </Dialog.Content>
     </Dialog.Portal>
   );
 };

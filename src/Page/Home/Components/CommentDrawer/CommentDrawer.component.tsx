@@ -1,84 +1,116 @@
 import InlineProfile from '@Components/InlineProfile';
 import * as Icon from '@Icons/index';
 import * as Layout from '@Layouts/DefaultLayout';
-import { CommentItemInner, CommentItemProp, CommentListProp } from './CommentDrawer.types';
+import * as S from './CommentDrawer.styled.tsx';
+import type { CommentItemInner, CommentItemProp, CommentListProp } from './CommentDrawer.types';
 
-const ItemInner = ({ name, profile, date, body, replys, heartCount }: CommentItemInner) => {
+const ItemInner = ({
+  id,
+  name,
+  profile,
+  date,
+  body,
+  replys,
+  heartCount,
+  onMoreMenuClick,
+  onReplyButtonClick,
+  onHeartClick,
+}: CommentItemInner) => {
   return (
-    <div>
-      <Layout.Head>
-        <div className="left">
-          <InlineProfile type="normal" nickname={name} profile={profile} />
-          <p className="time">{date}</p>
-        </div>
+    <S.CommentItemInner className="댓글 Inner">
+      <div className="group">
+        <Layout.Head>
+          <S.CommentItemHead className="댓글 Head">
+            <div className="group">
+              <InlineProfile type="normal" nickname={name} profile={profile} />
+              <p className="time">{date}</p>
+            </div>
 
-        <button>
-          <Icon.More
-            css={{
-              width: '$icon-comment',
-              height: '$icon-comment',
-            }}
-          />
-        </button>
-      </Layout.Head>
+            <button onClick={() => onMoreMenuClick(id)}>
+              <CommentIcon IconInner={Icon.More} color="$depth3" />
+            </button>
+          </S.CommentItemHead>
+        </Layout.Head>
 
-      <Layout.Body>
-        <p className="body">{body}</p>
-      </Layout.Body>
+        <Layout.Body className="댓글 본문">
+          <S.CommentItemBody className="body">{body}</S.CommentItemBody>
+        </Layout.Body>
+      </div>
 
       <Layout.Foot>
-        {replys && (
-          <button>
-            <Icon.Comment
-              css={{
-                width: '$icon-comment',
-                height: '$icon-comment',
-                lineHeight: 0,
-                color: '$point',
-              }}
-            />
-            {replys.length}
+        <S.CommentItemFoot className="댓글 Foot">
+          {replys && (
+            <button onClick={() => onReplyButtonClick(id)}>
+              <CommentIcon IconInner={Icon.Comment} color="$point" />
+              {replys.length}
+            </button>
+          )}
+          <button onClick={() => onHeartClick(id)}>
+            <CommentIcon IconInner={Icon.Heart} color="$point" />
+            {heartCount}
           </button>
-        )}
-        <button>
-          <Icon.Heart
-            css={{
-              width: '$icon-comment',
-              height: '$icon-comment',
-              lineHeight: 0,
-              color: '$point',
-            }}
-          />
-          {heartCount}
-        </button>
+        </S.CommentItemFoot>
       </Layout.Foot>
-    </div>
+    </S.CommentItemInner>
   );
 };
 
-const Item = ({ comment }: CommentItemProp) => {
+const Item = ({ comment, onItemClick }: CommentItemProp) => {
+  const handleHeartClick = (id: number) => {
+    onItemClick(id, 'heart');
+  };
+
+  const handleMoreMenuClick = (id: number) => {
+    onItemClick(id, 'more');
+  };
+
+  const handleReplyButtonClick = (id: number) => {
+    onItemClick(id, 'reply');
+  };
+
   return (
-    <div>
-      <ItemInner {...comment} />
+    <S.CommentItem className="댓글 하나">
+      <ItemInner
+        {...comment}
+        onHeartClick={handleHeartClick}
+        onMoreMenuClick={handleMoreMenuClick}
+        onReplyButtonClick={handleReplyButtonClick}
+      />
       {comment.replys && (
-        <div className="padding">
+        <S.CommentReplyList className="대댓 목록">
           {comment.replys.map((reply) => (
-            <ItemInner {...reply} />
+            <ItemInner
+              key={reply.id}
+              {...reply}
+              onHeartClick={handleHeartClick}
+              onMoreMenuClick={handleMoreMenuClick}
+              onReplyButtonClick={handleReplyButtonClick}
+            />
           ))}
-        </div>
+        </S.CommentReplyList>
       )}
-    </div>
+    </S.CommentItem>
   );
 };
 
-const List = ({ comments }: CommentListProp) => {
+const List = ({ comments, onItemClick }: CommentListProp) => {
   return (
-    <>
+    <S.CommentList className="댓글 목록">
       {comments.map((comment) => (
-        <Item key={comment.id} comment={comment} />
+        <Item key={comment.id} comment={comment} onItemClick={onItemClick} />
       ))}
-    </>
+    </S.CommentList>
   );
 };
 
-export { Item, ItemInner, List };
+const CommentIcon = ({ IconInner, ...rest }) => (
+  <IconInner
+    css={{
+      width: '$icon-comment',
+      height: '$icon-comment',
+      ...rest,
+    }}
+  />
+);
+
+export { Item, ItemInner, List, CommentIcon };

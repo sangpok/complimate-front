@@ -8,6 +8,7 @@ import { ReactComponent as PasswordIConInner } from '@Icons/mdi_lock-outline.svg
 import { ReactComponent as HamburgerInner } from '@Icons/quill_hamburger.svg';
 import { ReactComponent as WriteInner } from '@Icons/mdi_pencil-outline.svg';
 import { ReactComponent as HeartInner } from '@Icons/solar_heart-broken.svg';
+import { ReactComponent as HeartFillInner } from '@Icons/solar_heart-fill.svg';
 import { ReactComponent as MoreInner } from '@Icons/ri_more-line.svg';
 import { ReactComponent as CommentInner } from '@Icons/material-symbols_comment-outline.svg';
 import { ReactComponent as RefreshInner } from '@Icons/material-symbols_refresh.svg';
@@ -60,6 +61,12 @@ export const Write = styled(WriteInner, {
 });
 
 export const Heart = styled(HeartInner, {
+  width: '$icon-sm',
+  height: '$icon-sm',
+  color: '$point',
+});
+
+export const HeartFilled = styled(HeartFillInner, {
   width: '$icon-sm',
   height: '$icon-sm',
   color: '$point',

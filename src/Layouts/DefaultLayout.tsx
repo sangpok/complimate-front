@@ -16,14 +16,14 @@ const Root = styled('div', {
   width: '100%',
   height: '100%',
 
-  border: '1px solid cyan',
+  // border: '1px solid cyan',
 });
 
 const Head = styled('header', {
   position: 'relative',
   width: '100%',
 
-  border: '1px solid red',
+  // border: '1px solid red',
 });
 
 const Body = styled('section', {
@@ -31,12 +31,12 @@ const Body = styled('section', {
   width: '100%',
   position: 'relative',
 
-  border: '1px solid green',
+  // border: '1px solid green',
 });
 
 const Foot = styled('footer', {
   width: '100%',
-  border: '1px solid blue',
+  // border: '1px solid blue',
 });
 
 export { Body, Foot, Full, Head, Root };

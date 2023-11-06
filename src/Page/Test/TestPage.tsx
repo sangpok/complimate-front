@@ -1,174 +1,139 @@
-import { styled } from '@/stitches.config';
-import { tutorials } from '@/tutorials';
-import { Text } from '@Components/Atomic';
+import { useRef, ReturnType } from 'react';
+
+import * as Layout from '@Layouts/DefaultLayout';
 import * as Icon from '@Icons/index';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+// import { css, styled } from '@/stitches.config';
+import { motion } from 'framer-motion';
 
-const FullPage = styled('div', {
-  // position: 'relative',
-});
-
-const LogoWrapper = styled(motion.div, {
+const TriggerButton = styled('div', {
   display: 'flex',
-  flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-  gap: '$double',
-  marginTop: '$quard',
 
-  width: '100%',
+  backgorund: '$depth2',
+  padding: '1rem',
+
+  height: 'fit-content',
+  aspectRatio: '1 / 1',
+
+  boxShadow: '0 0 16px 1px rgba(0, 0, 0, .2)',
+
+  borderRadius: '9999px',
+  overflow: 'hidden',
+});
+
+const TriggeredMenu = styled(motion.div, {
   position: 'absolute',
+  width: '100%',
   top: 0,
 });
 
-const Content = styled(motion.div, {
+const ContentContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
-  height: '100dvh',
-  width: '100dvw',
+  alignItems: 'center',
 
-  marginTop: '4rem',
-  padding: '0 2rem',
+  padding: '.5rem 0',
 
-  position: 'absolute',
-
-  '& h1': {
-    fontSize: '$tutorial-title',
-    marginBottom: '$double',
-  },
-
-  '& p': {
-    fontSize: '$tutorial-content',
-    fontWeight: 600,
-    lineHeight: '$tutorial-content',
-
-    '& strong': {
-      color: '$point',
-    },
-  },
+  span: { fontWeight: 600, color: '$point' },
 });
 
-const Nav = styled('div', {
+const List = styled('ul', {
   display: 'flex',
-  flexDirection: 'row',
+  flexDirection: 'column',
+
   justifyContent: 'center',
   alignItems: 'center',
-  gap: '$smaller',
-  width: '100%',
-  marginBottom: '$quard',
 
-  position: 'absolute',
-  bottom: 0,
-});
+  backgorund: '$depth2',
+  padding: '.5rem',
 
-const Circle = styled('div', {
-  width: '$nav',
-  height: '$nav',
-  borderRadius: '999px',
-  background: '$depth2',
+  boxShadow: '0 0 16px 1px rgba(0, 0, 0, .2)',
+  borderRadius: '99rem',
+  background: 'white',
 
-  '&.selected': {
-    background: '$point',
+  li: {
+    all: 'unset',
   },
 });
 
-const ButtonSection = styled(motion.div, {
-  position: 'absolute',
-  bottom: '0',
-  width: '100%',
-  padding: '0 $double',
-  display: 'flex',
-  marginBottom: 'calc($quard * 2)',
+const Content = ({ Icon, text }) => {
+  return (
+    <ContentContainer>
+      <Icon
+        css={{
+          width: '$icon-sm',
+          height: '$icon-sm',
+          color: '$point',
+        }}
+      />
+      <span>{text}</span>
+    </ContentContainer>
+  );
+};
+
+const DraggableSelectContainer = styled('div', {
+  position: 'relative',
 });
 
-const StyledLink = styled(Link, {
-  all: 'unset',
-
-  width: '100%',
-  fontSize: '$button-text',
-  fontWeight: 700,
-  padding: '$default $double',
-  color: '$bg',
-  background: '$point',
-  textAlign: 'center',
-  borderRadius: '$small',
-  boxShadow: '0 0 10px 1px rgba(0, 0, 0, .2)',
-});
+const list = [
+  {
+    id: 0,
+    Icon: Icon.Heart,
+    count: 1,
+  },
+  {
+    id: 1,
+    Icon: Icon.Heart,
+    count: 2,
+  },
+  {
+    id: 2,
+    Icon: Icon.Heart,
+    count: 3,
+  },
+  {
+    id: 3,
+    Icon: Icon.Heart,
+    count: 4,
+  },
+];
 
 const TestPage = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
+  const timerInstance = useRef<ReturnType<typeof setTimeout>>(null);
+  const [isPressed, setIsPressed] = useState(false);
+  const longPressCallback = () => {};
 
-  const isLastStep = currentIndex === tutorials.length - 1;
-  const isFirstStep = currentIndex === 0;
+  const handleTriggerButtonClick = () => {
+    timerInstance.current = setTimeout(() => {
+      if (timerInstance.current && !isPressed.current) {
+        isPressed.current = true;
+        longPressCallback();
+      }
+    }, 600);
+  };
 
   return (
-    <FullPage>
-      <LogoWrapper
-        variants={{
-          first: { y: '4rem', opacity: 1 },
-          after: { y: 0, opacity: 1 },
-        }}
-        initial={{ opacity: 0 }}
-        animate={currentIndex === 0 ? 'first' : 'after'}
-      >
-        <Icon.Logo />
-        <Text type="logo">컴플리메이트</Text>
-      </LogoWrapper>
+    <Layout.Full>
+      <Layout.Root>
+        <DraggableSelectContainer>
+          <TriggerButton onClick={handleTriggerButtonClick}>
+            <Content Icon={Icon.Hamburger} text="1" />
+          </TriggerButton>
 
-      <AnimatePresence initial={false} custom={direction}>
-        <Content
-          key={currentIndex}
-          custom={direction}
-          variants={{
-            initial: (direction) => ({ x: `${100 * direction}%` }),
-            normal: { x: 0 },
-            exit: (direction) => ({ x: `${-100 * direction}%` }),
-          }}
-          initial="initial"
-          animate="normal"
-          exit="exit"
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          onDragEnd={(_, panInfo) => {
-            const { offset, velocity } = panInfo;
-            const currentDirection = offset.x < 0 ? 1 : -1;
-
-            if (isFirstStep && currentDirection === -1) return;
-            if (isLastStep && currentDirection === 1) return;
-
-            setDirection(currentDirection);
-
-            if (Math.abs(offset.x) > document.body.clientWidth / 2 || Math.abs(velocity.x) > 100) {
-              setCurrentIndex((prev) => prev + currentDirection);
-            }
-          }}
-        >
-          <h1>{tutorials[currentIndex].title}</h1>
-          <p>{tutorials[currentIndex].body}</p>
-        </Content>
-      </AnimatePresence>
-
-      <Nav>
-        {tutorials.map((_, index) => (
-          <Circle className={index === currentIndex ? 'selected' : ''} />
-        ))}
-      </Nav>
-
-      <ButtonSection
-        variants={{
-          hide: { y: '400%' },
-          show: { y: 0 },
-        }}
-        initial={false}
-        animate={currentIndex === tutorials.length - 1 ? 'show' : 'hide'}
-      >
-        <StyledLink to="/home">시작하기</StyledLink>
-      </ButtonSection>
-    </FullPage>
+          <TriggeredMenu variants>
+            <List>
+              {list.map((item) => (
+                <li key={item.id}>
+                  <Content Icon={item.Icon} text={item.count} />
+                </li>
+              ))}
+            </List>
+          </TriggeredMenu>
+        </DraggableSelectContainer>
+      </Layout.Root>
+    </Layout.Full>
   );
 };
 

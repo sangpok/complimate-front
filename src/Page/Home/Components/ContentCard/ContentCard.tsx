@@ -13,7 +13,14 @@ import PostUserInfo from '../../../../Components/PostUserInfo';
 import * as Icon from '@Icons/index';
 
 /** Animate */
-import { PanInfo, motion, useAnimate, useDragControls, useMotionValue } from 'framer-motion';
+import {
+  AnimatePresence,
+  PanInfo,
+  motion,
+  useAnimate,
+  useDragControls,
+  useMotionValue,
+} from 'framer-motion';
 
 /** Hook */
 import { mergeRefs } from 'react-merge-refs';
@@ -23,42 +30,20 @@ import useMeasure from 'react-use-measure';
 import { ContentCardProp, TransitionDirection } from './ContentCard.types';
 import { styled } from '@/stitches.config';
 import PostImageList from '../../../../Components/PostImageList';
+import { useDoubleTap } from '@Hooks/useDoubleTab';
 
-const DialogOverlay = styled(motion(Dialog.Overlay), {
-  background: 'rgba(0 0 0 / 0.5)',
-  position: 'fixed',
-  top: '0',
-  left: '0',
-  right: '0',
-  bottom: '0',
-  zIndex: 99,
-  willChange: 'opacity',
-});
-
-const DialogContent = styled(motion(Dialog.Content), {
-  position: 'absolute',
-  top: '$content',
-  left: 0,
-  width: '100dvw',
-  height: 'calc(100% - 5rem)',
-  background: '$depth1',
-  padding: '$double',
-  zIndex: 99,
-  willChange: 'transform',
-  borderRadius: '$large',
-  boxShadow: '0 0 25px 1px rgba(0, 0, 0, .1)',
-});
-
-const ContentCard = ({ post, onTransitionRaise, drawerRef, onCommentClick }: ContentCardProp) => {
+const ContentCard = ({
+  post,
+  onTransitionRaise,
+  onCommentClick,
+  onHeartClick,
+}: ContentCardProp) => {
   const containerDragControls = useDragControls();
   const bodyDragControls = useDragControls();
 
-  // const [drawerRef, setDrawerRef] = useState(null);
+  const [heartRef, animateHeart] = useAnimate();
 
-  const [scope, animate] = useAnimate();
-  const [scopee, animatee] = useAnimate();
-
-  const [open, setOpen] = useState(false);
+  const [isHeartClicked, setIsHeartClicked] = useState(false);
 
   const [bodyRef, bodyBounds] = useMeasure();
   const [bodyContentRef, bodyContentBounds] = useMeasure();
@@ -158,17 +143,27 @@ const ContentCard = ({ post, onTransitionRaise, drawerRef, onCommentClick }: Con
     }
   };
 
-  const handleOpenChange = (open: boolean) => {
-    // setOpen(open);
-    if (!open) {
-      Promise.all([
-        // animate(scope.current, { opacity: 0 }),
-        animatee(scopee.current, { y: '100%' }),
-      ]).then(() => {
-        setOpen(false);
-      });
-    }
+  const handleHeartClick = () => {
+    setIsHeartClicked((prev) => !prev);
+    onHeartClick(post.id);
   };
+
+  const animateHeartDown = () => animateHeart(heartRef.current, { scale: 0.7 });
+  const animateHeartUp = async () => {
+    await animateHeart(heartRef.current, { scale: 1.2 });
+    await animateHeart(heartRef.current, { scale: 1 });
+  };
+
+  const animateHeartbeat = async () => {
+    await animateHeartDown();
+    await animateHeartUp();
+  };
+
+  const doubleTabEvent = useDoubleTap(() => {
+    setIsHeartClicked((prev) => !prev);
+    onHeartClick(post.id);
+    animateHeartbeat();
+  });
 
   return (
     <S.CardContainer
@@ -180,6 +175,18 @@ const ContentCard = ({ post, onTransitionRaise, drawerRef, onCommentClick }: Con
       dragDirectionLock
       onPointerDown={handleContainerPointerDown}
       onDragEnd={handleContainerDragEnd}
+      // onClick={(event) => {
+      //   // alert(event);
+      //   console.log({ event });
+      //   if (event.detail === 2) {
+      //     // alert('Asdf');
+      //     setIsHeartClicked((prev) => !prev);
+      //     animateHeartbeat();
+      //   }
+      // }}
+      // onTap={(event, info) => {
+      //   console.log({ event, info });
+      // }}
       className="칭찬해줘 한 개"
     >
       <S.CardHedaer className="유저 정보 및 칭찬스티커">
@@ -190,10 +197,16 @@ const ContentCard = ({ post, onTransitionRaise, drawerRef, onCommentClick }: Con
         />
 
         <S.Sticker className="cc-sticker">
-          <button>
-            <Icon.Heart />
+          <button
+            onClick={handleHeartClick}
+            onPointerDown={() => animateHeartDown()}
+            onPointerUp={() => animateHeartUp()}
+          >
+            <motion.div ref={heartRef}>
+              {isHeartClicked ? <Icon.HeartFilled /> : <Icon.Heart />}
+            </motion.div>
+            <p>{`${post.stickerCount}`}</p>
           </button>
-          <p>{`${post.stickerCount}`}</p>
           <div className="공감 목록" />
         </S.Sticker>
       </S.CardHedaer>
@@ -202,6 +215,7 @@ const ContentCard = ({ post, onTransitionRaise, drawerRef, onCommentClick }: Con
         data-component="body"
         className="칭찬해줘"
         ref={mergeRefs([cardBodyRef, bodyRef])}
+        {...doubleTabEvent}
       >
         <motion.div
           key={JSON.stringify(bodyBounds)}
@@ -231,50 +245,49 @@ const ContentCard = ({ post, onTransitionRaise, drawerRef, onCommentClick }: Con
         </motion.div>
       </S.CardBody>
 
-      <Dialog.Root open={open} onOpenChange={handleOpenChange}>
-        <S.BestCommentSection className="베댓">
-          <div className="베댓 Wrapper">
-            <div className="베댓 콘텐츠">
-              <div className="베댓 카드">
-                <S.BestCardContent className="베댓 카드 콘텐츠">
-                  <S.BestCommentHeader className="베댓 카드 정보 및 메뉴">
-                    <S.BestCommentInfo className="베댓 정보">
-                      <InlineProfile
-                        type="normal"
-                        nickname={post.bestComments[0].author}
-                        profile={post.bestComments[0].profile}
-                      />
-                      <S.Time>{post.bestComments[0].date}</S.Time>
-                    </S.BestCommentInfo>
+      <S.BestCommentSection className="베댓">
+        <div className="베댓 Wrapper">
+          <div className="베댓 콘텐츠">
+            <div className="베댓 카드">
+              <S.BestCardContent className="베댓 카드 콘텐츠">
+                <S.BestCommentHeader className="베댓 카드 정보 및 메뉴">
+                  <S.BestCommentInfo className="베댓 정보">
+                    <InlineProfile
+                      type="normal"
+                      nickname={post.bestComments[0].author}
+                      profile={post.bestComments[0].profile}
+                    />
+                    <S.Time>{post.bestComments[0].date}</S.Time>
+                  </S.BestCommentInfo>
 
-                    <S.CommentMenu className="메뉴">
-                      <Icon.More width="1.125rem" height="1.125rem" />
-                    </S.CommentMenu>
-                  </S.BestCommentHeader>
+                  <S.CommentMenu className="메뉴">
+                    <Icon.More width="1.125rem" height="1.125rem" />
+                  </S.CommentMenu>
+                </S.BestCommentHeader>
 
-                  <S.CommentBody className="베댓 본문">{post.bestComments[0].body}</S.CommentBody>
-                  <S.CommentLike className="베댓 좋아요">
-                    <Icon.Heart />
-                    <span>{post.bestComments[0].stickerCount}</span>
-                  </S.CommentLike>
-                </S.BestCardContent>
-              </div>
+                <S.CommentBody className="베댓 본문">{post.bestComments[0].body}</S.CommentBody>
+                <S.CommentLike className="베댓 좋아요">
+                  <Icon.Heart />
+                  <span>{post.bestComments[0].stickerCount}</span>
+                </S.CommentLike>
+              </S.BestCardContent>
             </div>
           </div>
+        </div>
 
-          <S.MoreButton onClick={() => onCommentClick()}>
-            <Icon.Comment css={{ color: '$point' }} />
-            <span>{post.bestComments.length}개의 댓글 더 보기</span>
-          </S.MoreButton>
+        <S.MoreButton onClick={() => onCommentClick()}>
+          <Icon.Comment css={{ color: '$point' }} />
+          <span>{post.bestComments.length}개의 댓글 더 보기</span>
+        </S.MoreButton>
 
-          {/* <Dialog.Trigger asChild>
+        {/* <Dialog.Trigger asChild>
             <S.MoreButton onClick={() => setOpen(true)}>
               <Icon.Comment css={{ color: '$point' }} />
               <span>{post.bestComments.length}개의 댓글 더 보기</span>
             </S.MoreButton>
           </Dialog.Trigger> */}
 
-          {/* <Dialog.Portal container={drawerRef}>
+        {/* <Dialog.Portal container={drawerRef}>
             <DialogContent ref={scopee} initial={{ y: '100%' }} animate={{ y: 0 }}>
               <S.Drawer className="댓글 Drawer">
                 <S.DrawerHandle className="Drawer Handle Wrapper">
@@ -599,8 +612,7 @@ const ContentCard = ({ post, onTransitionRaise, drawerRef, onCommentClick }: Con
               </S.Drawer>
             </DialogContent>
           </Dialog.Portal> */}
-        </S.BestCommentSection>
-      </Dialog.Root>
+      </S.BestCommentSection>
     </S.CardContainer>
   );
 };

@@ -1,15 +1,16 @@
-import * as Layout from '@Layouts/DefaultLayout';
 import * as Header from '@Components/HomeHeader';
-import * as C from './Components';
-import * as Dialog from '@radix-ui/react-dialog';
-import { LegacyRef, useRef, useState } from 'react';
-import { useLoaderData, useNavigate } from 'react-router-dom';
-import { AnimatePresence, useAnimate } from 'framer-motion';
+import * as Layout from '@Layouts/DefaultLayout';
 import { TransitionDirection } from '@Page/Home/Components/ContentCard/ContentCard.types';
+import * as Dialog from '@radix-ui/react-dialog';
+import { useAnimate } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { useLoaderData, useNavigate } from 'react-router-dom';
+import * as C from './Components';
+import { v4 as uuid } from 'uuid';
 
 const commentList = [
   {
-    id: 0,
+    id: uuid(),
     name: '박봉자',
     profile: './tet.jpg',
     date: '4시간 전',
@@ -17,7 +18,7 @@ const commentList = [
     heartCount: 48,
     replys: [
       {
-        id: 0,
+        id: uuid(),
         name: '박봉자',
         profile: './tet.jpg',
         date: '4시간 전',
@@ -25,7 +26,7 @@ const commentList = [
         heartCount: 48,
       },
       {
-        id: 1,
+        id: uuid(),
         name: '박봉자',
         profile: './tet.jpg',
         date: '4시간 전',
@@ -35,7 +36,7 @@ const commentList = [
     ],
   },
   {
-    id: 0,
+    id: uuid(),
     name: '박봉자',
     profile: './tet.jpg',
     date: '4시간 전',
@@ -43,7 +44,7 @@ const commentList = [
     heartCount: 48,
     replys: [
       {
-        id: 0,
+        id: uuid(),
         name: '박봉자',
         profile: './tet.jpg',
         date: '4시간 전',
@@ -51,7 +52,7 @@ const commentList = [
         heartCount: 48,
       },
       {
-        id: 1,
+        id: uuid(),
         name: '박봉자',
         profile: './tet.jpg',
         date: '4시간 전',
@@ -90,11 +91,14 @@ const HomePage = () => {
   const sideMenuRef = useRef<HTMLElement>(null);
   const drawerRef = useRef<HTMLElement>(null);
 
+  if (!posts) return;
   const handleHamburgerClick = () => {
     setIsSideMenuOpen(true);
   };
 
-  const handleRefreshClick = () => {};
+  const handleRefreshClick = () => {
+    setCurrentPostIndex(0);
+  };
 
   const handleWriteClick = () => {
     navigate('/write');
@@ -139,6 +143,18 @@ const HomePage = () => {
     }
   };
 
+  const handleCommentItemClick = (id: number, type: string) => {
+    console.log({ id, type });
+  };
+
+  const handleSortClick = (sortType: string) => {
+    console.log(sortType);
+  };
+
+  const handleHaertClick = (id: string) => {
+    console.log({ id });
+  };
+
   return (
     <Layout.Root>
       <Layout.Head>
@@ -155,8 +171,8 @@ const HomePage = () => {
         <C.DraggablePost
           post={posts[currentPostIndex]}
           onTransitionRaise={handleTransitionRaise}
-          drawerRef={drawerRef.current}
           onCommentClick={handleCommentClick}
+          onHeartClick={handleHaertClick}
         />
       </Layout.Body>
 
@@ -166,7 +182,7 @@ const HomePage = () => {
           overlayScope={overlayScope}
           contentScope={contentScope}
           onBackClick={() => closeSidebar(() => console.log('back clicked'))}
-          onSettingClick={() => closeSidebar(() => console.log('setting clicked'))}
+          onSettingClick={() => closeSidebar(() => navigate('/setting'))}
           onMenuItemClick={(path) => closeSidebar(() => console.log(`item clicked: ${path}`))}
         />
       </Dialog.Root>
@@ -176,6 +192,9 @@ const HomePage = () => {
           comments={commentList}
           container={drawerRef.current}
           drawerScope={drawerScope}
+          onCommentItemClick={handleCommentItemClick}
+          onSortClick={handleSortClick}
+          onClose={() => closeCommentDrawer()}
         />
       </Dialog.Root>
 

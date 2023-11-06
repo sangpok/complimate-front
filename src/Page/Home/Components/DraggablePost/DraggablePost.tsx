@@ -16,8 +16,8 @@ const contentSectionVariants = {
 export const DraggablePost = ({
   post,
   onTransitionRaise,
-  drawerRef,
   onCommentClick,
+  onHeartClick,
 }: DraggablePostProp) => {
   const direction = useRef(TransitionDirection.Down);
 
@@ -39,8 +39,8 @@ export const DraggablePost = ({
         <ContentCard
           post={post}
           onTransitionRaise={handleTransitionRaise}
-          drawerRef={drawerRef}
           onCommentClick={onCommentClick}
+          onHeartClick={onHeartClick}
         />
       </S.ContentSection>
     </AnimatePresence>

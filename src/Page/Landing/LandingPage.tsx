@@ -38,7 +38,7 @@ const LandingPage = () => {
           구글로 로그인하기
         </Button>
 
-        <Link to="/home">TEST</Link>
+        <Link to="/test">TEST</Link>
       </Box>
     </LandingContainer>
     // </PageTransition>
