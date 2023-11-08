@@ -1,50 +1,68 @@
-import { styled } from '@/stitches.config';
+import styled from '@emotion/styled';
+import { Tokens } from '@Styles/tokens';
+const { space, fontSizes, radii, borderWidths } = Tokens;
 
-export const Container = styled('div', {
+export const Container = styled.div({
   display: 'flex',
   flexDirection: 'column',
-  gap: '$default',
+  gap: space.default,
 
-  padding: '$double',
+  padding: space.double,
 });
 
-export const Time = styled('span', {
-  fontSize: '$default',
-  color: '$depth3',
-});
-
-export const Textarea = styled('textarea', {
-  all: 'unset',
-
-  display: 'block',
-  fontSize: '$input',
-  color: '$body',
-  width: '100%',
-
-  '&:disabled': {
-    color: '$depth2',
+export const Time = styled('span')(
+  {
+    ...fontSizes.default,
   },
-});
+  ({ theme }) => ({
+    color: theme.colors.text.greyed,
+  })
+);
 
-export const TextCount = styled('p', {
-  fontSize: '$comment',
-  color: '$depth3',
-  textAlign: 'end',
-});
+export const Textarea = styled('textarea')(
+  {
+    all: 'unset',
 
-export const ImageAddButton = styled('button', {
-  all: 'unset',
+    display: 'block',
+    ...fontSizes.input,
+    width: '100%',
+  },
+  ({ theme }) => ({
+    color: theme.colors.text.default,
 
-  display: 'block',
-  boxSizing: 'border-box',
-  padding: '$smaller $default',
+    '&:disabled': {
+      color: theme.colors.text.greyed,
+    },
+  })
+);
 
-  border: '1px solid $point',
-  borderRadius: '$small',
-  width: '100%',
+export const TextCount = styled('p')(
+  {
+    ...fontSizes.post.comment,
+    textAlign: 'end',
+  },
+  ({ theme }) => ({
+    color: theme.colors.text.greyed,
+  })
+);
 
-  color: '$point',
-  fontSize: '$button-text',
-  fontWeight: '600',
-  textAlign: 'center',
-});
+export const ImageAddButton = styled('button')(
+  {
+    all: 'unset',
+
+    display: 'block',
+    boxSizing: 'border-box',
+    padding: `${space.smaller} ${space.default}`,
+
+    ...radii.small,
+    width: '100%',
+
+    ...fontSizes.button.text,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  ({ theme }) => ({
+    border: `${borderWidths.base._1} solid ${theme.colors.button.point}`,
+    color: theme.colors.button.point,
+  })
+);

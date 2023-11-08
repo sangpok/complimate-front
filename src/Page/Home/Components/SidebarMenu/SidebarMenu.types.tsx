@@ -1,5 +1,3 @@
-import { Left as IconComponent } from '@Icons/index';
-import Stitches from '@stitches/react';
 import type { AnimationScope } from 'framer-motion';
 import type { ComponentType, RefObject } from 'react';
 
@@ -11,8 +9,10 @@ export type MenuItem = {
 };
 
 export type MenuIconProp = {
-  IconInner: ComponentType<Stitches.ComponentProps<typeof IconComponent>>;
-} & Stitches.CSS;
+  IconInner: ComponentType;
+  enabled?: boolean;
+  selected?: boolean;
+};
 
 export type MenuHeadProp = {
   onBackClick: () => void;

@@ -4,8 +4,13 @@ import * as Layout from '@Layouts/DefaultLayout';
 import * as Icon from '@Icons/index';
 // import { css, styled } from '@/stitches.config';
 import { motion } from 'framer-motion';
+import styled from '@emotion/styled';
 
-const TriggerButton = styled('div', {
+const text = styled.p`
+  color: ${({ theme }) => theme.colors.point};
+`;
+
+const TriggerButton = styled.div`
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -16,7 +21,7 @@ const TriggerButton = styled('div', {
   height: 'fit-content',
   aspectRatio: '1 / 1',
 
-  boxShadow: '0 0 16px 1px rgba(0, 0, 0, .2)',
+  box-shadow: '0 0 16px 1px rgba(0, 0, 0, .2)',
 
   borderRadius: '9999px',
   overflow: 'hidden',
@@ -28,9 +33,9 @@ const TriggeredMenu = styled(motion.div, {
   top: 0,
 });
 
-const ContentContainer = styled('div', {
+const ContentContainer = styled.div`
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: column,
   justifyContent: 'center',
   alignItems: 'center',
 
@@ -41,7 +46,7 @@ const ContentContainer = styled('div', {
 
 const List = styled('ul', {
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: column,
 
   justifyContent: 'center',
   alignItems: 'center',
@@ -49,7 +54,7 @@ const List = styled('ul', {
   backgorund: '$depth2',
   padding: '.5rem',
 
-  boxShadow: '0 0 16px 1px rgba(0, 0, 0, .2)',
+  box-shadow: '0 0 16px 1px rgba(0, 0, 0, .2)',
   borderRadius: '99rem',
   background: 'white',
 
@@ -73,7 +78,7 @@ const Content = ({ Icon, text }) => {
   );
 };
 
-const DraggableSelectContainer = styled('div', {
+const DraggableSelectContainer = styled.div`
   position: 'relative',
 });
 

@@ -1,10 +1,10 @@
-import { styled } from '@/stitches.config';
+import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 
-export const ContentSection = styled(motion.section, {
+export const ContentSection = styled(motion.section)({
   // flex: 1,
   position: 'absolute',
-  // marginTop: '$content',
+  // margin-top: '$content',
   // paddingTop: '$content',
   width: '100%',
   height: '100%',

@@ -2,7 +2,7 @@ import { darkTheme, lightTheme, styled } from '../stitches.config';
 
 export type Theme = 'light' | 'dark';
 
-const FixedContainer = styled('div', {
+const FixedContainer = styled.div`
   // position: 'fixed',
   // top: 0,
   // left: 0,

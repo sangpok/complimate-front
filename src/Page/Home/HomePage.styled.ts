@@ -1,9 +1,6 @@
-import { styled } from '@/stitches.config';
-import { motion } from 'framer-motion';
-import * as Dialog from '@radix-ui/react-dialog';
-import * as Layout from '@Layouts/DefaultLayout';
+import styled from '@emotion/styled';
 
-export const PageContainer = styled('div', {
+export const PageContainer = styled.div({
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
@@ -11,7 +8,7 @@ export const PageContainer = styled('div', {
   height: '100dvh',
 });
 
-export const ContentSectionWrapper = styled('div', {
+export const ContentSectionWrapper = styled.div({
   flex: 1,
   position: 'relative',
   // width:

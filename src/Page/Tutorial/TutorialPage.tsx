@@ -1,5 +1,5 @@
 import { tutorials } from '@/tutorials';
-import { Text } from '@Components/Atomic';
+// import { Text } from '@Components/Atomic';
 import * as Icon from '@Icons/index';
 import { AnimatePresence, PanInfo } from 'framer-motion';
 import { useState } from 'react';
@@ -55,8 +55,9 @@ const TutorialPage = () => {
         initial="initial"
         animate={currentIndex === 0 ? 'first' : 'after'}
       >
-        <Icon.Logo />
-        <Text type="logo">컴플리메이트</Text>
+        <S.LogoIcon />
+        {/* <Icon.Logo width="250px" height="250px" /> */}
+        {/* <Text type="logo">컴플리메이트</Text> */}
       </S.LogoWrapper>
 
       <AnimatePresence initial={false} custom={direction}>

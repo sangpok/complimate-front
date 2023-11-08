@@ -4,7 +4,7 @@ import { redirect, useNavigate, useNavigation, useSubmit } from 'react-router-do
 
 /** Style & Component */
 import * as Layout from '@Layouts/DefaultLayout';
-import * as Header from '@Components/PageHeader';
+import * as Header from '@Components/PageHeader/PageHeader';
 import * as Form from '@radix-ui/react-form';
 import * as C from './RegisterPage.component';
 import * as S from './RegisterPage.styled';

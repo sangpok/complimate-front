@@ -1,39 +1,46 @@
-import { styled } from '@/stitches.config';
+import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 import * as Form from '@radix-ui/react-form';
 
-export const AnimateTitleInner = styled('div', {
+import { Tokens } from '@Styles/tokens';
+const { fontSizes, sizes, space } = Tokens;
+
+export const AnimateTitleInner = styled.div({
   flex: 1,
   position: 'relative',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   overflow: 'hidden',
-  height: '$header-title',
+  height: sizes.header.title,
 });
 
-export const FormWrapper = styled(motion.div, {
+export const FormWrapper = styled(motion.div)({
   width: '100%',
   position: 'absolute',
-  padding: '$default',
+  padding: space.default,
   paddingTop: 0,
 });
 
-export const FormField = styled(Form.Field, {
+export const FormField = styled(Form.Field)({
   display: 'flex',
   flexDirection: 'column',
-  gap: '$default',
-  padding: '0 $default',
-  marginBottom: '$double',
+  gap: space.default,
+  padding: `0 ${space.default}`,
+  marginBottom: space.double,
 });
 
-export const FormLabel = styled(Form.Label, {
-  fontSize: '$header',
+export const FormLabel = styled(Form.Label)({
+  ...fontSizes.header,
   fontWeight: '500',
 });
 
-export const FormMessage = styled(Form.Message, {
-  color: '$red',
-  fontSize: '$label-status',
-  fontWeight: 500,
-});
+export const FormMessage = styled(Form.Message)(
+  {
+    ...fontSizes['label-status'],
+    fontWeight: 500,
+  },
+  ({ theme }) => ({
+    color: theme.colors.text.alarm,
+  })
+);

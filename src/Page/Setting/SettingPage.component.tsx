@@ -7,11 +7,11 @@ export const CategoryItem = ({ item, onItemClick }: CategoryItemProp) => {
   return (
     <S.Item onClick={() => onItemClick(item.path)}>
       <span className="name">{item.name}</span>
-      <div className="right">
+      <div className="group">
         {item.placeholder && <span className="placeholder">{item.placeholder}</span>}
 
         <button>
-          <Icon.Left css={{ rotate: '180deg' }} />
+          <S.RightIcon />
         </button>
       </div>
     </S.Item>

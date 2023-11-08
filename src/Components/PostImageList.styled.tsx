@@ -1,51 +1,57 @@
-import { styled } from '@/stitches.config';
+import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 
-export const Container = styled('div', {
-  marginBottom: '$double',
+import { Tokens } from '@Styles/tokens';
+const { space, radii, sizes } = Tokens;
+
+export const Container = styled.div({
+  marginBottom: space.double,
   touchAction: 'none',
 });
 
-export const Image = styled('div', {
+export const Image = styled.div({
   display: 'inline-block',
   width: `100%`,
   aspectRatio: '1 / 1',
   backgroundColor: '$depth2',
-  // backgroundImage: `url('./tet.jpg')`,
   backgroundPosition: 'center',
   backgroundSize: 'cover',
-  borderRadius: '$small',
+  ...radii.small,
 
   '& + &': {
-    marginLeft: '$default',
+    marginLeft: space.default,
   },
 });
 
-export const ImageList = styled(motion.div, {
+export const ImageList = styled(motion.div)({
   whiteSpace: 'nowrap',
   overflow: 'visible',
   width: '100%',
-  marginBottom: '$default',
+  marginBottom: space.default,
 });
 
-export const ImageWrapper = styled(motion.div, {
+export const ImageWrapper = styled(motion.div)({
   touchAction: 'pan-x',
 });
 
-export const ImageNavContainer = styled('div', {
+export const ImageNavContainer = styled.div({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'end',
-  gap: '$smaller',
+  gap: space.smaller,
 });
 
-export const Circle = styled('div', {
-  width: '$nav',
-  height: '$nav',
-  borderRadius: '999px',
-  background: '$depth2',
-
-  '&.selected': {
-    background: '$point',
+export const Circle = styled.div(
+  {
+    width: sizes.nav,
+    height: sizes.nav,
+    ...radii.full,
   },
-});
+  ({ theme }) => ({
+    background: theme.colors.nav.default,
+
+    '&.selected': {
+      background: theme.colors.nav.selected,
+    },
+  })
+);

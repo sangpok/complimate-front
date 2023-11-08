@@ -27,7 +27,7 @@ const ItemInner = ({
             </div>
 
             <button onClick={() => onMoreMenuClick(id)}>
-              <CommentIcon IconInner={Icon.More} color="$depth3" />
+              <S.MoreIcon />
             </button>
           </S.CommentItemHead>
         </Layout.Head>
@@ -41,12 +41,12 @@ const ItemInner = ({
         <S.CommentItemFoot className="댓글 Foot">
           {replys && (
             <button onClick={() => onReplyButtonClick(id)}>
-              <CommentIcon IconInner={Icon.Comment} color="$point" />
+              <S.CommentIcon />
               {replys.length}
             </button>
           )}
           <button onClick={() => onHeartClick(id)}>
-            <CommentIcon IconInner={Icon.Heart} color="$point" />
+            <S.HeartIcon />
             {heartCount}
           </button>
         </S.CommentItemFoot>

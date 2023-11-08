@@ -1,56 +1,67 @@
-import { styled } from '@/stitches.config';
+import styled from '@emotion/styled';
+import { Tokens } from '@Styles/tokens';
+const { space, fontSizes, sizes, radii } = Tokens;
 
-export const Container = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  flexDirection: 'row',
-  gap: '$smaller',
-
-  variants: {
-    type: {
-      normal: {
+export const Container = styled.div<{ type?: 'normal' | 'post' | 'reply-target' }>(
+  {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: space.smaller,
+  },
+  ({ theme, type }) => {
+    if (type === 'normal') {
+      return {
         '& span': {
-          fontSize: '$author',
-          color: '$body',
+          ...fontSizes.post.author,
+          color: theme.colors.text.default,
         },
-      },
-      post: {
+      };
+    }
+
+    if (type === 'post') {
+      return {
         '& span': {
-          fontSize: '$author',
-          color: '$depth3',
+          ...fontSizes.post.author,
+          color: theme.colors.text.greyed,
         },
-      },
-      'replay-target': {
-        gap: '.25rem',
+      };
+    }
+
+    if (type === 'reply-target') {
+      return {
+        gap: space.base._4,
 
         '& span': {
-          fontSize: '$caption',
-          color: '$depth3',
-
+          ...fontSizes.caption,
+          color: theme.colors.text.greyed,
           strong: {
-            color: '$body',
+            color: theme.colors.text.point,
           },
         },
-      },
-    },
-  },
-});
+      };
+    }
+  }
+);
 
-export const Profile = styled('div', {
-  display: 'block',
-  width: '$profile-sm',
-  height: '$profile-sm',
-  overflow: 'hidden',
-  borderRadius: '9999px',
-  backgroundPosition: 'center',
-  backgroundSize: 'cover',
-
-  variants: {
-    type: {
-      'replay-target': {
-        width: '$profile-replay-target',
-        height: '$profile-replay-target',
-      },
-    },
+export const Profile = styled.div<{ type?: 'reply-target' }>(
+  {
+    display: 'block',
+    width: sizes.profile.small,
+    height: sizes.profile.small,
+    // minWidth: sizes.profile.small,
+    // minHeight: sizes.profile.small,
+    overflow: 'hidden',
+    ...radii.full,
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
   },
-});
+  ({ type }) => {
+    if (type === 'reply-target') {
+      return {
+        width: sizes.profile.replyTarget,
+        height: sizes.profile.replyTarget,
+      };
+    }
+  }
+);

@@ -16,7 +16,7 @@ import * as Icon from '@Icons/index';
 import ContentCard from '@Page/Home/Components/ContentCard/ContentCard';
 import HomeHeader from '@Components/HomeHeader';
 
-import { styled } from '@/stitches.config';
+import styled from '@emotion/styled';
 import { TransitionDirection } from '@Page/Home/Components/ContentCard/ContentCard.types';
 import { AnimatePresence, motion, useAnimate } from 'framer-motion';
 import Complimate from '@Components/Complimate';
@@ -34,12 +34,12 @@ const DialogOverlay = styled(motion(Dialog.Overlay), {
   left: '0',
   right: '0',
   bottom: '0',
-  zIndex: 99,
+  z-index: 99,
   willChange: 'opacity',
 });
 
 const DialogContent = styled(motion(Dialog.Content), {
-  maxWidth: '18.75rem',
+  max-width: '18.75rem',
   width: '70%',
   height: '100%',
   background: 'white',
@@ -135,7 +135,7 @@ const HomePage = () => {
                         css={{
                           width: '$icon-menu',
                           height: '$icon-menu',
-                          color: '$body',
+                          color: 'theme.colors.bg',
                         }}
                       />
                     </button>
@@ -149,7 +149,7 @@ const HomePage = () => {
                         width: '$icon-menu',
                         height: '$icon-menu',
                         lineHeight: '0',
-                        color: '$body',
+                        color: 'theme.colors.bg',
                       }}
                     />
                   </button>

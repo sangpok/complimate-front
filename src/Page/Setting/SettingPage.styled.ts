@@ -1,55 +1,70 @@
-import { styled } from '@/stitches.config';
+import styled from '@emotion/styled';
+import { Tokens } from '@Styles/tokens';
+import * as Icon from '@Icons/index';
 
-export const ListGroup = styled('div', {
+const { space, fontSizes } = Tokens;
+
+export const RightIcon = styled(Icon.Left)({
+  rotate: '180deg',
+});
+
+export const ListGroup = styled.div({
   display: 'flex',
   flexDirection: 'column',
-  gap: '$double',
+  gap: space.double,
 
-  padding: '$double',
+  padding: space.double,
   paddingTop: 0,
 });
 
-export const Item = styled('li', {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-
-  background: '$depth1',
-
-  padding: '$default',
-  fontSize: '1rem',
-
-  'span.name': {
-    fontWeight: 600,
-  },
-
-  'div.right': {
+export const Item = styled('li')(
+  {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: '$small',
 
-    'span.placeholder': {
-      fontSize: '$caption',
-      fontWeight: 500,
-      color: '$depth3',
+    padding: space.default,
+    ...fontSizes.default,
+
+    'span.name': {
+      fontWeight: 600,
     },
 
-    button: {
-      all: 'unset',
+    'div.group': {
       display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: space.small,
+
+      'span.placeholder': {
+        ...fontSizes.caption,
+        fontWeight: 500,
+      },
+
+      button: {
+        all: 'unset',
+        display: 'flex',
+      },
     },
   },
+  ({ theme }) => ({
+    background: theme.colors.background.depth,
 
-  '&:active': {
-    background: '$depth2',
-    // color: '$bg',
-  },
-});
+    'div.right': {
+      'span.placeholder': {
+        color: theme.colors.text.greyed,
+      },
+    },
 
-export const Group = styled('ul', {
+    '&:active': {
+      background: theme.colors.background.depth,
+    },
+  })
+);
+
+export const Group = styled('ul')({
   borderRadius: '$small',
   overflow: 'hidden',
 

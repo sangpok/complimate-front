@@ -19,9 +19,15 @@ import WritePage, { action as writeAction } from '@Page/Write/WritePage';
 
 import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 
-import { Theme, ThemeProvider } from './Components/ThemeProvider';
-import { globalStyle } from './Styles/_globals';
-import { globalCss } from './stitches.config';
+import { ThemeProvider } from '@emotion/react';
+import { darkTheme, lightTheme } from '@Styles/theme';
+import { GlobalStyle } from '@Styles/_globals';
+
+// import { Theme, ThemeProvider } from './Components/ThemeProvider';
+// import { globalStyle } from './Styles/_globals';
+// import { globalCss } from './stitches.config';
+
+// const globalStyles = globalCss(globalStyle);
 
 const AnimatedOutlet = () => {
   const o = useOutlet();
@@ -29,8 +35,6 @@ const AnimatedOutlet = () => {
 
   return <>{outlet}</>;
 };
-
-const globalStyles = globalCss(globalStyle);
 
 const Layout = () => {
   const navigation = useNavigation();
@@ -84,7 +88,7 @@ const router = createBrowserRouter(
       <Route path="home" element={<HomePage />} loader={homeLoader} />
       <Route path="write" element={<WritePage />} action={writeAction} />
       <Route path="setting" element={<SettingPage />} />
-      <Route path="test" element={<TestPage />} />
+      {/* <Route path="test" element={<TestPage />} /> */}
     </Route>
   )
 );
@@ -92,16 +96,19 @@ const router = createBrowserRouter(
 const motionTransition = { type: 'spring', bounce: 0, duration: 0.4 };
 
 const App = () => {
-  globalStyles();
+  // globalStyles();
 
-  const theme: Theme = 'light';
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   return (
-    <ThemeProvider theme={theme}>
-      <MotionConfig transition={motionTransition}>
-        <RouterProvider router={router} />
-      </MotionConfig>
-    </ThemeProvider>
+    <>
+      <GlobalStyle />
+      <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+        <MotionConfig transition={motionTransition}>
+          <RouterProvider router={router} />
+        </MotionConfig>
+      </ThemeProvider>
+    </>
   );
 };
 
