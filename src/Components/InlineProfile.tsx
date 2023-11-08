@@ -5,7 +5,7 @@ const InlineProfile = ({ nickname, profile, ...rest }: InlineProfileProp) => {
   return (
     <S.Container {...rest}>
       <S.Profile
-        css={{
+        style={{
           backgroundImage: `url('${profile}')`,
         }}
         {...rest}
@@ -13,7 +13,7 @@ const InlineProfile = ({ nickname, profile, ...rest }: InlineProfileProp) => {
       <span>
         <strong>{nickname}</strong>
         {rest.type === 'post' && <>님으로부터</>}
-        {rest.type === 'replay-target' && <>님에게 답글달기</>}
+        {rest.type === 'reply-target' && <>님에게 답글달기</>}
       </span>
     </S.Container>
   );

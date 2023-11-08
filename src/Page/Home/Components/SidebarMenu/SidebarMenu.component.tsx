@@ -1,68 +1,70 @@
 import { MenuHeadProp, MenuIconProp, MenuItemProp, MenuListProp } from './SidebarMenu.types';
+import React from 'react';
+import styled from '@emotion/styled';
+import { Tokens } from '@Styles/tokens';
+const { sizes } = Tokens;
 
 import * as Dialog from '@radix-ui/react-dialog';
 import * as S from './SidebarMenu.styled';
 import * as Icon from '@Icons/index';
 import * as Layout from '@Layouts/DefaultLayout';
 
-const MiniLogo = () => (
+const MiniLogo = React.memo(() => (
   <S.MenuFooter>
-    <Icon.Logo
-      css={{
-        width: '$icon-sm',
-        height: '$icon-sm',
-      }}
-    />
+    <S.LogoIcon />
     <span>컴플리메이트</span>
   </S.MenuFooter>
-);
+));
 
-const MenuIcon = ({ IconInner, ...rest }: MenuIconProp) => {
-  return (
-    <IconInner
-      css={{
-        width: '$icon-menu',
-        height: '$icon-menu',
-        color: '$body',
-        ...rest,
-      }}
-    />
+const MenuIcon = React.memo(({ IconInner, enabled, selected }: MenuIconProp) => {
+  const StyledIcon = styled(IconInner)<{ enabled?: boolean; selected?: boolean }>(
+    {
+      width: sizes.icon.menu,
+      height: sizes.icon.menu,
+    },
+    ({ theme, enabled, selected }) => ({
+      color: !enabled
+        ? theme.colors.icon.disabled
+        : selected
+        ? theme.colors.icon.point
+        : theme.colors.icon.default,
+    })
   );
-};
 
-const Head = ({ onBackClick, onSettingClick }: MenuHeadProp) => {
+  return <StyledIcon enabled={enabled} selected={selected} />;
+});
+
+const Head = React.memo(({ onBackClick, onSettingClick }: MenuHeadProp) => {
   return (
     <S.SideBarHeader>
       <div className="group">
         <button onClick={onBackClick}>
-          <MenuIcon IconInner={Icon.Left} />
+          {/* <MenuIcon IconInner={Icon.Left} /> */}
+          <S.LeftIcon />
         </button>
         <p>메뉴</p>
       </div>
 
       <button onClick={onSettingClick}>
-        <Icon.Setting />
+        <S.SettingIcon />
       </button>
     </S.SideBarHeader>
   );
-};
+});
 
-const Item = ({ selected, item, onClick }: MenuItemProp) => {
+const Item = React.memo(({ selected, item, onClick }: MenuItemProp) => {
   return (
     <li
       className={!item.enabled ? 'disabled' : selected ? 'selected' : ''}
       onClick={() => item.enabled && onClick(item.path)}
     >
-      <MenuIcon
-        IconInner={item.icon}
-        color={!item.enabled ? '$depth3' : selected ? '$point' : ''}
-      />
+      <MenuIcon IconInner={item.icon} enabled={item.enabled} selected={selected} />
       {item.name}
     </li>
   );
-};
+});
 
-const List = ({ list, currentPath, onMenuItemClick }: MenuListProp) => {
+const List = React.memo(({ list, currentPath, onMenuItemClick }: MenuListProp) => {
   return (
     <S.MenuList>
       {list.map((item) => (
@@ -75,6 +77,6 @@ const List = ({ list, currentPath, onMenuItemClick }: MenuListProp) => {
       ))}
     </S.MenuList>
   );
-};
+});
 
 export { MiniLogo, Head, Item, List };

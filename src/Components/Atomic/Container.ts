@@ -1,30 +1,24 @@
-import { styled } from '../../stitches.config';
+import styled from '@emotion/styled';
+import { Tokens } from '@Styles/tokens';
+const { space, media } = Tokens;
 
-export const Container = styled('div', {
+export const Container = styled.div({
   display: 'flex',
   flexDirection: 'column',
-  gap: '$default',
+  gap: space.default,
   width: '100%',
   maxWidth: 'calc(100% - 3rem)',
   margin: '0 auto',
 
-  variants: {
-    spacing: {
-      lg: {
-        gap: '$quard',
-      },
-    },
-  },
-
-  '@md': {
+  [media.md]: {
     maxWidth: 'calc(100% - 9rem)',
   },
 
-  '@lg': {
+  [media.lg]: {
     maxWidth: 'calc(100% - 18rem)',
   },
 
-  '@xl': {
+  [media.xl]: {
     maxWidth: 'calc(100% - 36rem)',
   },
 });

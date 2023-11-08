@@ -70,29 +70,29 @@ export const CommentDrawer = ({
                 </S.DrawerHandle>
               </MotionedHead>
 
-              <Layout.Body css={{ overflowY: 'scroll', marginBottom: '1rem' }}>
+              <S.ScrollBody>
                 <Layout.Head>
                   <S.DrawerHead>
                     <h2>총 {comments.length}개의 댓글</h2>
                     <button className="필터" onClick={() => onSortClick('정렬 버튼 눌렀음 암튼')}>
-                      <C.CommentIcon IconInner={Icon.Sort} color="$point" />
+                      <S.SortIcon />
                       공감순
                     </button>
                   </S.DrawerHead>
                 </Layout.Head>
 
                 <C.List comments={comments} onItemClick={onCommentItemClick} />
-              </Layout.Body>
+              </S.ScrollBody>
 
               <Layout.Foot>
                 <S.WriteContainer>
                   <S.WriteInputBox>
                     <S.ReplyTargetBox className="답글 정보">
                       <button className="답글 취소">
-                        <Icon.Delete />
+                        <S.DeleteIcon />
                       </button>
                       <div className="답글 정보 콘텐츠">
-                        <InlineProfile nickname="박봉자" profile="./tet.jpg" type="replay-target" />
+                        <InlineProfile nickname="박봉자" profile="./tet.jpg" type="reply-target" />
                       </div>
                     </S.ReplyTargetBox>
 

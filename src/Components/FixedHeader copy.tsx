@@ -1,4 +1,4 @@
-import { styled } from '@/stitches.config';
+import styled from '@emotion/styled';
 import { Text } from './Atomic';
 
 import { AnimatePresence, motion } from 'framer-motion';
@@ -6,14 +6,14 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ReactComponent as LeftIconInner } from '@Icons/mdi_chevron-left.svg';
 import { useState } from 'react';
 
-const FixedHeaderContainer = styled('div', {
+const FixedHeaderContainer = styled.div`
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'space-between',
   gap: '$default',
 
-  backgroundColor: '$bg',
+  background-color: '$bg',
 
   padding: '$double',
 

@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { PanInfo, useAnimate } from 'framer-motion';
 import useMeasure from 'react-use-measure';
 import * as S from './PostImageList.styled';
 import { PostImageList } from './PostImageList.types';
+import { Tokens } from '@Styles/tokens';
+const { space } = Tokens;
 
 const wrap = (min: number, max: number, value: number) => {
   if (value < min) return min;
@@ -12,7 +14,7 @@ const wrap = (min: number, max: number, value: number) => {
   return value;
 };
 
-const PostImageList = ({ images }: PostImageList) => {
+const PostImageList = React.memo(({ images }: PostImageList) => {
   const [imageWrapperRef, imageWrapperBounds] = useMeasure();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imageListScope, animateImageList] = useAnimate();
@@ -21,6 +23,7 @@ const PostImageList = ({ images }: PostImageList) => {
     animateImageList(
       imageListScope.current,
       {
+        // x: `calc(-${100 * currentImageIndex}% - (${currentImageIndex} * ${space.default}))`,
         x: `-${(imageWrapperBounds.width * currentImageIndex) / 16 + currentImageIndex * 0.75}rem`,
       },
       { type: 'spring', bounce: 0, duration: 0.4 }
@@ -32,7 +35,7 @@ const PostImageList = ({ images }: PostImageList) => {
 
     const curDirection = offset.x < 0 ? 1 : -1;
     const overOffset = Math.abs(offset.x) > document.body.clientWidth / 2;
-    const overVelocity = Math.abs(velocity.x) > 100;
+    const overVelocity = Math.abs(velocity.x) > 400;
     const couldTransition = overOffset || overVelocity;
 
     if (couldTransition) {
@@ -55,7 +58,7 @@ const PostImageList = ({ images }: PostImageList) => {
           {images.map((image, index) => (
             <S.Image
               key={`${image}-${index}`}
-              css={{
+              style={{
                 backgroundImage: `url('${image}')`,
               }}
             />
@@ -73,6 +76,6 @@ const PostImageList = ({ images }: PostImageList) => {
       </S.ImageNavContainer>
     </S.Container>
   );
-};
+});
 
 export default PostImageList;

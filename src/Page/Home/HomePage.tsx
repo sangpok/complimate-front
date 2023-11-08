@@ -3,7 +3,7 @@ import * as Layout from '@Layouts/DefaultLayout';
 import { TransitionDirection } from '@Page/Home/Components/ContentCard/ContentCard.types';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useAnimate } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import * as C from './Components';
 import { v4 as uuid } from 'uuid';
@@ -91,26 +91,25 @@ const HomePage = () => {
   const sideMenuRef = useRef<HTMLElement>(null);
   const drawerRef = useRef<HTMLElement>(null);
 
-  if (!posts) return;
-  const handleHamburgerClick = () => {
+  const handleHamburgerClick = useCallback(() => {
     setIsSideMenuOpen(true);
-  };
+  }, [setIsSideMenuOpen]);
 
-  const handleRefreshClick = () => {
+  const handleRefreshClick = useCallback(() => {
     setCurrentPostIndex(0);
-  };
+  }, [setCurrentPostIndex]);
 
-  const handleWriteClick = () => {
+  const handleWriteClick = useCallback(() => {
     navigate('/write');
-  };
+  }, [navigate]);
 
   const handleTransitionRaise = (transitionDirection: TransitionDirection) => {
     setCurrentPostIndex((prev) => wrap(0, posts.length - 1, prev + transitionDirection));
   };
 
-  const handleCommentClick = () => {
+  const handleCommentClick = useCallback(() => {
     setIsCommentDrawerOpen(true);
-  };
+  }, [setIsCommentDrawerOpen]);
 
   const closeSidebar = (afterAnimate?: () => void) => {
     Promise.all([
@@ -154,6 +153,8 @@ const HomePage = () => {
   const handleHaertClick = (id: string) => {
     console.log({ id });
   };
+
+  if (!posts) return;
 
   return (
     <Layout.Root>

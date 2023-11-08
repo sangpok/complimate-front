@@ -1,6 +1,6 @@
 import { Box } from './Box';
-import Button from './Button';
+// import Button from './Button';
 import { Container } from './Container';
-import { Text } from './Text';
+// import { Text } from './Text';
 
-export { Box, Button, Container, Text };
+export { Box, Container };

@@ -15,6 +15,14 @@
         "date": "1698748661320",
         "body": "덧글 테스트1",
         "stickerCount": 33
+      },
+      {
+        "id": 1,
+        "author": "박봉자",
+        "profile": "https://cdnimg.melon.co.kr/resource/image/cds/musicstory/imgUrl20230503104932853.jpg/melon/optimize/90",
+        "date": "1698748661320",
+        "body": "덧글 테스트2",
+        "stickerCount": 34
       }
     ]
   },

@@ -2,7 +2,7 @@ import { AnimatePresence } from 'framer-motion';
 
 import * as Form from '@radix-ui/react-form';
 
-import { Text } from './Atomic';
+import { Text } from '../Atomic';
 
 import { Header, LeftIcon, Title, TitleWrapper } from './PageHeader.styled';
 

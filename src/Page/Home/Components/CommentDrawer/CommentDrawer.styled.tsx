@@ -1,160 +1,247 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import { styled } from '@/stitches.config';
+import * as Icon from '@Icons/index';
+import * as Layout from '@Layouts/DefaultLayout';
+import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
+import { Tokens } from '@Styles/tokens';
+const { space, sizes, radii, fontSizes, lineHeights, borderWidths } = Tokens;
 
-export const DrawerHandle = styled('div', {
-  width: '100%',
-  height: '50px',
-  padding: '$default 0',
+export const SortIcon = styled(Icon.Sort)(
+  {
+    width: sizes.icon.comment,
+    height: sizes.icon.comment,
+  },
+  ({ theme }) => ({ color: theme.colors.icon.point })
+);
 
-  'div.handle': {
-    width: '2.8125rem',
-    height: '.25rem',
-    background: '$point',
-    borderRadius: '999px',
-    margin: '0 auto',
+export const MoreIcon = styled(Icon.More)(
+  {
+    width: sizes.icon.comment,
+    height: sizes.icon.comment,
+  },
+  ({ theme }) => ({ color: theme.colors.text.greyed })
+);
+
+export const CommentIcon = styled(Icon.Comment)(
+  {
+    width: sizes.icon.comment,
+    height: sizes.icon.comment,
+  },
+  ({ theme }) => ({ color: theme.colors.icon.point })
+);
+
+export const HeartIcon = styled(Icon.Heart)(
+  {
+    width: sizes.icon.comment,
+    height: sizes.icon.comment,
+  },
+  ({ theme }) => ({ color: theme.colors.icon.point })
+);
+
+export const DeleteIcon = styled(Icon.Delete)(
+  {
+    width: sizes.icon.comment,
+    height: sizes.icon.comment,
+  },
+  ({ theme }) => ({ color: theme.colors.icon.point })
+);
+
+export const ScrollBody = styled(Layout.Body)({
+  overflowY: 'scroll',
+  marginBottom: space.default,
+
+  scrollbarWidth: 'none',
+  '&::-webkit-scrollbar': {
+    display: 'none',
   },
 });
 
-export const Drawer = styled('div', {
+export const DrawerHandle = styled.div(
+  {
+    width: '100%',
+    height: sizes.drawer.height,
+    padding: `${space.default} 0`,
+
+    'div.handle': {
+      width: sizes.drawer.handleWidth,
+      height: sizes.drawer.handleHeight,
+      ...radii.full,
+      margin: '0 auto',
+    },
+  },
+  ({ theme }) => ({
+    'div.handle': {
+      background: theme.colors.background.point,
+    },
+  })
+);
+
+export const Drawer = styled.div({
   display: 'flex',
   flexDirection: 'column',
   height: '100%',
   width: '100%',
 });
 
-export const DrawerHead = styled('div', {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: '$double',
-
-  p: {
-    fontSize: '1.25rem',
-    fontWeight: 700,
-    color: '$body',
-  },
-
-  button: {
-    all: 'unset',
-
+export const DrawerHead = styled.div(
+  {
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: '$smller',
+    marginBottom: space.double,
 
-    color: '$point',
+    p: {
+      ...fontSizes.drawer.header,
+      fontWeight: 700,
+    },
 
-    fontSize: '$button-sm',
+    button: {
+      all: 'unset',
+
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: space.smaller,
+
+      ...fontSizes.button.sm,
+    },
   },
-});
+  ({ theme }) => ({
+    p: {
+      color: theme.colors.text.point,
+    },
 
-export const DrawerBody = styled('div', {
+    button: {
+      color: theme.colors.button.point,
+    },
+  })
+);
+
+export const DrawerBody = styled.div({
   flex: 1,
   width: '100%',
   overflowY: 'scroll',
-  marginBottom: '$default',
+  marginBottom: space.default,
 
   'div.inner': {
     whiteSpace: 'nowrap',
   },
 });
 
-export const CommentItemInner = styled('div', {
+export const CommentItemInner = styled.div({
   display: 'flex',
   flexDirection: 'column',
-  gap: '$smaller',
-  padding: '$default 0',
+  gap: space.smaller,
+  padding: `${space.default} 0`,
   // border: '1px solid red',
 });
 
-export const CommentItemHead = styled('div', {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  marginBottom: '$small',
-
-  'div.group': {
+export const CommentItemHead = styled.div(
+  {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'end',
-    gap: '$small',
+    justifyContent: 'space-between',
+    marginBottom: space.small,
 
-    'p.time': {
-      fontSize: '$caption',
-      color: '$depth3',
+    'div.group': {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'end',
+      gap: space.small,
+
+      'p.time': {
+        ...fontSizes.caption,
+        color: '$depth3',
+      },
+    },
+
+    button: {
+      all: 'unset',
     },
   },
+  ({ theme }) => ({
+    'div.group': {
+      'p.time': {
+        color: theme.colors.text.greyed,
+      },
+    },
+  })
+);
 
-  button: {
-    all: 'unset',
+export const CommentItemBody = styled('p')(
+  {
+    ...fontSizes.post.comment,
+    ...lineHeights.comment,
   },
-});
+  ({ theme }) => ({
+    color: theme.colors.text.default,
+  })
+);
 
-export const CommentItemBody = styled('p', {
-  fontSize: '$comment',
-  lineHeight: '$comment',
-  color: '$body',
-});
-
-export const CommentItemFoot = styled('div', {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-
-  button: {
-    all: 'unset',
+export const CommentItemFoot = styled.div(
+  {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: '$small',
-    color: '$point',
-    fontWeight: 500,
-  },
-});
 
-export const CommentItem = styled('div', {
+    button: {
+      all: 'unset',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: space.small,
+      fontWeight: 500,
+    },
+  },
+  ({ theme }) => ({
+    button: {
+      color: theme.colors.button.point,
+    },
+  })
+);
+
+export const CommentItem = styled.div({
   display: 'flex',
   flexDirection: 'column',
   // gap: '$default',
   // border: '1px solid red',
 });
 
-export const CommentReplyList = styled('div', {
+export const CommentReplyList = styled.div({
   display: 'flex',
   flexDirection: 'column',
   // gap: '$double',
-  paddingLeft: '$double',
+  paddingLeft: space.double,
 });
 
-export const CommentList = styled('div', {
+export const CommentList = styled.div({
   display: 'flex',
   flexDirection: 'column',
   // gap: '$double',
 });
 
-// export const CommentItem = styled('div', {
+// export const CommentItem = styled.div`
 //   display: 'flex',
-//   flexDirection: 'column',
+//   flexDirection: column,
 //   gap: '$default',
 // });
 
-// export const CommentList = styled('div', {
+// export const CommentList = styled.div`
 //   display: 'flex',
-//   flexDirection: 'column',
+//   flexDirection: column,
 //   gap: '$default',
 // });
 
-// export const CommentItemInner = styled('div', {
+// export const CommentItemInner = styled.div`
 //   display: 'flex',
-//   flexDirection: 'column',
+//   flexDirection: column,
 //   gap: '$smaller',
 // });
 
-// export const CommentHead = styled('div', {
+// export const CommentHead = styled.div`
 //   display: 'flex',
 //   flexDirection: 'row',
 //   justifyContent: 'space-between',
@@ -176,7 +263,7 @@ export const CommentList = styled('div', {
 //   },
 // });
 
-// export const CommentFoot = styled('div', {
+// export const CommentFoot = styled.div`
 //   display: 'flex',
 //   flexDirection: 'row',
 //   justifyContent: 'space-between',
@@ -196,40 +283,45 @@ export const CommentList = styled('div', {
 //   },
 // });
 
-// export const ReplyComment = styled('div', {
+// export const ReplyComment = styled.div`
 //   display: 'flex',
-//   flexDirection: 'column',
+//   flexDirection: column,
 //   paddingLeft: '$double',
 // });
 
-export const CommentSection = styled('div', {});
+export const CommentSection = styled.div({});
 
-export const DrawerFooter = styled('div', {
-  // height: '56px',
+export const DrawerFooter = styled.div(
+  {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
 
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
+    ...radii.small,
 
-  border: '1px solid $point',
-  borderRadius: '$small',
-
-  '& > button': {
-    all: 'unset',
-    background: '$point',
-    width: '4rem',
-    height: '100%',
-    color: '$bg',
-    fontWeight: 500,
-    textAlign: 'center',
+    '& > button': {
+      all: 'unset',
+      width: sizes.button.comment,
+      height: '100%',
+      fontWeight: 500,
+      textAlign: 'center',
+    },
   },
-});
+  ({ theme }) => ({
+    border: `${borderWidths.base._1} solid ${theme.colors.border.point}`,
 
-export const WriteInputBox = styled('div', {
+    '& > button': {
+      background: theme.colors.button.point,
+      color: theme.colors.button.inversion,
+    },
+  })
+);
+
+export const WriteInputBox = styled.div({
   flex: 1,
 
-  padding: '.25rem $default',
+  padding: `${space.base._4} ${space.default}`,
 
   input: {
     all: 'unset',
@@ -237,13 +329,13 @@ export const WriteInputBox = styled('div', {
 
     height: '100%',
     width: '100%',
-    padding: '$smaller 0',
+    padding: `${space.smaller} 0`,
 
-    fontSize: '$input',
+    ...fontSizes.input,
   },
 });
 
-export const ReplyTargetBox = styled('div', {
+export const ReplyTargetBox = styled.div({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
@@ -254,47 +346,60 @@ export const ReplyTargetBox = styled('div', {
   },
 });
 
-export const DrawerContent = styled(motion.div, {
-  position: 'absolute',
-  top: '$content',
-  left: 0,
-  width: '100%',
-  height: 'calc(100% - 5rem)',
-  background: '$depth1',
-  padding: '$double',
-  zIndex: 99,
-  willChange: 'transform',
-  borderRadius: '$large',
-  boxShadow: '0 0 25px 1px rgba(0, 0, 0, .1)',
-});
+export const DrawerContent = styled(motion.div)(
+  {
+    position: 'absolute',
+    top: space.content,
+    left: 0,
+    width: '100%',
+    height: `calc(100% - ${space.content})`,
+    padding: space.double,
+    zIndex: 99,
+    willChange: 'transform',
+    ...radii.large,
+    boxShadow: '0 0 25px 1px rgba(0, 0, 0, .1)',
+  },
+  ({ theme }) => ({
+    background: theme.colors.background.depth,
+  })
+);
 
-export const DrawerLayout = styled('div', {
+export const DrawerLayout = styled.div({
   width: '100%',
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
 });
 
-export const WriteContainer = styled('div', {
-  // height: '56px',
+export const WriteContainer = styled.div(
+  {
+    // height: '56px',
 
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
 
-  border: '1px solid $point',
-  borderRadius: '$small',
+    ...radii.small,
 
-  height: '100%',
-
-  '& > button': {
-    all: 'unset',
-    background: '$point',
-    width: '4rem',
     height: '100%',
-    color: '$bg',
-    fontWeight: 500,
-    textAlign: 'center',
+
+    '& > button': {
+      all: 'unset',
+      background: '$point',
+      width: sizes.button.comment,
+      height: '100%',
+      color: '$bg',
+      fontWeight: 500,
+      textAlign: 'center',
+    },
   },
-});
+  ({ theme }) => ({
+    border: `${borderWidths.base._1} solid ${theme.colors.border.point}`,
+
+    '& > button': {
+      background: theme.colors.button.point,
+      color: theme.colors.button.inversion,
+    },
+  })
+);
