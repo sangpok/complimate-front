@@ -1,7 +1,16 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as S from './BestCommentList.styled';
 import InlineProfile from '@Components/InlineProfile';
 import useMeasure from 'react-use-measure';
+import DraggableComponent from '@Components/DraggableComponent';
+import { useAnimate } from 'framer-motion';
+
+const wrap = (min: number, max: number, value: number) => {
+  if (value < min) return min;
+  if (value > max) return max;
+
+  return value;
+};
 
 const BestComment = React.memo(({ comment }) => {
   return (
@@ -30,25 +39,58 @@ const BestComment = React.memo(({ comment }) => {
 
 const BestCommentList = React.memo(({ bestComments, onMoreClick }) => {
   const contaienrRef = useRef<HTMLDivElement>(null);
-  const [listRef, listBounds] = useMeasure();
+  const [currentCommentIndex, setCurrentCommentIndex] = useState(0);
+  const [commentListScope, animateCommentList] = useAnimate();
 
   const bestCommentElements = bestComments.map((bestComment) => (
     <BestComment key={bestComment.id} comment={bestComment} />
   ));
 
+  useEffect(() => {
+    animateCommentList(
+      commentListScope.current,
+      {
+        // x: `calc(-${100 * currentImageIndex}% - (${currentImageIndex} * ${space.default}))`,
+        // x: `-${(imageWrapperBounds.width * currentImageIndex) / 16 + currentImageIndex * 0.75}rem`,
+        x: `-${100 * currentCommentIndex}%`,
+      },
+      { type: 'spring', bounce: 0, duration: 0.4 }
+    );
+  }, [currentCommentIndex]);
+
+  const handleDragEnd = (event, panInfo) => {
+    const { offset, velocity } = panInfo;
+
+    const curDirection = offset.x < 0 ? 1 : -1;
+    const overOffset = Math.abs(offset.x) > document.body.clientWidth / 2;
+    const overVelocity = Math.abs(velocity.x) > 400;
+    const couldTransition = overOffset || overVelocity;
+
+    if (couldTransition) {
+      setCurrentCommentIndex((prev) => wrap(0, bestComments.length - 1, prev + curDirection));
+    }
+  };
+
   return (
     <S.BestCommentSection className="베댓">
       {/* <div className="베댓 Wrapper"> */}
       <S.ScrollBestCommentContainer
-        drag="x"
-        dragDirectionLock
-        // onDragStart={(event) => event.stopImmediatePropagation()}
-        // onDrag={(event) => event.stopImmediatePropagation()}
-        onPointerDownCapture={(event) => event.preventDefault()}
-        dragListener={bestComments.length !== 1}
-        dragConstraints={{ left: -listBounds.width, right: 0 }}
+      // drag="x"
+      // dragDirectionLock
+      // dragConstraints={{ left: -listBounds.width, right: 0 }}
       >
-        <S.BestCommentListWrapper ref={listRef}>{bestCommentElements}</S.BestCommentListWrapper>
+        {/* Comment가 1개면 일반 Container
+            Comment가 여러개면 DraggableComponent
+          */}
+        <S.StyledDraggableComponent
+          dragId="BestCommentList"
+          axis="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          onDragEnd={handleDragEnd}
+          dragListener={bestComments.length !== 1}
+        >
+          <div ref={commentListScope}>{bestCommentElements}</div>
+        </S.StyledDraggableComponent>
       </S.ScrollBestCommentContainer>
       {/* </div> */}
 

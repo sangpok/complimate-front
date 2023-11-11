@@ -4,10 +4,11 @@ const { space, fontSizes, lineHeights, radii, sizes } = Tokens;
 import { motion } from 'framer-motion';
 
 import * as Icon from '@Icons/index';
+import DraggableComponent from '@Components/DraggableComponent';
 
-export const HeartFilIcon = styled(Icon.HeartFill)({}, ({ theme }) => ({
-  color: theme.colors.icon.point,
-}));
+// export const HeartFilIcon = styled(Icon.HeartFill)({}, ({ theme }) => ({
+//   color: theme.colors.icon.point,
+// }));
 
 export const HeartIcon = styled(Icon.Heart)({}, ({ theme }) => ({
   color: theme.colors.icon.point,
@@ -70,20 +71,16 @@ export const CommentLike = styled.div(
   })
 );
 
-export const BestCardContent = styled.div(
-  {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: space.small,
-    ...radii.large,
-    padding: space.default,
-    width: '100%',
-    boxShadow: '0px 0px 10px 1px rgba(0, 0, 0, .1)',
-  },
-  ({ theme }) => ({
-    background: theme.colors.background.depth,
-  })
-);
+export const BestCardContent = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+});
+
+export const StyledDraggableComponent = styled(DraggableComponent)({
+  whiteSpace: 'nowrap',
+  width: '100%',
+});
 
 export const MoreButton = styled('button')(
   {
@@ -118,10 +115,10 @@ export const BestCommentSection = styled('section')({
   width: '100%',
 });
 
-export const Nickname = styled('span')({
-  ...fontSizes.post.author,
-  fontWeight: '600',
-});
+// export const Nickname = styled('span')({
+//   ...fontSizes.post.author,
+//   fontWeight: '600',
+// });
 
 export const Time = styled('span')(
   {
@@ -133,22 +130,35 @@ export const Time = styled('span')(
   })
 );
 
-export const BestCommentListWrapper = styled.div({
-  display: 'flex',
-  flexDirection: 'row',
-  width: '100%',
-  flexWrap: 'nowrap',
-  whiteSpace: 'nowrap',
-  gap: space.default,
-});
+// export const BestCommentListWrapper = styled.div({
+//   display: 'flex',
+//   flexDirection: 'row',
+//   width: '100%',
+//   flexWrap: 'nowrap',
+//   whiteSpace: 'nowrap',
+//   gap: space.default,
+// });
 
 export const ScrollBestCommentContainer = styled(motion.div)({
   width: '100%',
   // overflowX: 'scroll',
-  paddingRight: space.small,
+  // paddingRight: space.small,
 });
 
-export const FixedWidth = styled.div({
-  width: '100%',
-  flex: 'none',
-});
+export const FixedWidth = styled.div(
+  {
+    width: '100%',
+    display: 'inline-flex',
+    padding: space.default,
+    ...radii.large,
+    boxShadow: '0px 0px 10px 1px rgba(0, 0, 0, .1)',
+    // flex: 'none',
+
+    '& + &': {
+      marginLeft: space.default,
+    },
+  },
+  ({ theme }) => ({
+    background: theme.colors.background.depth,
+  })
+);

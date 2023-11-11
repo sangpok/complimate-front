@@ -1,7 +1,8 @@
+import React from 'react';
 import * as S from './InlineProfile.styled';
 import { InlineProfileProp } from './InlineProfile.types';
 
-const InlineProfile = ({ nickname, profile, ...rest }: InlineProfileProp) => {
+const InlineProfile = React.memo(({ nickname, profile, ...rest }: InlineProfileProp) => {
   return (
     <S.Container {...rest}>
       <S.Profile
@@ -17,6 +18,6 @@ const InlineProfile = ({ nickname, profile, ...rest }: InlineProfileProp) => {
       </span>
     </S.Container>
   );
-};
+});
 
 export default InlineProfile;

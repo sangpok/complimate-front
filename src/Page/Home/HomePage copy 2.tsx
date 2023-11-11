@@ -1,12 +1,11 @@
+import * as Header from '@Components/HomeHeader';
+import * as Layout from '@Layouts/DefaultLayout';
 import { TransitionDirection } from '@Page/Home/Components/ContentCard/ContentCard.types';
+import * as Dialog from '@radix-ui/react-dialog';
 import { useAnimate } from 'framer-motion';
 import { useCallback, useRef, useState } from 'react';
 import { useLoaderData, useNavigate } from 'react-router-dom';
-import * as Header from '@Components/HomeHeader';
-import * as Layout from '@Layouts/DefaultLayout';
-import * as Dialog from '@radix-ui/react-dialog';
 import * as C from './Components';
-import * as S from './HomePage.styled';
 import { v4 as uuid } from 'uuid';
 
 const commentList = [
@@ -89,8 +88,6 @@ const HomePage = () => {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [isCommentDrawerOpen, setIsCommentDrawerOpen] = useState(false);
 
-  // const contentCardParentRef = useRef<HTMLDivElement>(null);
-
   const sideMenuRef = useRef<HTMLElement>(null);
   const drawerRef = useRef<HTMLElement>(null);
 
@@ -171,16 +168,14 @@ const HomePage = () => {
         </Header.Root>
       </Layout.Head>
 
-      <S.LayoutBody>
-        <S.BodyLayout>
-          <C.DraggablePost
-            post={posts[currentPostIndex]}
-            onTransitionRaise={handleTransitionRaise}
-            onCommentClick={handleCommentClick}
-            onHeartClick={handleHaertClick}
-          />
-        </S.BodyLayout>
-      </S.LayoutBody>
+      <Layout.Body>
+        <C.DraggablePost
+          post={posts[currentPostIndex]}
+          onTransitionRaise={handleTransitionRaise}
+          onCommentClick={handleCommentClick}
+          onHeartClick={handleHaertClick}
+        />
+      </Layout.Body>
 
       <Dialog.Root open={isSideMenuOpen} onOpenChange={handleSidebarOpenChange}>
         <C.SideBarMenu
