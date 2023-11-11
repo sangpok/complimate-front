@@ -28,6 +28,7 @@ const Head = styled.header({
 
 const Body = styled.section({
   flex: '1',
+  minHeight: 0,
   width: '100%',
   position: 'relative',
 
