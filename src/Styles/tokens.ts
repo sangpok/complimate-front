@@ -9,6 +9,7 @@ export const Tokens = {
     logo: { fontSize: fontSizes.logo },
     caption: { fontSize: fontSizes.caption },
     default: { fontSize: fontSizes.default },
+    large: { fontSize: fontSizes.large },
 
     button: {
       sm: { fontSize: fontSizes.button.sm },

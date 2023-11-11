@@ -40,7 +40,7 @@ export const settingList: SettingList = [
   [
     {
       name: '로그아웃',
-      path: '/',
+      path: '/logout',
       placeholder: null,
     },
   ],

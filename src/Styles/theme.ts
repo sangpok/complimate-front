@@ -42,6 +42,7 @@ const base = {
     _4: '.25rem', // 4
     _8: '.5rem', // 8
     _12: '.75rem', // 12
+    _18: '1.125rem', // 18
     _24: '1.5rem', // 24
     _32: '2rem', // 32
     _48: '3rem', // 48
@@ -82,7 +83,7 @@ const base = {
     _12: '.75rem',
     _9999: '624.9375rem',
   },
-};
+} as const;
 
 const defaultStyles = {
   colors: {
@@ -94,6 +95,7 @@ const defaultStyles = {
     logo: base.fontSizes._32,
     caption: base.fontSizes._12,
     default: base.fontSizes._14,
+    large: base.fontSizes._18,
 
     button: {
       sm: base.fontSizes._14,
@@ -155,6 +157,7 @@ const defaultStyles = {
       small: base.sizes._24,
       menu: base.sizes._28,
       comment: base.sizes._18,
+      feedProfile: base.sizes._42,
     },
     logo: {
       default: base.sizes._128,
@@ -228,6 +231,7 @@ const lightTheme: Theme = {
       default: base.colors.white,
       point: base.colors.greenblue,
       depth: base.colors.gray8,
+      active: base.colors.gray6,
     },
 
     border: {
@@ -289,6 +293,7 @@ const darkTheme: Theme = {
       default: base.colors.black,
       point: base.colors.skyblue,
       depth: base.colors.gray6,
+      active: base.colors.gray6,
     },
 
     border: {
@@ -368,6 +373,7 @@ declare module '@emotion/react' {
         default: string;
         point: string;
         depth: string;
+        active: string;
       };
 
       border: {
@@ -420,6 +426,7 @@ declare module '@emotion/react' {
       logo: string;
       caption: string;
       default: string;
+      large: string;
 
       button: {
         sm: string;
@@ -457,6 +464,7 @@ declare module '@emotion/react' {
         _4: string;
         _8: string;
         _12: string;
+        _18: string;
         _24: string;
         _32: string;
         _48: string;
@@ -504,6 +512,7 @@ declare module '@emotion/react' {
         small: string;
         menu: string;
         comment: string;
+        feedProfile: string;
       };
       logo: {
         default: string;

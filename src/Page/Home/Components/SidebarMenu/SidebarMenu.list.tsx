@@ -11,7 +11,7 @@ export const sidebarMenuList: MenuItem[] = [
   {
     name: '내 피드',
     icon: Icon.Profile,
-    path: '/profile',
+    path: '/myfeed',
     enabled: true,
   },
   {
