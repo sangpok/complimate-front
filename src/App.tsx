@@ -22,6 +22,7 @@ import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 import { ThemeProvider } from '@emotion/react';
 import { darkTheme, lightTheme } from '@Styles/theme';
 import { GlobalStyle } from '@Styles/_globals';
+import MyFeedPage from '@Page/MyFeed/MyFeedPage';
 
 // import { Theme, ThemeProvider } from './Components/ThemeProvider';
 // import { globalStyle } from './Styles/_globals';
@@ -88,6 +89,7 @@ const router = createBrowserRouter(
       <Route path="home" element={<HomePage />} loader={homeLoader} />
       <Route path="write" element={<WritePage />} action={writeAction} />
       <Route path="setting" element={<SettingPage />} />
+      <Route path="myfeed" element={<MyFeedPage />} />
       {/* <Route path="test" element={<TestPage />} /> */}
     </Route>
   )

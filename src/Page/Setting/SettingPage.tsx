@@ -18,7 +18,11 @@ const SettingPage = () => {
   };
 
   const handleItemClick = (path: string) => {
-    navigate(path);
+    if (path === '/logout') {
+      navigate('/');
+    } else {
+      alert(path);
+    }
   };
 
   const settingListComponents = settingList.map((setting, index) => (

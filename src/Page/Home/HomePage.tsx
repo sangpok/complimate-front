@@ -157,6 +157,15 @@ const HomePage = () => {
     console.log({ id });
   };
 
+  const handleMenuItemClick = (path: string) => {
+    // 테스트용 코드
+    if (path === '/myfeed') {
+      closeSidebar(() => navigate(path));
+    } else {
+      closeSidebar(() => console.log(`item clicked: ${path}`));
+    }
+  };
+
   if (!posts) return;
 
   return (
@@ -189,7 +198,7 @@ const HomePage = () => {
           contentScope={contentScope}
           onBackClick={() => closeSidebar(() => console.log('back clicked'))}
           onSettingClick={() => closeSidebar(() => navigate('/setting'))}
-          onMenuItemClick={(path) => closeSidebar(() => console.log(`item clicked: ${path}`))}
+          onMenuItemClick={handleMenuItemClick}
         />
       </Dialog.Root>
 

@@ -22,6 +22,8 @@ import { ReactComponent as HeartFillInner } from '@Icons/solar_heart-fill.svg';
 import { ReactComponent as DeleteInner } from '@Icons/typcn_delete.svg';
 import { ReactComponent as SettingInner } from '@Icons/uil_setting.svg';
 import { ReactComponent as LogoInner } from '../Icons/complimate-logo.svg';
+import { ReactComponent as GiveHeartInner } from '@Icons/GiveHeart.svg';
+import { ReactComponent as TakenHeartInner } from '@Icons/TakenHeart.svg';
 
 // const icons = [
 //   { name: 'Google', Icon: GoogleIconInner },
@@ -73,6 +75,8 @@ export const HeartFill = returnIcon(HeartFillInner);
 export const Delete = returnIcon(DeleteInner);
 export const Setting = returnIcon(SettingInner);
 export const Logo = returnIcon(LogoInner);
+export const GiveHeart = returnIcon(GiveHeartInner);
+export const TakenHeart = returnIcon(TakenHeartInner);
 
 // export {...IconList};
 

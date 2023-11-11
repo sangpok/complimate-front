@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Tokens } from '@Styles/tokens';
 import * as Icon from '@Icons/index';
 
-const { space, fontSizes } = Tokens;
+const { space, fontSizes, radii } = Tokens;
 
 export const RightIcon = styled(Icon.Left)({
   rotate: '180deg',
@@ -52,20 +52,20 @@ export const Item = styled('li')(
   ({ theme }) => ({
     background: theme.colors.background.depth,
 
-    'div.right': {
+    'div.group': {
       'span.placeholder': {
         color: theme.colors.text.greyed,
       },
     },
 
     '&:active': {
-      background: theme.colors.background.depth,
+      background: theme.colors.background.active,
     },
   })
 );
 
 export const Group = styled('ul')({
-  borderRadius: '$small',
+  ...radii.small,
   overflow: 'hidden',
 
   // border: '1px solid red',
