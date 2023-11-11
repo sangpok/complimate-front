@@ -13,6 +13,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
 
     /* Linting */
     "strict": true,
@@ -25,6 +26,7 @@
     "baseUrl": ".",
     "paths": {
       "@Components/*": ["src/Components/*"],
+      "@Hooks/*": ["src/Hooks/*"],
       "@Icons/*": ["src/Icons/*"],
       "@Layouts/*": ["src/Layouts/*"],
       "@Page/*": ["src/Page/*"],

@@ -6,14 +6,14 @@ export type StepProp = {
 };
 
 export type MultiStepFormType = {
-  currentStepIndex: number;
+  currentFormIndex: number;
   currentTitle: string;
   isFirstStep: boolean;
   isLastStep: boolean;
   progressDirection: number;
-  CurrentStepComponent: ComponentType<any>;
-  prev: () => void;
-  next: () => void;
+  CurrentForm: ComponentType<any>;
+  prevForm: () => void;
+  nextForm: () => void;
   formData: object;
   updateFields: (field: object) => void;
 };
@@ -21,32 +21,32 @@ export type MultiStepFormType = {
 const useMultiStepForm = (steps: StepProp[], initialFormData: object): MultiStepFormType => {
   const [formData, setFormData] = useState(initialFormData);
 
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [currentFormIndex, setCurrentFormIndex] = useState(0);
   const [progressDirection, setProgressDirection] = useState(1);
 
   const updateFields = (field: object) => {
     setFormData((prev) => ({ ...prev, ...field }));
   };
 
-  const prev = () => {
-    setCurrentStepIndex((index) => (index <= 0 ? 0 : index - 1));
+  const prevForm = () => {
+    setCurrentFormIndex((index) => (index <= 0 ? 0 : index - 1));
     setProgressDirection(-1);
   };
 
-  const next = () => {
-    setCurrentStepIndex((index) => (index >= steps.length - 1 ? index : index + 1));
+  const nextForm = () => {
+    setCurrentFormIndex((index) => (index >= steps.length - 1 ? index : index + 1));
     setProgressDirection(1);
   };
 
   return {
-    currentStepIndex,
-    currentTitle: steps[currentStepIndex].title,
-    CurrentStepComponent: steps[currentStepIndex].Component,
-    isFirstStep: currentStepIndex === 0,
-    isLastStep: currentStepIndex === steps.length - 1,
+    currentFormIndex,
+    currentTitle: steps[currentFormIndex].title,
+    CurrentForm: steps[currentFormIndex].Component,
+    isFirstStep: currentFormIndex === 0,
+    isLastStep: currentFormIndex === steps.length - 1,
     progressDirection,
-    prev,
-    next,
+    prevForm,
+    nextForm,
 
     formData,
     updateFields,

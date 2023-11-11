@@ -1,62 +1,71 @@
-import { styled } from '@/stitches.config';
+import styled from '@emotion/styled';
+import { Tokens } from '@Styles/tokens';
+import { forwardRef, InputHTMLAttributes, ReactNode } from 'react';
 
-import { forwardRef, type InputHTMLAttributes, type ReactNode } from 'react';
+const { radii, space, borderWidths, fontSizes } = Tokens;
 
-// const Container = styled('div', {
-//   width: '100%',
-// });
+const InputContainer = styled.div(
+  {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
 
-const InputContainer = styled('div', {
-  display: 'flex',
-  flexDirection: 'colunm',
-  justifyContent: 'center',
-  alignItems: 'center',
+    padding: space.default,
+    gap: space.default,
+    zIndex: 0,
 
-  padding: '$default',
-  gap: '$default',
-  zIndex: 0,
+    '& + &': {
+      marginTop: `-${space.base._1}`,
+    },
 
-  border: '.0625rem solid $depth2',
+    '&:first-of-type': {
+      borderTopLeftRadius: radii.tokens.small,
+      borderTopRightRadius: radii.tokens.small,
+    },
 
-  svg: {
-    color: '$depth2',
-  },
-
-  '& + &': {
-    marginTop: '-0.0625rem',
-  },
-
-  '&:focus-within': {
-    border: '.0625rem solid $point',
-    boxShadow: '0 0 .625rem .0625rem rgba(0, 0, 0, .1)',
-    position: 'relative',
-    zIndex: 1,
-
-    svg: {
-      color: '$point',
+    '&:last-of-type': {
+      borderBottomLeftRadius: radii.tokens.small,
+      borderBottomRightRadius: radii.tokens.small,
     },
   },
+  ({ theme }) => ({
+    border: `${borderWidths.base._1} solid ${theme.colors.border.depth}`,
 
-  '&:first-of-type': {
-    borderTopLeftRadius: '$small',
-    borderTopRightRadius: '$small',
+    svg: {
+      color: theme.colors.icon.disabled,
+    },
+
+    '&:focus-within': {
+      border: `${borderWidths.base._1} solid ${theme.colors.border.point}`,
+      boxShadow: `0 0 .625rem ${space.base._1} rgba(0, 0, 0, .1)`,
+      position: 'relative',
+      zIndex: 1,
+
+      svg: {
+        color: theme.colors.icon.point,
+      },
+    },
+  })
+);
+
+const InputInner = styled.input(
+  {
+    all: 'unset',
+
+    flex: 1,
+    ...fontSizes.input,
+    width: '100%',
+    border: `${borderWidths.default} solid transparent`,
   },
+  ({ theme }) => ({
+    background: theme.colors.input.background,
 
-  '&:last-of-type': {
-    borderBottomLeftRadius: '$small',
-    borderBottomRightRadius: '$small',
-  },
-});
-
-const InputInner = styled('input', {
-  all: 'unset',
-
-  flex: 1,
-  fontSize: '$input',
-  width: '100%',
-  border: '.0625rem solid transparent',
-  background: '$input',
-});
+    '&:disabled': {
+      color: theme.colors.input.disabled,
+    },
+  })
+);
 
 const Root = ({ children }: { children: ReactNode }) => {
   return <div style={{ width: '100%' }}>{children}</div>;
@@ -66,7 +75,7 @@ type ContentProp = {
   icon: ReactNode;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-const Content = forwardRef(({ icon, ...rest }: ContentProp, ref) => {
+const Content = forwardRef<HTMLInputElement, ContentProp>(({ icon, ...rest }: ContentProp, ref) => {
   return (
     <InputContainer>
       {icon}

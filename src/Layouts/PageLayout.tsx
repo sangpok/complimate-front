@@ -1,5 +1,5 @@
 import useMultiStepForm, { MultiStepFormType, StepProp } from '@/Hooks/useMultiStepForm';
-import { styled } from '@/stitches.config';
+import styled from '@emotion/styled';
 import * as PageHeader from '@Components/PageHeader';
 import PageTransition from '@Components/PageTransition';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -9,12 +9,12 @@ import { useNavigate } from 'react-router-dom';
 
 const PageContent = styled(motion.div, {
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: column,
   gap: '$double',
   position: 'absolute',
   padding: '0 $default',
   width: '100%',
-  marginTop: '$content',
+  margin-top: '$content',
 });
 
 const Fieldset = styled('fieldset', {
@@ -49,19 +49,20 @@ const Root = ({ children, onSubmit, stepList, fieldData }: PageRootProp) => {
   };
 
   return (
-    <PageTransition>
-      <PageHeader.Root onSubmit={handleSubmit}>
-        <PageContext.Provider value={multiStepForm}>{children}</PageContext.Provider>
-      </PageHeader.Root>
-    </PageTransition>
+    // <PageTransition>
+    <PageHeader.Root onSubmit={handleSubmit}>
+      <PageContext.Provider value={multiStepForm}>{children}</PageContext.Provider>
+    </PageHeader.Root>
+    // </PageTransition>
   );
 };
 
 type HeaderProp = {
   submitText?: string;
+  submitting?: boolean;
 };
 
-const Header = ({ submitText = '완료' }: HeaderProp) => {
+const Header = ({ submitText = '완료', submitting = false }: HeaderProp) => {
   const navigate = useNavigate();
 
   const multiStepForm = useContext(PageContext);
@@ -87,6 +88,7 @@ const Header = ({ submitText = '완료' }: HeaderProp) => {
       progressDirection={progressDirection}
       title={currentTitle}
       nextContent={isLastStep ? submitText : '다음'}
+      submitting={submitting}
     />
   );
 };
