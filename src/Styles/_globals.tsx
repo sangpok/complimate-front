@@ -28,6 +28,10 @@ export const GlobalStyle = () => (
         font-size: calc(100vw / 22.5);
       }
 
+      fieldset {
+        border: none;
+      }
+
       ${media.md} {
         :root {
           font-size: calc(100vw / 48);

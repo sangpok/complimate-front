@@ -5,6 +5,35 @@ const { sizes } = Tokens;
 
 import type { ComponentType, SVGProps } from 'react';
 
+// console.time('Promise Import');
+// const a = await Promise.all([
+//   import('@Icons/google.svg'),
+//   import('@Icons/ic_outline-email.svg'),
+//   import('@Icons/iconoir_profile-circle.svg'),
+//   import('@Icons/material-symbols_comment-outline.svg'),
+//   import('@Icons/material-symbols_refresh.svg'),
+//   import('@Icons/material-symbols_sort.svg'),
+//   import('@Icons/mdi_chevron-left.svg'),
+//   import('@Icons/mdi_home.svg'),
+//   import('@Icons/mdi_lock-outline.svg'),
+//   import('@Icons/mdi_pencil-outline.svg'),
+//   import('@Icons/quill_hamburger.svg'),
+//   import('@Icons/ri_more-line.svg'),
+//   import('@Icons/solar_heart-broken.svg'),
+//   import('@Icons/solar_heart-fill.svg'),
+//   import('@Icons/typcn_delete.svg'),
+//   import('@Icons/uil_setting.svg'),
+//   import('@Icons/complimate-logo.svg'),
+//   import('@Icons/GiveHeart.svg'),
+//   import('@Icons/TakenHeart.svg'),
+// ]);
+// console.timeEnd('Promise Import');
+
+// console.log({ a });
+// const { ReactComponent } = a[0];
+// console.log({ ReactComponent });
+
+console.time('Normal Import');
 import { ReactComponent as GoogleIconInner } from '@Icons/google.svg';
 import { ReactComponent as EmailIconInner } from '@Icons/ic_outline-email.svg';
 import { ReactComponent as ProfileInner } from '@Icons/iconoir_profile-circle.svg';
@@ -25,25 +54,25 @@ import { ReactComponent as LogoInner } from '../Icons/complimate-logo.svg';
 import { ReactComponent as GiveHeartInner } from '@Icons/GiveHeart.svg';
 import { ReactComponent as TakenHeartInner } from '@Icons/TakenHeart.svg';
 
-// const icons = [
-//   { name: 'Google', Icon: GoogleIconInner },
-//   { name: 'Email', Icon: EmailIconInner },
-//   { name: 'Profile', Icon: ProfileInner },
-//   { name: 'Comment', Icon: CommentInner },
-//   { name: 'Refresh', Icon: RefreshInner },
-//   { name: 'Sort', Icon: SortInner },
-//   { name: 'Left', Icon: LeftIconInner },
-//   { name: 'Home', Icon: HomeInner },
-//   { name: 'Password', Icon: PasswordIconInner },
-//   { name: 'Write', Icon: WriteInner },
-//   { name: 'Hamburger', Icon: HamburgerInner },
-//   { name: 'More', Icon: MoreInner },
-//   { name: 'Heart', Icon: HeartInner },
-//   { name: 'HeartFill', Icon: HeartFillInner },
-//   { name: 'Delete', Icon: DeleteInner },
-//   { name: 'Setting', Icon: SettingInner },
-//   { name: 'Logo', Icon: LogoInner },
-// ];
+const icons = [
+  { name: 'Google', Icon: GoogleIconInner },
+  { name: 'Email', Icon: EmailIconInner },
+  { name: 'Profile', Icon: ProfileInner },
+  { name: 'Comment', Icon: CommentInner },
+  { name: 'Refresh', Icon: RefreshInner },
+  { name: 'Sort', Icon: SortInner },
+  { name: 'Left', Icon: LeftIconInner },
+  { name: 'Home', Icon: HomeInner },
+  { name: 'Password', Icon: PasswordIconInner },
+  { name: 'Write', Icon: WriteInner },
+  { name: 'Hamburger', Icon: HamburgerInner },
+  { name: 'More', Icon: MoreInner },
+  { name: 'Heart', Icon: HeartInner },
+  { name: 'HeartFill', Icon: HeartFillInner },
+  { name: 'Delete', Icon: DeleteInner },
+  { name: 'Setting', Icon: SettingInner },
+  { name: 'Logo', Icon: LogoInner },
+];
 
 const returnIcon = (Icon: ComponentType<SVGProps<SVGSVGElement>>) =>
   styled(Icon)<{ color?: string; width?: string; height?: string }>(

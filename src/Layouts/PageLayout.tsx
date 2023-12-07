@@ -1,142 +1,142 @@
-import useMultiStepForm, { MultiStepFormType, StepProp } from '@/Hooks/useMultiStepForm';
-import styled from '@emotion/styled';
-import * as PageHeader from '@Components/PageHeader';
-import PageTransition from '@Components/PageTransition';
-import { AnimatePresence, motion } from 'framer-motion';
-import { ChangeEvent, createContext, useContext, useRef } from 'react';
-import type { FormEvent, ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import useMultiStepForm, { MultiStepFormType, StepProp } from '@/Hooks/useMultiStepForm';
+// import styled from '@emotion/styled';
+// import * as PageHeader from '@Components/PageHeader';
+// import PageTransition from '@Components/PageTransition';
+// import { AnimatePresence, motion } from 'framer-motion';
+// import { ChangeEvent, createContext, useContext, useRef } from 'react';
+// import type { FormEvent, ReactNode } from 'react';
+// import { useNavigate } from 'react-router-dom';
 
-const PageContent = styled(motion.div, {
-  display: 'flex',
-  flexDirection: column,
-  gap: '$double',
-  position: 'absolute',
-  padding: '0 $default',
-  width: '100%',
-  margin-top: '$content',
-});
+// const PageContent = styled(motion.div, {
+//   display: 'flex',
+//   flexDirection: column,
+//   gap: '$double',
+//   position: 'absolute',
+//   padding: '0 $default',
+//   width: '100%',
+//   margin-top: '$content',
+// });
 
-const Fieldset = styled('fieldset', {
-  all: 'unset',
+// const Fieldset = styled('fieldset', {
+//   all: 'unset',
 
-  '&:disabled': {
-    color: '$depth1',
-  },
-});
+//   '&:disabled': {
+//     color: '$depth1',
+//   },
+// });
 
-const PageContext = createContext<MultiStepFormType>({} as MultiStepFormType);
+// const PageContext = createContext<MultiStepFormType>({} as MultiStepFormType);
 
-type PageRootProp = {
-  children: ReactNode;
-  onSubmit: (formData: object) => void;
-  fieldData: object;
-  stepList: StepProp[];
-};
+// type PageRootProp = {
+//   children: ReactNode;
+//   onSubmit: (formData: object) => void;
+//   fieldData: object;
+//   stepList: StepProp[];
+// };
 
-const Root = ({ children, onSubmit, stepList, fieldData }: PageRootProp) => {
-  const multiStepForm = useMultiStepForm(stepList, fieldData);
-  const { formData, isLastStep, next: nextForm } = multiStepForm;
+// const Root = ({ children, onSubmit, stepList, fieldData }: PageRootProp) => {
+//   const multiStepForm = useMultiStepForm(stepList, fieldData);
+//   const { formData, isLastStep, next: nextForm } = multiStepForm;
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+//   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+//     event.preventDefault();
 
-    if (isLastStep) {
-      return onSubmit(formData);
-    }
+//     if (isLastStep) {
+//       return onSubmit(formData);
+//     }
 
-    nextForm();
-  };
+//     nextForm();
+//   };
 
-  return (
-    // <PageTransition>
-    <PageHeader.Root onSubmit={handleSubmit}>
-      <PageContext.Provider value={multiStepForm}>{children}</PageContext.Provider>
-    </PageHeader.Root>
-    // </PageTransition>
-  );
-};
+//   return (
+//     // <PageTransition>
+//     <PageHeader.Root onSubmit={handleSubmit}>
+//       <PageContext.Provider value={multiStepForm}>{children}</PageContext.Provider>
+//     </PageHeader.Root>
+//     // </PageTransition>
+//   );
+// };
 
-type HeaderProp = {
-  submitText?: string;
-  submitting?: boolean;
-};
+// type HeaderProp = {
+//   submitText?: string;
+//   submitting?: boolean;
+// };
 
-const Header = ({ submitText = '완료', submitting = false }: HeaderProp) => {
-  const navigate = useNavigate();
+// const Header = ({ submitText = '완료', submitting = false }: HeaderProp) => {
+//   const navigate = useNavigate();
 
-  const multiStepForm = useContext(PageContext);
-  const {
-    isFirstStep,
-    currentTitle,
-    progressDirection,
-    isLastStep,
-    prev: prevForm,
-  } = multiStepForm;
+//   const multiStepForm = useContext(PageContext);
+//   const {
+//     isFirstStep,
+//     currentTitle,
+//     progressDirection,
+//     isLastStep,
+//     prev: prevForm,
+//   } = multiStepForm;
 
-  const handlePrevClick = () => {
-    if (isFirstStep) {
-      return navigate('..');
-    }
+//   const handlePrevClick = () => {
+//     if (isFirstStep) {
+//       return navigate('..');
+//     }
 
-    prevForm();
-  };
+//     prevForm();
+//   };
 
-  return (
-    <PageHeader.Content
-      onPrevClick={handlePrevClick}
-      progressDirection={progressDirection}
-      title={currentTitle}
-      nextContent={isLastStep ? submitText : '다음'}
-      submitting={submitting}
-    />
-  );
-};
+//   return (
+//     <PageHeader.Content
+//       onPrevClick={handlePrevClick}
+//       progressDirection={progressDirection}
+//       title={currentTitle}
+//       nextContent={isLastStep ? submitText : '다음'}
+//       submitting={submitting}
+//     />
+//   );
+// };
 
-const Content = () => {
-  // const [isPresent, safeToRemove] = usePresence();
+// const Content = () => {
+//   // const [isPresent, safeToRemove] = usePresence();
 
-  const multiStepForm = useContext(PageContext);
-  const firstInputElement = useRef<HTMLInputElement>(null);
+//   const multiStepForm = useContext(PageContext);
+//   const firstInputElement = useRef<HTMLInputElement>(null);
 
-  const { currentStepIndex, progressDirection, CurrentStepComponent, updateFields, formData } =
-    multiStepForm;
+//   const { currentStepIndex, progressDirection, CurrentStepComponent, updateFields, formData } =
+//     multiStepForm;
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    updateFields({ [event.target.id]: event.target.value });
-    console.log({ [event.target.id]: event.target.value });
-  };
+//   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+//     updateFields({ [event.target.id]: event.target.value });
+//     console.log({ [event.target.id]: event.target.value });
+//   };
 
-  return (
-    <AnimatePresence
-      custom={progressDirection}
-      initial={false}
-      onExitComplete={() => {
-        if (firstInputElement.current) {
-          firstInputElement.current.focus();
-        }
-      }}
-    >
-      <PageContent
-        key={currentStepIndex}
-        custom={progressDirection}
-        variants={{
-          initial: (progressDirection: number) => ({ x: `${100 * progressDirection}%` }),
-          normal: { x: 0 },
-          exit: (progressDirection: number) => ({
-            x: `${-100 * progressDirection}%`,
-          }),
-        }}
-        initial="initial"
-        animate="normal"
-        exit="exit"
-      >
-        <Fieldset disabled={false}>
-          <CurrentStepComponent {...formData} onChange={handleChange} ref={firstInputElement} />
-        </Fieldset>
-      </PageContent>
-    </AnimatePresence>
-  );
-};
+//   return (
+//     <AnimatePresence
+//       custom={progressDirection}
+//       initial={false}
+//       onExitComplete={() => {
+//         if (firstInputElement.current) {
+//           firstInputElement.current.focus();
+//         }
+//       }}
+//     >
+//       <PageContent
+//         key={currentStepIndex}
+//         custom={progressDirection}
+//         variants={{
+//           initial: (progressDirection: number) => ({ x: `${100 * progressDirection}%` }),
+//           normal: { x: 0 },
+//           exit: (progressDirection: number) => ({
+//             x: `${-100 * progressDirection}%`,
+//           }),
+//         }}
+//         initial="initial"
+//         animate="normal"
+//         exit="exit"
+//       >
+//         <Fieldset disabled={false}>
+//           <CurrentStepComponent {...formData} onChange={handleChange} ref={firstInputElement} />
+//         </Fieldset>
+//       </PageContent>
+//     </AnimatePresence>
+//   );
+// };
 
-export { Content, Header, Root };
+// export { Content, Header, Root };
