@@ -1,5 +1,5 @@
 import { useCreateAccount } from '@Hooks/index';
-import useAuth from '@Hooks/useAuth';
+import { useAuth } from '@Hooks/useAuth';
 import { useEffect } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
@@ -12,6 +12,7 @@ const Signup = ({
   password: string;
   nickname: string;
 }) => {
+  const { signIn } = useAuth();
   const navigate = useNavigate();
   const { mutate } = useCreateAccount();
   const { updateAuth } = useAuth();
@@ -21,8 +22,15 @@ const Signup = ({
       { email, password, nickname },
       {
         onSuccess: () => {
-          updateAuth(true);
-          navigate('/app/tutorial', { replace: true });
+          signIn(
+            { email, password },
+            {
+              onSuccess: () => {
+                updateAuth(true);
+                navigate('/app/tutorial', { replace: true });
+              },
+            }
+          );
         },
       }
     );

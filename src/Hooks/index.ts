@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import * as API from '@API/index';
 import { SubmitCallbacks } from '@Types/index';
@@ -24,6 +24,9 @@ export const useCheckEmail = () => {
         }
 
         return callbacks?.onSuccess && callbacks.onSuccess();
+      })
+      .catch((error) => {
+        return callbacks?.onFail && callbacks.onFail(new Error(error));
       })
       .finally(() => callbacks?.onSettled && callbacks.onSettled());
   };
@@ -62,6 +65,9 @@ export const useCheckNickname = () => {
 
         return callbacks?.onSuccess && callbacks.onSuccess();
       })
+      .catch((error) => {
+        return callbacks?.onFail && callbacks.onFail(new Error(error));
+      })
       .finally(() => callbacks?.onSettled && callbacks.onSettled());
   };
 
@@ -86,5 +92,12 @@ export const useLogout = () => {
   return useMutation({
     mutationKey: ['logout'],
     mutationFn: API.logout,
+  });
+};
+
+export const useGetPosts = (lastViewId: number) => {
+  return useQuery({
+    queryKey: ['posts', lastViewId],
+    queryFn: () => API.getPosts(lastViewId),
   });
 };

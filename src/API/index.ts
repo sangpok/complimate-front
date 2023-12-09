@@ -1,6 +1,7 @@
-import { CheckFieldResult, UserAuth } from '@Types/index';
+import { CheckFieldResult, ComplementPost, UserAuth } from '@Types/index';
 
 const API_URI = 'http://localhost:3001' as const;
+// const API_URI = 'http://192.168.10.106:3001' as const;
 
 const handleResponse = async <T>(res: Response) => {
   if (res.ok) {
@@ -11,7 +12,7 @@ const handleResponse = async <T>(res: Response) => {
       return res.json() as Promise<T>;
     }
 
-    return null;
+    return {} as T;
   }
 
   throw await (res.json() as Promise<T>);
@@ -57,3 +58,7 @@ export const login = ({ email, password }: Omit<UserAuth, 'nickname'>) =>
   Fetcher.POST('/auth/login', { email, password });
 
 export const logout = () => Fetcher.POST('/auth/logout', {});
+
+// TODO: EndPoint 바꾸기
+export const getPosts = (lastViewId: number) =>
+  Fetcher.GET<ComplementPost[]>(`/complement/get?pageSize=10&lastViewId=${lastViewId}`);

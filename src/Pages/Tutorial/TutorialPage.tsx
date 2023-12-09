@@ -88,7 +88,9 @@ export const TutorialPage = () => {
         initial={false}
         animate={currentIndex === tutorials.length - 1 ? 'show' : 'hide'}
       >
-        <S.StyledLink to="/app">시작하기</S.StyledLink>
+        <S.StyledLink to="/app" replace>
+          시작하기
+        </S.StyledLink>
       </S.ButtonSection>
     </S.FullPage>
   );

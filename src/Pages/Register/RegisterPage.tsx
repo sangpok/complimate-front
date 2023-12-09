@@ -17,6 +17,7 @@ import { ActionFunction, redirect, useNavigate, useSubmit } from 'react-router-d
 import { EmailForm, NicknameForm, PasswordForm } from './RegisterPage.form';
 
 import * as API from '@API/index';
+import { getRandomNickname } from '@Utils/index';
 
 // export const action: ActionFunction = async ({ request }) => {
 //   const formData = await request.formData();
@@ -77,7 +78,7 @@ const FormView = () => {
 
         if (isLastForm) {
           // return submit({ ...fieldState }, { method: 'POST' });
-          return navigate('/signup', { state: { fieldState } });
+          return navigate('/signup', { state: { fieldState }, replace: true });
         }
 
         startToMove('next');
@@ -160,11 +161,14 @@ const InitializeFormComponent = () => {
   useEffect(() => {
     if (!formConfigs) {
       initializeFormState({
-        email: 'sangpok@complimate.com',
-        password: 'sangpok',
-        passwordConfirm: 'sangpok',
-        nickname: '김 주핸',
+        email: `test${Math.floor(Math.random() * 10000)
+          .toString()
+          .padStart(4, '0')}@complimate.com`,
+        password: 'test',
+        passwordConfirm: 'test',
+        nickname: getRandomNickname(),
       });
+
       initiailizeFormConfigs(initialFormConfigs);
     }
   }, []);

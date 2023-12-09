@@ -4,11 +4,11 @@ import * as Form from '@radix-ui/react-form';
 import * as S from './RegisterPage.styled';
 
 import { useRegisterMutation, useRegisterState } from '@Contexts/RegisterContext';
-import { ChangeEvent, useEffect, useRef } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useRef } from 'react';
 
 export const EmailForm = () => {
   const { formState } = useRegisterState();
-  const { disableNext, updateField, clearFieldError } = useRegisterMutation();
+  const { disableNext, updateField, clearFieldError, updateError } = useRegisterMutation();
 
   const { fieldState, errorState } = formState;
   const { email } = fieldState;
@@ -43,6 +43,13 @@ export const EmailForm = () => {
     }
   };
 
+  const handleInvalid = (event: FormEvent<HTMLInputElement>) => {
+    event.preventDefault();
+
+    const email = event.target as HTMLInputElement;
+    updateError({ email: email.validationMessage });
+  };
+
   return (
     <>
       <S.FormField>
@@ -54,13 +61,18 @@ export const EmailForm = () => {
           type="email"
           defaultValue={email}
           onChange={handleChange}
+          onInvalid={handleInvalid}
           placeholder="email@complimate.com"
           data-role="firstinput"
           required
           ref={emailInputRef}
           enterKeyHint="next"
         />
-        {emailError && <p style={{ color: 'red' }}>{emailError}</p>}
+        {emailError && (
+          <p id="error" style={{ color: 'red' }}>
+            {emailError}
+          </p>
+        )}
       </S.FormField>
     </>
   );

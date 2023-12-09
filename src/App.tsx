@@ -4,7 +4,7 @@ import { ThemeProvider } from '@emotion/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { routes } from './Routes';
+import { getRoutes } from './Routes';
 import { MotionConfig } from 'framer-motion';
 
 const motionTransition = { type: 'spring', bounce: 0, duration: 0.4 };
@@ -17,7 +17,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const router = createBrowserRouter(routes);
+const router = createBrowserRouter(getRoutes(queryClient));
 
 const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);

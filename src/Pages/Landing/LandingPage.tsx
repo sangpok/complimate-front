@@ -21,13 +21,19 @@ export const LandingPage = () => {
 
         <Flex gap={space.default}>
           <S.CaptionText>우리의 컴플리메이트가 되어주세요!</S.CaptionText>
-          <S.RegisterButton to="/register">3단계로 끝내는 회원가입</S.RegisterButton>
+          <S.RegisterButton to="/register" replace>
+            3단계로 끝내는 회원가입
+          </S.RegisterButton>
         </Flex>
 
         <Flex gap={space.default}>
           <S.CaptionText>이미 계정이 있으신가요?</S.CaptionText>
-          <S.RegisterButton to="/login">이메일로 로그인하기</S.RegisterButton>
-          <C.GoogleButton to="/app">구글로 로그인하기</C.GoogleButton>
+          <S.RegisterButton to="/login" replace>
+            이메일로 로그인하기
+          </S.RegisterButton>
+          <C.GoogleButton to="/app" replace>
+            구글로 로그인하기
+          </C.GoogleButton>
         </Flex>
       </Flex>
     </Container>

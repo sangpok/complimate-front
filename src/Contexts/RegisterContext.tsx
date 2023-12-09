@@ -166,8 +166,6 @@ export const RegisterContextProvider = ({ children }: { children: ReactNode }) =
     const { formId, submitFn } = state.formControl.formConfigs![state.formControl.currentFormIndex];
     const fieldValue = formData.get(formId) as string;
 
-    console.log({ formId, fieldValue });
-
     submitFn(fieldValue, {
       ...callbacks!,
       onFail: (error: Error) => {
