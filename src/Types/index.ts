@@ -28,16 +28,26 @@ export type UserAuth = {
 export type LikeType = 'LIKE' | 'PRAY' | 'LAUGH_WITH_SAD' | 'HEART_EYES' | 'ANGEL_SMILE';
 
 export type PostLike = {
+  id: number;
   likeType: LikeType;
   likeCount: number;
+  isLiked: boolean;
 };
+
+export type Writer = Omit<UserAuth, 'email' | 'password'>;
 
 export type Comment = {
   id: number;
   createdAt: number;
   contents: string;
+  replyCount: number;
   likeCount: number;
-  writer: Omit<UserAuth, 'email' | 'password'>;
+  writer: Writer;
+};
+
+export type MediaUrl = {
+  mediaUrl: string;
+  mediaType: string;
 };
 
 export type ComplementPost = {
@@ -46,6 +56,32 @@ export type ComplementPost = {
   contents: string;
   totalLikeCount: number;
   likeList: PostLike[];
-  writer: Omit<UserAuth, 'password' | 'email'>;
+  writer: Writer;
   bestCommentList: Comment[];
+  mediaUrlList: MediaUrl[];
+  totalCommentCount: number;
+};
+
+export type CreatePostRequest = {
+  contents: string;
+  mediaUrlList: MediaUrl[];
+};
+
+export type CreatePostResponse = {
+  complementId: number;
+};
+
+export type CreateCommentRequest = {
+  postId: number;
+  contents: string;
+  parentId?: number;
+};
+
+export type CreateCommentResponse = {
+  commentId: number;
+};
+
+export type LikePostRequest = {
+  postId: number;
+  likeType: LikeType;
 };

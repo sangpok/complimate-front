@@ -1,18 +1,44 @@
 import styled from '@emotion/styled';
+import { PaddingLayout } from '@Layouts/PaddingLayout';
 import { Tokens } from '@Styles/tokens';
-const { space, fontSizes, radii, borderWidths } = Tokens;
 
-export const Container = styled.div({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: space.default,
+const { space, fontSizes, sizes, radii, lineHeights, borderWidths } = Tokens;
 
-  padding: space.double,
-});
-
-export const Time = styled('span')(
+export const SmallCircleProfile = styled.div<{ url?: string }>(
   {
-    ...fontSizes.default,
+    ...radii.full,
+    display: 'inline-block',
+    width: sizes.profile.small,
+    height: sizes.profile.small,
+    overflow: 'hidden',
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+  },
+  ({ url }) => {
+    if (url) {
+      return { backgroundImage: `url('${url}')` };
+    }
+  }
+);
+
+export const WriterLayout = styled.div(
+  {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    marginBottom: space.default,
+
+    '& p.time': {
+      ...fontSizes.post.time,
+    },
+
+    '& div.writer': {
+      display: 'flex',
+      alignItems: 'center',
+      flexDirection: 'row',
+      gap: space.smaller,
+    },
   },
   ({ theme }) => ({
     color: theme.colors.text.greyed,
@@ -26,6 +52,7 @@ export const Textarea = styled('textarea')(
     display: 'block',
     ...fontSizes.input,
     width: '100%',
+    marginBottom: space.small,
   },
   ({ theme }) => ({
     color: theme.colors.text.default,
@@ -64,5 +91,10 @@ export const ImageAddButton = styled('button')(
   ({ theme }) => ({
     border: `${borderWidths.base._1} solid ${theme.colors.button.point}`,
     color: theme.colors.button.point,
+
+    '&:disabled': {
+      border: `${borderWidths.base._1} solid ${theme.colors.button.disabled}`,
+      color: theme.colors.button.disabled,
+    },
   })
 );

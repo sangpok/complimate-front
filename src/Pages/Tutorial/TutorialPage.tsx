@@ -73,13 +73,13 @@ export const TutorialPage = () => {
           onDragEnd={handleDragEnd}
         >
           <h1>{tutorials[currentIndex].title}</h1>
-          <p>{tutorials[currentIndex].body}</p>
+          <div>{tutorials[currentIndex].body}</div>
         </S.Content>
       </AnimatePresence>
 
       <S.Nav>
         {tutorials.map((_, index) => (
-          <S.Circle className={index === currentIndex ? 'selected' : ''} />
+          <S.Circle key={`nav-${index}`} className={index === currentIndex ? 'selected' : ''} />
         ))}
       </S.Nav>
 

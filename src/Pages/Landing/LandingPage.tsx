@@ -7,6 +7,7 @@ import * as S from './LandingPage.styled';
 import * as C from './LandingPage.components';
 import { Container } from '@Components/Atomic';
 import { Flex } from '@Components/Atomic/Flex';
+import { Link, Navigate } from 'react-router-dom';
 
 export const LandingPage = () => {
   return (
@@ -36,6 +37,10 @@ export const LandingPage = () => {
           </C.GoogleButton>
         </Flex>
       </Flex>
+
+      <Link to="/test" replace>
+        TEST
+      </Link>
     </Container>
 
     //  <PageTransition>

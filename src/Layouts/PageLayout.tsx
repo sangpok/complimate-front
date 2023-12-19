@@ -140,3 +140,33 @@
 // };
 
 // export { Content, Header, Root };
+
+import React, { ComponentType, PropsWithChildren, ReactNode } from 'react';
+import { VerticalLayout } from './VerticalLayout';
+
+import styled from '@emotion/styled';
+
+const BodyWrapper = styled.div({
+  flex: 1,
+  minHeight: 0,
+  overflow: 'hidden',
+  width: '100%',
+  height: '100%',
+  position: 'relative',
+});
+
+type PageLayoutProp = {
+  head?: ReactNode;
+  body?: ReactNode;
+  foot?: ReactNode;
+};
+
+export const PageLayout = ({ head, body, foot }: PageLayoutProp) => {
+  return (
+    <VerticalLayout hFull>
+      {head && head}
+      {body && <BodyWrapper>{body}</BodyWrapper>}
+      {foot && foot}
+    </VerticalLayout>
+  );
+};

@@ -25,6 +25,7 @@
 
     "baseUrl": ".",
     "paths": {
+      "@Animations/*": ["src/Animations/*"],
       "@API/*": ["src/API/*"],
       "@Components/*": ["src/Components/*"],
       "@Contexts/*": ["src/Contexts/*"],

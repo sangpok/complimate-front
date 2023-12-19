@@ -53,6 +53,7 @@ import { ReactComponent as SettingInner } from '@Icons/uil_setting.svg';
 import { ReactComponent as LogoInner } from '../Icons/complimate-logo.svg';
 import { ReactComponent as GiveHeartInner } from '@Icons/GiveHeart.svg';
 import { ReactComponent as TakenHeartInner } from '@Icons/TakenHeart.svg';
+import { ReactComponent as EnterInner } from '@Icons/tdesign_enter.svg';
 
 const icons = [
   { name: 'Google', Icon: GoogleIconInner },
@@ -72,6 +73,7 @@ const icons = [
   { name: 'Delete', Icon: DeleteInner },
   { name: 'Setting', Icon: SettingInner },
   { name: 'Logo', Icon: LogoInner },
+  { name: 'Enter', Icon: EnterInner },
 ];
 
 const returnIcon = (Icon: ComponentType<SVGProps<SVGSVGElement>>) =>
@@ -81,7 +83,7 @@ const returnIcon = (Icon: ComponentType<SVGProps<SVGSVGElement>>) =>
       height: sizes.icon.small,
     },
     ({ theme, color, width, height }) => ({
-      color: color || theme.colors.icon.default,
+      // color: color || theme.colors.icon.default,
       width: width || sizes.icon.small,
       height: height || sizes.icon.small,
     })
@@ -106,6 +108,7 @@ export const Setting = returnIcon(SettingInner);
 export const Logo = returnIcon(LogoInner);
 export const GiveHeart = returnIcon(GiveHeartInner);
 export const TakenHeart = returnIcon(TakenHeartInner);
+export const Enter = returnIcon(EnterInner);
 
 // export {...IconList};
 

@@ -45,7 +45,7 @@ export const Content = styled(motion.div)(
       marginBottom: space.double,
     },
 
-    '& p': {
+    '& div': {
       ...fontSizes.tutorial.content,
       // fontSize: '$tutorial-content',
       fontWeight: 600,
@@ -58,10 +58,8 @@ export const Content = styled(motion.div)(
     },
   },
   ({ theme }) => ({
-    '& p': {
-      '& strong': {
-        color: theme.colors.text.point,
-      },
+    strong: {
+      color: theme.colors.text.point,
     },
   })
 );

@@ -1,145 +1,117 @@
-// import { useRef, ReturnType } from 'react';
+import { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-// import * as Layout from '@Layouts/DefaultLayout';
-// import * as Icon from '@Icons/index';
-// // import { css, styled } from '@/stitches.config';
-// import { motion } from 'framer-motion';
-// import styled from '@emotion/styled';
+import { Variants, motion } from 'framer-motion';
 
-// const text = styled.p`
-//   color: ${({ theme }) => theme.colors.point};
-// `;
+import { IconButton } from '@Components/IconButton';
+import { Heart as HeartIcon } from '@Icons/index';
 
-// const TriggerButton = styled.div`
-//   display: 'flex',
-//   justifyContent: 'center',
-//   alignItems: 'center',
+import styled from '@emotion/styled';
 
-//   backgorund: '$depth2',
-//   padding: '1rem',
+const likeList = [
+  {
+    id: 0,
+    likeType: 'LIKE',
+    likeCount: 1,
+    isLiked: true,
+  },
+  {
+    id: 1,
+    likeType: 'PRAY',
+    likeCount: 0,
+    isLiked: false,
+  },
+  {
+    id: 2,
+    likeType: 'LAUGH_WITH_SAD',
+    likeCount: 0,
+    isLiked: false,
+  },
+  {
+    id: 3,
+    likeType: 'HEART_EYES',
+    likeCount: 0,
+    isLiked: false,
+  },
+  {
+    id: 4,
+    likeType: 'ANGEL_SMILE',
+    likeCount: 0,
+    isLiked: false,
+  },
+] as PostLike[];
 
-//   height: 'fit-content',
-//   aspectRatio: '1 / 1',
+const totalLikeCount = 1;
 
-//   box-shadow: '0 0 16px 1px rgba(0, 0, 0, .2)',
+import { Tokens } from '@Styles/tokens';
+import { LikeButtonWithList } from '@Pages/App/LikeButtonWithList';
+import { PostLike } from '@Types/index';
+const { radii } = Tokens;
 
-//   borderRadius: '9999px',
-//   overflow: 'hidden',
-// });
+export const TestPage = () => {
+  const [tmpLikeList, setTmpLikeList] = useState(likeList);
+  const [totalLikeCount, setTotalLikeCount] = useState(
+    likeList.reduce((acc, { likeCount }) => acc + likeCount, 0)
+  );
 
-// const TriggeredMenu = styled(motion.div, {
-//   position: 'absolute',
-//   width: '100%',
-//   top: 0,
-// });
+  console.log({ tmpLikeList });
+  return (
+    <div>
+      <Link to="/" replace>
+        Back to Landing
+      </Link>
 
-// const ContentContainer = styled.div`
-//   display: 'flex',
-//   flexDirection: column,
-//   justifyContent: 'center',
-//   alignItems: 'center',
+      <div style={{ display: 'grid', placeContent: 'center', height: '100dvh' }}>
+        <LikeButtonWithList
+          likeCount={totalLikeCount}
+          likeList={tmpLikeList.sort((a, b) => a.id - b.id)}
+          onSelectLike={(prevLike, newLike) => {
+            if (prevLike) {
+              if (prevLike.likeType === newLike.likeType) {
+                // 좋아요 취소임!
+                setTmpLikeList([
+                  ...tmpLikeList.filter(({ likeType: lt }) => lt !== newLike.likeType),
+                  {
+                    ...newLike,
+                    isLiked: false,
+                    likeCount: newLike.likeCount - 1,
+                  },
+                ]);
 
-//   padding: '.5rem 0',
-
-//   span: { fontWeight: 600, color: '$point' },
-// });
-
-// const List = styled('ul', {
-//   display: 'flex',
-//   flexDirection: column,
-
-//   justifyContent: 'center',
-//   alignItems: 'center',
-
-//   backgorund: '$depth2',
-//   padding: '.5rem',
-
-//   box-shadow: '0 0 16px 1px rgba(0, 0, 0, .2)',
-//   borderRadius: '99rem',
-//   background: 'white',
-
-//   li: {
-//     all: 'unset',
-//   },
-// });
-
-// const Content = ({ Icon, text }) => {
-//   return (
-//     <ContentContainer>
-//       <Icon
-//         css={{
-//           width: '$icon-sm',
-//           height: '$icon-sm',
-//           color: '$point',
-//         }}
-//       />
-//       <span>{text}</span>
-//     </ContentContainer>
-//   );
-// };
-
-// const DraggableSelectContainer = styled.div`
-//   position: 'relative',
-// });
-
-// const list = [
-//   {
-//     id: 0,
-//     Icon: Icon.Heart,
-//     count: 1,
-//   },
-//   {
-//     id: 1,
-//     Icon: Icon.Heart,
-//     count: 2,
-//   },
-//   {
-//     id: 2,
-//     Icon: Icon.Heart,
-//     count: 3,
-//   },
-//   {
-//     id: 3,
-//     Icon: Icon.Heart,
-//     count: 4,
-//   },
-// ];
-
-// const TestPage = () => {
-//   const timerInstance = useRef<ReturnType<typeof setTimeout>>(null);
-//   const [isPressed, setIsPressed] = useState(false);
-//   const longPressCallback = () => {};
-
-//   const handleTriggerButtonClick = () => {
-//     timerInstance.current = setTimeout(() => {
-//       if (timerInstance.current && !isPressed.current) {
-//         isPressed.current = true;
-//         longPressCallback();
-//       }
-//     }, 600);
-//   };
-
-//   return (
-//     <Layout.Full>
-//       <Layout.Root>
-//         <DraggableSelectContainer>
-//           <TriggerButton onClick={handleTriggerButtonClick}>
-//             <Content Icon={Icon.Hamburger} text="1" />
-//           </TriggerButton>
-
-//           <TriggeredMenu variants>
-//             <List>
-//               {list.map((item) => (
-//                 <li key={item.id}>
-//                   <Content Icon={item.Icon} text={item.count} />
-//                 </li>
-//               ))}
-//             </List>
-//           </TriggeredMenu>
-//         </DraggableSelectContainer>
-//       </Layout.Root>
-//     </Layout.Full>
-//   );
-// };
-
-// export default TestPage;
+                setTotalLikeCount(totalLikeCount - 1);
+              } else {
+                // 좋아요 교체임
+                setTmpLikeList([
+                  ...tmpLikeList.filter(
+                    ({ likeType: lt }) => !(lt === newLike.likeType || lt === prevLike.likeType)
+                  ),
+                  {
+                    ...prevLike,
+                    isLiked: false,
+                    likeCount: prevLike.likeCount - 1,
+                  },
+                  {
+                    ...newLike,
+                    isLiked: true,
+                    likeCount: newLike.likeCount + 1,
+                  },
+                ]);
+              }
+            } else {
+              // 처음 Like
+              setTmpLikeList([
+                ...tmpLikeList.filter(({ likeType: lt }) => lt !== newLike.likeType),
+                {
+                  ...newLike,
+                  isLiked: true,
+                  likeCount: newLike.likeCount + 1,
+                },
+              ]);
+              setTotalLikeCount(totalLikeCount + 1);
+            }
+          }}
+        />
+      </div>
+    </div>
+  );
+};

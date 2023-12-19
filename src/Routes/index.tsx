@@ -19,10 +19,19 @@ const TempPage = () => <p>Test Page입니다</p>;
 export const getRoutes = (queryClient: QueryClient) =>
   [
     {
+      path: '/test',
+      async lazy() {
+        const { TestPage } = await import('@Pages/Test');
+        return { Component: TestPage };
+      },
+    },
+    {
       path: '/',
       async lazy() {
-        const { LandingLayout } = await import('@Layouts/LandingLayout');
-        return { Component: LandingLayout };
+        const { LandingLayout, loader: landingLayoutLoader } = await import(
+          '@Layouts/LandingLayout'
+        );
+        return { Component: LandingLayout, loader: landingLayoutLoader(queryClient) };
       },
       children: [
         {
@@ -57,16 +66,17 @@ export const getRoutes = (queryClient: QueryClient) =>
     },
     {
       path: '/app',
+      id: 'appLayout',
       async lazy() {
-        const { AppLayout } = await import('@Layouts/AppLayout');
-        return { Component: AppLayout };
+        const { AppLayout, loader: appLayoutLoader } = await import('@Layouts/AppLayout');
+        return { Component: AppLayout, loader: appLayoutLoader(queryClient) };
       },
       children: [
         {
           index: true,
           async lazy() {
-            const { AppPage, loader } = await import('@Pages/App');
-            return { Component: AppPage, loader: loader(queryClient) };
+            const { AppPage, loader: appLoader } = await import('@Pages/App');
+            return { Component: AppPage, loader: appLoader(queryClient) };
           },
         },
         {

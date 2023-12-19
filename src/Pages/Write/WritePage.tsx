@@ -1,38 +1,45 @@
-import { ChangeEvent, MouseEvent, useRef, useState } from 'react';
-import { redirect, useNavigate, useNavigation, useSubmit } from 'react-router-dom';
+import { PageLayout } from '@Layouts/PageLayout';
+import React, { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import { WriteHeader } from './WriteHeader';
 
-import * as Layout from '@Layouts/DefaultLayout';
 import * as S from './WritePage.styled';
+import { useNavigate, useRouteLoaderData } from 'react-router-dom';
+import { CreatePostRequest, MediaUrl, UserAuth, Writer } from '@Types/index';
+import { PaddingLayout } from '@Layouts/PaddingLayout';
 
-import * as Header from '@Components/PageHeader';
-import InlineProfile from '@Components/InlineProfile';
+import { Tokens } from '@Styles/tokens';
+import { useCreatePost } from '@Hooks/index';
+import { useQueryClient } from '@tanstack/react-query';
+const { space } = Tokens;
 
-export async function action({ request }) {
-  // console.log(request);
-  // const formData = await request.formData();
-  // console.log({ asdf: formData.get('text') });
-  return await new Promise((resolve) => setTimeout(() => resolve(redirect('/home')), 1500));
-}
+type WrtierPresenterProp = {
+  writer: Writer;
+  createdAt: number;
+};
 
-export const WritePage = () => {
-  const submit = useSubmit();
-  const navigation = useNavigation();
-  const navigate = useNavigate();
+const PostMetaInfo = ({ writer, createdAt }: WrtierPresenterProp) => {
+  const { profileUrl, nickname } = writer;
 
+  return (
+    <S.WriterLayout>
+      <div className="writer">
+        <S.SmallCircleProfile url={`/profile/${profileUrl}`} />
+        <span className="nickname">
+          <strong>{nickname}</strong>
+          님으로부터
+        </span>
+      </div>
+
+      <p className="time">{new Date(+createdAt).toLocaleString()}</p>
+    </S.WriterLayout>
+  );
+};
+
+const WriteBody = ({ error }: { error: Error | null }) => {
+  const userAuth = useRouteLoaderData('appLayout') as Omit<UserAuth, 'password'>;
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [inputValue, setInputValue] = useState('');
-
-  const isSubmitting = navigation.state === 'submitting';
-
-  const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    submit({ text: inputValue }, { method: 'post' });
-  };
-
-  const handlePrevClick = () => navigate('/home');
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setInputValue(event.target.value);
     resizeTextarea();
   };
 
@@ -45,45 +52,84 @@ export const WritePage = () => {
   };
 
   return (
-    <Layout.Root>
-      <Layout.Head>
-        <Header.Root>
-          <Header.Prev disabled={isSubmitting} onClick={handlePrevClick} />
-          <Header.Title>칭찬하기 작성</Header.Title>
-          <Header.Next onClick={handleSubmit} disabled={isSubmitting}>
-            {isSubmitting ? '작성중...' : '작성'}
-          </Header.Next>
-        </Header.Root>
-      </Layout.Head>
+    <PaddingLayout.SideDouble style={{ marginBottom: space.double }}>
+      <PostMetaInfo writer={userAuth} createdAt={Number(new Date())} />
+      <S.Textarea
+        name="contents"
+        ref={inputRef}
+        onChange={handleChange}
+        placeholder="칭찬받고 싶은 내용을 작성해보세요 :)"
+        rows={1}
+      />
+      <S.TextCount>{inputRef.current?.value.length || 0}/1000</S.TextCount>
 
-      <Layout.Body>
-        <S.Container>
-          <Layout.Head>
-            <InlineProfile nickname="나는야 김재민" profile="./tet.jpg" type="post" />
-            <S.Time>2023.10.07 오후 4시</S.Time>
-          </Layout.Head>
+      {error && <p style={{ color: 'red' }}>{error.message}</p>}
+    </PaddingLayout.SideDouble>
+  );
+};
 
-          <Layout.Body>
-            <S.Textarea
-              ref={inputRef}
-              value={inputValue}
-              onChange={handleChange}
-              placeholder="칭찬받고 싶은 내용을 작성해보세요 :)"
-              rows={1}
-              disabled={isSubmitting}
-            />
-            <S.TextCount>{inputValue.length}/1000</S.TextCount>
-          </Layout.Body>
+const WriteFooter = () => {
+  return (
+    <>
+      <PaddingLayout.SideDouble wFull>
+        <S.ImageAddButton type="button">사진 추가하기</S.ImageAddButton>
+      </PaddingLayout.SideDouble>
 
-          <Layout.Foot>
-            <S.ImageAddButton>사진 추가하기</S.ImageAddButton>
-          </Layout.Foot>
-        </S.Container>
-      </Layout.Body>
+      <input name="media-1" defaultValue="1.webp" hidden />
+      <input name="media-2" defaultValue="2.webp" hidden />
+      <input name="media-3" defaultValue="3.webp" hidden />
+      <input name="media-4" defaultValue="4.webp" hidden />
+      <input name="media-5" defaultValue="5.webp" hidden />
+      <input name="media-6" defaultValue="6.webp" hidden />
+      <input name="media-7" defaultValue="7.webp" hidden />
+    </>
+  );
+};
 
-      {/* <Layout.Foot>
-        <h1>hihi</h1>
-      </Layout.Foot> */}
-    </Layout.Root>
+export const WritePage = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { mutate, isPending } = useCreatePost();
+  const [error, setError] = useState<Error | null>(null);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target as HTMLFormElement);
+    const hasMedia = formData.has('media-1');
+    const mediaUrlList: MediaUrl[] = [];
+
+    if (hasMedia) {
+      formData.forEach((value, key) => {
+        if (key.includes('media-')) {
+          mediaUrlList.push({
+            mediaUrl: value as string,
+            mediaType: 'IMAGE',
+          });
+        }
+      });
+    }
+
+    const postData = { ...Object.fromEntries(formData), mediaUrlList } as CreatePostRequest;
+    // console.log({ postData });
+    mutate(postData, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['posts'] });
+        navigate('/app', { replace: true });
+      },
+      onError: (error) => setError(error),
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <fieldset disabled={isPending}>
+        <PageLayout
+          head={<WriteHeader />}
+          body={<WriteBody error={error} />}
+          foot={<WriteFooter />}
+        />
+      </fieldset>
+    </form>
   );
 };

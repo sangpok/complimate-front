@@ -336,3 +336,10 @@ export const getRandomNickname = () => {
 
   return `${adjectives[indicatorA]} ${nouns[indicatorB]}`;
 };
+
+export const wrap = (min: number, max: number, value: number) => {
+  if (value < min) return min;
+  if (value > max) return max;
+
+  return value;
+};
