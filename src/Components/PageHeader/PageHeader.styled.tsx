@@ -126,5 +126,9 @@ export const SubmitButton = styled('button')(
   },
   ({ theme }) => ({
     color: theme.colors.button.point,
+
+    '&:disabled': {
+      color: theme.colors.button.disabled,
+    },
   })
 );
