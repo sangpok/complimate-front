@@ -25,19 +25,12 @@
 
     "baseUrl": ".",
     "paths": {
-      "@Animations/*": ["src/Animations/*"],
-      "@API/*": ["src/API/*"],
       "@Components/*": ["src/Components/*"],
-      "@Contexts/*": ["src/Contexts/*"],
       "@Hooks/*": ["src/Hooks/*"],
       "@Icons/*": ["src/Icons/*"],
       "@Layouts/*": ["src/Layouts/*"],
-      "@Pages/*": ["src/Pages/*"],
-      "@Routes/*": ["src/Routes/*"],
-      "@Store/*": ["src/Store/*"],
+      "@Page/*": ["src/Page/*"],
       "@Styles/*": ["src/Styles/*"],
-      "@Types/*": ["src/Types/*"],
-      "@Utils/*": ["src/Utils/*"],
       "@/*": ["src/*"]
     }
   },

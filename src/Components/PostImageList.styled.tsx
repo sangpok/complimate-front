@@ -24,7 +24,6 @@ export const Image = styled.div({
 });
 
 export const ImageList = styled(motion.div)({
-  display: 'block',
   whiteSpace: 'nowrap',
   overflow: 'visible',
   width: '100%',

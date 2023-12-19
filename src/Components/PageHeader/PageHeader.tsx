@@ -31,7 +31,7 @@ const Title = ({ children }: TitleProp) => {
 
 const Next = ({ children, disabled, onClick, ...rest }: NextProp) => {
   return (
-    <S.SubmitButton type="submit" disabled={disabled} onClick={onClick} {...rest}>
+    <S.SubmitButton disabled={disabled} onClick={onClick} {...rest}>
       {children}
     </S.SubmitButton>
   );

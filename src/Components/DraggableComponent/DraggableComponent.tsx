@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback } from 'react';
 import { motion, useDragControls } from 'framer-motion';
 
 import type { DragControls, PanInfo } from 'framer-motion';
@@ -55,8 +55,7 @@ const cleanUpDragVariable = () => {
 };
 
 const DraggableComponent = React.memo(
-  ({ dragId, axis, onDragEnd, children, ...rest }: DraggableComponentProp) => {
-    const parentRef = useRef<HTMLDivElement>(null);
+  ({ dragId, axis, dragConstraints, onDragEnd, children, ...rest }: DraggableComponentProp) => {
     const _dragControls = useDragControls();
 
     if (!dragControls) {
@@ -234,19 +233,17 @@ const DraggableComponent = React.memo(
     };
 
     return (
-      <div style={{ height: '100%' }} ref={parentRef}>
-        <motion.div
-          id={dragId}
-          drag={axis}
-          dragListener={false}
-          dragControls={dragControls}
-          dragConstraints={parentRef}
-          {...dragEventBind}
-          {...rest}
-        >
-          {children}
-        </motion.div>
-      </div>
+      <motion.div
+        id={dragId}
+        drag={axis}
+        dragListener={false}
+        dragControls={dragControls}
+        dragConstraints={dragConstraints}
+        {...dragEventBind}
+        {...rest}
+      >
+        {children}
+      </motion.div>
     );
   }
 );
