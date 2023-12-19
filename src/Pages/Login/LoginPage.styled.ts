@@ -8,14 +8,14 @@ export const LoginBody = styled.div({
   paddingTop: 0,
 });
 
-export const FormField = styled(Form.Field)({
+export const FormField = styled.div({
   display: 'flex',
   flexDirection: 'column',
   gap: space.default,
   padding: `0 ${space.default}`,
 });
 
-export const FormMessage = styled(Form.Message)({
+export const FormMessage = styled.p({
   color: colors.base.red,
   // fontSize: '$label-status',
   ...fontSizes['label-status'],

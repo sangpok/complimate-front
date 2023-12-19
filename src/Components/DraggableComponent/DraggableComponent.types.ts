@@ -4,7 +4,7 @@ import type { PointerEvent } from 'react';
 export type DraggableComponentProp = {
   dragId: string;
   axis: DragAxis;
-  dragConstraints?: DraggableProps['dragConstraints'];
+  // dragConstraints?: DraggableProps['dragConstraints'];
   children?: React.ReactNode;
 } & HTMLMotionProps<'div'>;
 

@@ -8,6 +8,7 @@ export default defineConfig({
   plugins: [react(), svgr()],
   resolve: {
     alias: [
+      { find: '@Animations', replacement: '/src/Animations' },
       { find: '@API', replacement: '/src/API' },
       { find: '@Components', replacement: '/src/Components' },
       { find: '@Contexts', replacement: '/src/Contexts' },
@@ -19,6 +20,7 @@ export default defineConfig({
       { find: '@Store', replacement: '/src/Store' },
       { find: '@Styles', replacement: '/src/Styles' },
       { find: '@Types', replacement: '/src/Types' },
+      { find: '@Utils', replacement: '/src/Utils' },
       { find: '@', replacement: '/src' },
     ],
   },

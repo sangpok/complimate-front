@@ -41,67 +41,61 @@ import { useAuth } from '@Hooks/useAuth';
 
 export const LoginPage = () => {
   const { signIn, updateAuth } = useAuth();
-  const submit = useSubmit();
   const navigate = useNavigate();
-  const navigation = useNavigation();
 
-  const [formData, setFormData] = useState(initialFormData);
-  const [isLogging, setIsLogging] = useState(false);
-  const [error, setError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    signIn(formData, {
+    const formData = new FormData(event.target as HTMLFormElement);
+    const loginData = Object.fromEntries(formData);
+
+    setIsSubmitting(true);
+
+    signIn(loginData, {
       onSuccess: () => {
         updateAuth(true);
         navigate('/app/tutorial', { replace: true });
       },
       onError: (error) => {
-        setIsLogging(false);
+        setIsSubmitting(false);
         setError(error);
       },
     });
-    // return submit(formData, { method: 'post' });
   };
 
   const handlePrevClick = () => {
     return navigate('/');
   };
 
-  const updateFields = (newValue: object) => {
-    setFormData((prev) => ({ ...prev, ...newValue }));
-  };
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    updateFields({ [event.target.id]: event.target.value });
-  };
-
   return (
     <Form.Root onSubmit={handleSubmit}>
-      <Layout.Full>
-        <Layout.Root>
-          <Layout.Head>
-            <Header.Root>
-              <Header.Prev disabled={isLogging} onClick={handlePrevClick} />
-              <Header.Title>로그인하기</Header.Title>
-              <Form.Submit asChild>
-                <Header.Next disabled={isLogging}>
-                  {isLogging ? '로그인 중...' : '로그인'}
+      <fieldset disabled={isSubmitting}>
+        <Layout.Full>
+          <Layout.Root>
+            <Layout.Head>
+              <Header.Root>
+                <Header.Prev disabled={isSubmitting} onClick={handlePrevClick} />
+                <Header.Title>로그인하기</Header.Title>
+                <Header.Next disabled={isSubmitting}>
+                  {isSubmitting ? '로그인 중...' : '로그인'}
                 </Header.Next>
-              </Form.Submit>
-            </Header.Root>
-          </Layout.Head>
+              </Header.Root>
+            </Layout.Head>
 
-          <Layout.Body>
-            <S.LoginBody>
-              <LoginForm disabled={isLogging} {...formData} onChange={handleChange} />
-            </S.LoginBody>
-          </Layout.Body>
+            <Layout.Body>
+              <S.LoginBody>
+                <LoginForm />
+                {error && <p>{error.message}</p>}
+              </S.LoginBody>
+            </Layout.Body>
 
-          {/* <Layout.Foot>Foot</Layout.Foot> */}
-        </Layout.Root>
-      </Layout.Full>
+            {/* <Layout.Foot>Foot</Layout.Foot> */}
+          </Layout.Root>
+        </Layout.Full>
+      </fieldset>
     </Form.Root>
   );
 };

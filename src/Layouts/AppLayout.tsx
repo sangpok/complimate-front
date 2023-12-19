@@ -1,8 +1,28 @@
 import { useAuth } from '@Hooks/useAuth';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLoaderData } from 'react-router-dom';
+
+import * as API from '@API/index';
+
+export const loader = (queryClient: QueryClient) => async () => {
+  console.log('AppLayout Loader 옴');
+  try {
+    return await API.getAuthStatus();
+  } catch (error) {
+    return false;
+  }
+};
 
 export const AppLayout = () => {
-  const { hasAuth } = useAuth();
+  const { hasAuth, updateAuth } = useAuth();
+  const userAuth = useLoaderData() as Awaited<ReturnType<ReturnType<typeof loader>>>;
+
+  if (hasAuth && !userAuth) {
+    updateAuth(false);
+  }
+
+  if (!hasAuth && userAuth) {
+    updateAuth(true);
+  }
 
   const AnimatedOutlet = (
     <div
@@ -16,5 +36,5 @@ export const AppLayout = () => {
     </div>
   );
 
-  return hasAuth ? AnimatedOutlet : <Navigate to="/" replace />;
+  return hasAuth || userAuth ? AnimatedOutlet : <Navigate to="/" replace />;
 };

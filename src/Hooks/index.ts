@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import * as API from '@API/index';
 import { SubmitCallbacks } from '@Types/index';
@@ -24,6 +24,9 @@ export const useCheckEmail = () => {
         }
 
         return callbacks?.onSuccess && callbacks.onSuccess();
+      })
+      .catch((error) => {
+        return callbacks?.onFail && callbacks.onFail(new Error(error));
       })
       .finally(() => callbacks?.onSettled && callbacks.onSettled());
   };
@@ -62,6 +65,9 @@ export const useCheckNickname = () => {
 
         return callbacks?.onSuccess && callbacks.onSuccess();
       })
+      .catch((error) => {
+        return callbacks?.onFail && callbacks.onFail(new Error(error));
+      })
       .finally(() => callbacks?.onSettled && callbacks.onSettled());
   };
 
@@ -88,3 +94,66 @@ export const useLogout = () => {
     mutationFn: API.logout,
   });
 };
+
+export const useGetPosts = (lastViewId: number) => {
+  return useQuery({
+    queryKey: ['posts'],
+    queryFn: () => API.getPosts(lastViewId),
+  });
+};
+
+export const useCreatePost = () => {
+  return useMutation({
+    mutationKey: ['createPost'],
+    mutationFn: API.createPost,
+  });
+};
+
+export const useGetComments = (postId: number) => {
+  return useQuery({
+    queryKey: ['comments', postId],
+    queryFn: () => API.getComments(postId),
+  });
+};
+
+export const useGetReplys = (postId: number, commentId?: number) => {
+  return useQuery({
+    queryKey: ['replys', postId, commentId],
+    queryFn: () => API.getReplys({ postId, commentId: commentId! }),
+    enabled: commentId !== undefined,
+  });
+};
+
+export const useCreateComment = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['createComment'],
+    mutationFn: API.createComment,
+    onSuccess(data, variables, context) {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      queryClient.invalidateQueries({ queryKey: ['posts', variables.postId] });
+      queryClient.invalidateQueries({ queryKey: ['comments', variables.postId] });
+
+      if (variables.parentId) {
+        queryClient.invalidateQueries({
+          queryKey: ['replys', variables.postId, variables.parentId],
+        });
+      }
+    },
+  });
+};
+
+export const useLikePost = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['likePost'],
+    mutationFn: API.likePost,
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+    },
+  });
+};
+
+export const useCommentLike = () => {};

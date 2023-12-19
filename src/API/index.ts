@@ -1,6 +1,18 @@
-import { CheckFieldResult, UserAuth } from '@Types/index';
+import {
+  CheckFieldResult,
+  Comment,
+  ComplementPost,
+  CreateCommentRequest,
+  CreateCommentResponse,
+  CreatePostRequest,
+  CreatePostResponse,
+  LikePostRequest,
+  MediaUrl,
+  UserAuth,
+} from '@Types/index';
 
-const API_URI = 'http://localhost:3001' as const;
+// const API_URI = 'http://localhost:3001' as const;
+const API_URI = 'http://172.30.1.12:3001' as const;
 
 const handleResponse = async <T>(res: Response) => {
   if (res.ok) {
@@ -11,7 +23,7 @@ const handleResponse = async <T>(res: Response) => {
       return res.json() as Promise<T>;
     }
 
-    return null;
+    return {} as T;
   }
 
   throw await (res.json() as Promise<T>);
@@ -57,3 +69,26 @@ export const login = ({ email, password }: Omit<UserAuth, 'nickname'>) =>
   Fetcher.POST('/auth/login', { email, password });
 
 export const logout = () => Fetcher.POST('/auth/logout', {});
+
+// TODO: EndPoint 바꾸기
+export const getPosts = (lastViewId: number) =>
+  Fetcher.GET<ComplementPost[]>(`/complement/get?pageSize=10&lastViewId=${lastViewId}`);
+
+// TODO: EndPoint 바꾸기
+export const createPost = ({ contents, mediaUrlList }: CreatePostRequest) =>
+  Fetcher.POST<CreatePostResponse>('/complement/create', { contents, mediaUrlList });
+
+export const getComments = (postId: number) =>
+  Fetcher.GET<Comment[]>(`/complement/${postId}/comment`);
+
+export const getReplys = ({ postId, commentId }: { postId: number; commentId: number }) =>
+  Fetcher.GET<Comment[]>(`/complement/${postId}/comment?parentId=${commentId}`);
+
+export const createComment = ({ postId, contents, parentId }: CreateCommentRequest) =>
+  Fetcher.POST<CreateCommentResponse>(
+    `/complement/${postId}/comment`,
+    parentId === undefined ? { contents } : { contents, parentId }
+  );
+
+export const likePost = ({ postId, likeType }: LikePostRequest) =>
+  Fetcher.POST(`/complement/${postId}/like`, { likeType });

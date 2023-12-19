@@ -73,13 +73,13 @@ export const TutorialPage = () => {
           onDragEnd={handleDragEnd}
         >
           <h1>{tutorials[currentIndex].title}</h1>
-          <p>{tutorials[currentIndex].body}</p>
+          <div>{tutorials[currentIndex].body}</div>
         </S.Content>
       </AnimatePresence>
 
       <S.Nav>
         {tutorials.map((_, index) => (
-          <S.Circle className={index === currentIndex ? 'selected' : ''} />
+          <S.Circle key={`nav-${index}`} className={index === currentIndex ? 'selected' : ''} />
         ))}
       </S.Nav>
 
@@ -88,7 +88,9 @@ export const TutorialPage = () => {
         initial={false}
         animate={currentIndex === tutorials.length - 1 ? 'show' : 'hide'}
       >
-        <S.StyledLink to="/app">시작하기</S.StyledLink>
+        <S.StyledLink to="/app" replace>
+          시작하기
+        </S.StyledLink>
       </S.ButtonSection>
     </S.FullPage>
   );

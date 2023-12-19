@@ -25,7 +25,7 @@ export const GlobalStyle = () => (
       }
 
       :root {
-        font-size: calc(100vw / 22.5);
+        font-size: calc(100vw / 22.5); // 22.5: w360 기준 16px
       }
 
       fieldset {
