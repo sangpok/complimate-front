@@ -92,3 +92,6 @@ export const createComment = ({ postId, contents, parentId }: CreateCommentReque
 
 export const likePost = ({ postId, likeType }: LikePostRequest) =>
   Fetcher.POST(`/complement/${postId}/like`, { likeType });
+
+export const likeComment = ({ postId, commentId }: { postId: number; commentId: number }) =>
+  Fetcher.POST(`/complement/${postId}/comment/${commentId}/like`, { likeType: 'LIKE' });

@@ -1,9 +1,12 @@
 /** React */
-import { PointerEvent, useState } from 'react';
+import { useState } from 'react';
+
+/** Hook */
+import { usePressableContextMenu } from './usePressableContextMenu';
 
 /** Type */
+import type { PointerEvent } from 'react';
 import type { PressableContextMenuProp } from './PressableContextMenu.types';
-import { usePressableContextMenu } from './usePressableContextMenu';
 
 export const PressableContextMenu = ({
   onSelect,
@@ -31,7 +34,7 @@ export const PressableContextMenu = ({
   };
 
   return (
-    <div style={{ position: 'relative', zIndex: 99 }}>
+    <div style={{ position: 'relative' }}>
       <div
         ref={buttonRef}
         onPointerDown={handlePointerDown}

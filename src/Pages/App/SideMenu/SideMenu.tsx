@@ -7,6 +7,7 @@ import React, {
   ReactNode,
   ReactPortal,
   cloneElement,
+  useRef,
   useSyncExternalStore,
 } from 'react';
 
@@ -21,7 +22,7 @@ const { sizes, space, fontSizes, radii } = Tokens;
 import { Left as LeftIcon, Setting as SettingIcon, Logo as LogoIcon } from '@Icons/index';
 
 import { MenuItem, sideMenuList } from './SideMenu.list';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { motion } from 'framer-motion';
 
@@ -29,7 +30,7 @@ import * as S from './SideMenu.styled';
 import { AppStore, useAppStore } from '@Store/AppStore';
 import { SlideAnimate } from '@Animations/index';
 
-const MenuHead = () => {
+const MenuHead = ({ onSettingClick }: { onSettingClick: () => void }) => {
   return (
     <HorizontalLayout.Root>
       <HorizontalLayout.Group gap={space.default}>
@@ -40,7 +41,7 @@ const MenuHead = () => {
         <S.MenuTitle>메뉴</S.MenuTitle>
       </HorizontalLayout.Group>
 
-      <IconButton>
+      <IconButton onClick={onSettingClick}>
         <SettingIcon />
       </IconButton>
     </HorizontalLayout.Root>
@@ -49,6 +50,7 @@ const MenuHead = () => {
 
 type MenuItemProp = {
   isCurrentPath: boolean;
+  onClick: (path: string) => void;
 } & MenuItem;
 
 const MenuItem = ({ enabled, isCurrentPath, icon: Icon, path, name, onClick }: MenuItemProp) => {
@@ -56,14 +58,17 @@ const MenuItem = ({ enabled, isCurrentPath, icon: Icon, path, name, onClick }: M
   const disabled = !enabled ? 'disabled' : '';
 
   return (
-    <S.ItemContainer className={[selected, disabled].join(' ').trim()}>
+    <S.ItemContainer
+      className={[selected, disabled].join(' ').trim()}
+      onClick={() => onClick(path)}
+    >
       <Icon />
       <span>{name}</span>
     </S.ItemContainer>
   );
 };
 
-const MenuBody = () => {
+const MenuBody = ({ onMenuClick }: { onMenuClick: (path: string) => void }) => {
   const location = useLocation();
 
   return (
@@ -73,6 +78,7 @@ const MenuBody = () => {
           key={sideMenu.path}
           isCurrentPath={location.pathname === sideMenu.path}
           {...sideMenu}
+          onClick={onMenuClick}
         />
       ))}
     </ul>
@@ -89,10 +95,32 @@ const MenuFoot = () => {
 };
 
 export const SideMenu = () => {
+  const navigate = useNavigate();
   const isSideMenuOpen = useAppStore<boolean>('isSideMenuOpen');
 
+  const wouldRouting = useRef(false);
+  const routingPath = useRef<string>('');
+
   // TODO: 메뉴 이동
-  const handleAfterClose = () => {};
+  const handleAfterClose = () => {
+    if (wouldRouting.current) {
+      return navigate(routingPath.current);
+    }
+  };
+
+  const handleSettingClick = () => {
+    wouldRouting.current = true;
+    routingPath.current = '/app/setting';
+
+    AppStore.hideSideMenu();
+  };
+
+  const handleMenuClick = (path: string) => {
+    wouldRouting.current = true;
+    routingPath.current = path;
+
+    AppStore.hideSideMenu();
+  };
 
   return (
     <ModalLayout
@@ -102,7 +130,11 @@ export const SideMenu = () => {
     >
       <SlideAnimate>
         <S.MenuContainer onClick={(e) => e.stopPropagation()}>
-          <PageLayout head={<MenuHead />} body={<MenuBody />} foot={<MenuFoot />} />
+          <PageLayout
+            head={<MenuHead onSettingClick={handleSettingClick} />}
+            body={<MenuBody onMenuClick={handleMenuClick} />}
+            foot={<MenuFoot />}
+          />
         </S.MenuContainer>
       </SlideAnimate>
     </ModalLayout>

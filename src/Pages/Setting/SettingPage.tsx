@@ -14,7 +14,7 @@ export const SettingPage = () => {
   const navigate = useNavigate();
 
   const handlePrevClick = () => {
-    navigate('/home');
+    navigate('/app');
   };
 
   const handleItemClick = (path: string) => {

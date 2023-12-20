@@ -156,4 +156,16 @@ export const useLikePost = () => {
   });
 };
 
-export const useCommentLike = () => {};
+export const useLikeComment = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['likeComment'],
+    mutationFn: API.likeComment,
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      queryClient.invalidateQueries({ queryKey: ['comments'] });
+      queryClient.invalidateQueries({ queryKey: ['replys'] });
+    },
+  });
+};
