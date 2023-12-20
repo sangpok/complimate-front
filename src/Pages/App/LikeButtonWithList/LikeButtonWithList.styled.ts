@@ -49,6 +49,7 @@ export const Ul = styled(motion.div)(
     padding: space.small,
     pointerEvents: 'none',
     boxShadow: '0 0 12px rgba(0, 0, 0, .1)',
+    zIndex: 99,
   },
   ({ theme }) => ({ background: theme.colors.background.default })
 );

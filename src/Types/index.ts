@@ -41,6 +41,7 @@ export type Comment = {
   createdAt: number;
   contents: string;
   replyCount: number;
+  isLiked: boolean;
   likeCount: number;
   writer: Writer;
 };
