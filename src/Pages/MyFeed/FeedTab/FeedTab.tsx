@@ -1,7 +1,12 @@
 import { MyComment, MyCompliment } from '@Types/index';
-import { ComponentType } from 'react';
+import { ComponentType, useMemo, useRef } from 'react';
 import { Tab } from './Tab';
+import { AccordionList } from '../AccordionList';
+import DraggableComponent from '@Components/DraggableComponent';
 
+import { motion } from 'framer-motion';
+import styled from '@emotion/styled';
+import useMeasure from 'react-use-measure';
 type TabContentProp<T> = { list: T[] };
 
 type FeedTabProp = {
@@ -11,28 +16,27 @@ type FeedTabProp = {
 
 const CommentTabContent = ({ list: comments }: TabContentProp<MyComment>) => {
   return (
-    <ul>
-      {comments.map((comment) => (
-        <li key={comment.id}>
-          <p>{comment.contents}</p>
-          <span>하트: {comment.likeCount}</span>
-        </li>
-      ))}
-    </ul>
+    <ScrollContainer>
+      <AccordionList
+        list={comments}
+        onViewClick={() => {}}
+        onDeleteClick={() => {}}
+        onModifyClick={() => {}}
+      />
+    </ScrollContainer>
   );
 };
 
 const ComplimentTabContent = ({ list: compliments }: TabContentProp<MyCompliment>) => {
   return (
-    <ul>
-      {compliments.map((compliment) => (
-        <li key={compliment.id}>
-          <p>{compliment.contents}</p>
-          <span>댓글: {compliment.commentCount} </span>
-          <span>하트: {compliment.likeCount}</span>
-        </li>
-      ))}
-    </ul>
+    <ScrollContainer>
+      <AccordionList
+        list={compliments}
+        onViewClick={() => {}}
+        onDeleteClick={() => {}}
+        onModifyClick={() => {}}
+      />
+    </ScrollContainer>
   );
 };
 
@@ -57,3 +61,23 @@ export const FeedTab = ({ compliments, comments }: FeedTabProp) => {
     </Tab>
   );
 };
+
+const ScrollContainer = styled.div({
+  height: '100%',
+  overflowY: 'scroll',
+
+  '&::-webkit-scrollbar': {
+    width: '16px',
+  },
+
+  '&::-webkit-scrollbar-track': {
+    background: 'transparent',
+  },
+
+  '&::-webkit-scrollbar-thumb': {
+    background: '#606060',
+    border: '4px solid transparent',
+    borderRadius: '8px',
+    backgroundClip: 'content-box',
+  },
+});

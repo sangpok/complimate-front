@@ -119,7 +119,9 @@ const Tab = ({ children }: PropsWithChildren) => {
   return (
     <MotionConfig transition={transitionConfig}>
       <TabStateContext.Provider value={state}>
-        <TabDispatchContext.Provider value={dispatch}>{children}</TabDispatchContext.Provider>
+        <TabDispatchContext.Provider value={dispatch}>
+          <Container>{children}</Container>
+        </TabDispatchContext.Provider>
       </TabStateContext.Provider>
     </MotionConfig>
   );
@@ -224,7 +226,7 @@ const TabContentView = ({ children }: PropsWithChildren) => {
   }
 
   return (
-    <FullWidthFlexBox>
+    <FullWidthFlexBox style={{ height: '100%' }}>
       <AnimatePresence initial={false} custom={selectedTab.direction}>
         {React.Children.map(
           children as ReactElement,
@@ -258,6 +260,12 @@ export const useTabDispatch = () => {
   return tabDispatch;
 };
 
+const Container = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+});
+
 const StyledButton = styled(motion.button)({
   all: 'unset',
   color: '#999',
@@ -286,6 +294,7 @@ const FullWidthFlexBox = styled.div({
 const AbsoluteContainer = styled(motion.div)({
   position: 'absolute',
   width: '100%',
+  height: '100%',
 });
 
 const TabIndicator = styled(motion.div)(
