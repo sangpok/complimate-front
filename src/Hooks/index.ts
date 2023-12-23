@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import * as API from '@API/index';
 import { SubmitCallbacks } from '@Types/index';
@@ -167,5 +167,28 @@ export const useLikeComment = () => {
       queryClient.invalidateQueries({ queryKey: ['comments'] });
       queryClient.invalidateQueries({ queryKey: ['replys'] });
     },
+  });
+};
+
+export const useGetUserFeedData = () => {
+  return useQueries({
+    queries: [
+      {
+        queryKey: ['mypage', 'me'],
+        queryFn: API.getAuthStatus,
+      },
+      {
+        queryKey: ['mypage', 'compCount'],
+        queryFn: API.getCompCount,
+      },
+      {
+        queryKey: ['mypage', 'compliments'],
+        queryFn: API.getMyCompliments,
+      },
+      {
+        queryKey: ['mypage', 'comments'],
+        queryFn: API.getMyComments,
+      },
+    ],
   });
 };

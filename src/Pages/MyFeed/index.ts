@@ -1,3 +1,1 @@
-import { MyFeedPage } from './MyFeedPage';
-
-export { MyFeedPage };
+export { MyFeedPage } from './MyFeedPage';

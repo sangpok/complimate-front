@@ -1,74 +1,178 @@
-import * as S from './MyFeedPage.styled';
-
-import * as Header from '@Components/PageHeader';
-import * as Layout from '@Layouts/DefaultLayout';
+import { IconButton } from '@Components/IconButton';
+import { useGetUserFeedData } from '@Hooks/index';
+import {
+  GiveHeart as GiveHeartIcon,
+  Left as LeftIcon,
+  TakenHeart as TakenHeartIcon,
+} from '@Icons/index';
+import { HorizontalLayout } from '@Layouts/HorizontalLayout';
+import { PaddingLayout } from '@Layouts/PaddingLayout';
+import { PageLayout } from '@Layouts/PageLayout';
+import { VerticalLayout } from '@Layouts/VerticalLayout';
+import { Tokens } from '@Styles/tokens';
+import { CompCount, MyComment, MyCompliment, UserAuth } from '@Types/index';
+import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
-import { v4 as uuid } from 'uuid';
+import { FeedTab } from './FeedTab';
+const { space, fontSizes, sizes, radii } = Tokens;
 
-import * as C from './Components';
-
-const tabs = [
-  {
-    name: '내가 쓴 칭찬해줘',
-    list: [
-      {
-        id: uuid(),
-        content: '떡볶이 먹고 싶었는데 다욧중이라 참음',
-        commentCount: 25,
-        heartCount: 51,
-      },
-      {
-        id: uuid(),
-        content: '저가요 오늘요 무슨일이잇엇냐면요 맨날 부끄러워서ㅋㅋ',
-        commentCount: 18,
-        heartCount: 46,
-      },
-    ],
-  },
-  {
-    name: '내가 쓴 칭찬할게',
-    list: [
-      {
-        id: uuid(),
-        content: '돼지에서 벗어난 거 축하해~',
-        commentCount: null,
-        heartCount: 109,
-      },
-      {
-        id: uuid(),
-        content:
-          '그래 우리 재민이가 부끄러운데도 발표를 해서 친구들을 웃겨줬다니 기분이 좋았겠꾸나 아줌마는 회사에서 부장한테 웃기지도 않는 농담을 듣고 웃어야 해서 기분이 안 좋아요~',
-        commentCount: null,
-        heartCount: 75,
-      },
-    ],
-  },
-];
-
-export const MyFeedPage = () => {
+type FeedHeadProp = UserAuth & CompCount;
+const FeedHead = ({ nickname, profileUrl, writeCompCount, receiveCompCount }: FeedHeadProp) => {
   const navigate = useNavigate();
 
-  const handlePrevClick = () => {
-    navigate('/app');
-  };
-
   return (
-    <Layout.Root>
-      <Layout.Head>
-        <Header.Root>
-          <Header.Prev onClick={handlePrevClick} />
-          <Header.Title>내 피드</Header.Title>
-        </Header.Root>
-      </Layout.Head>
+    <>
+      <PaddingLayout.Double wFull>
+        <HorizontalLayout.Root>
+          <HorizontalLayout.Group gap={space.default}>
+            <IconButton onClick={() => navigate('/app', { replace: true })}>
+              <LeftIcon />
+            </IconButton>
 
-      <S.LayoutBody>
-        <S.BodyInnerLayout>
-          {/* <S.ListGroup>{settingListComponents}</S.ListGroup> */}
-          <C.FeedInfo />
+            <HeadTitle>내 피드</HeadTitle>
+          </HorizontalLayout.Group>
+        </HorizontalLayout.Root>
+      </PaddingLayout.Double>
 
-          <C.TabList tabs={tabs} />
-        </S.BodyInnerLayout>
-      </S.LayoutBody>
-    </Layout.Root>
+      <PaddingLayout.SideDouble wFull>
+        <ProfileBox>
+          <VerticalLayout gap={space.default}>
+            <HorizontalLayout.Root>
+              <HorizontalLayout.Group gap={space.default}>
+                <ProfileImage url={`/profile/${profileUrl}`} />
+
+                <VerticalLayout>
+                  <Nickname>{nickname}</Nickname>
+                  <HandleId>@im_jmjm</HandleId>
+                </VerticalLayout>
+              </HorizontalLayout.Group>
+            </HorizontalLayout.Root>
+
+            <FillWithPoint>
+              <HorizontalLayout.Group gap={space.default}>
+                <StyledGiveHeartIcon />
+
+                <VerticalLayout>
+                  <CategoryName>내가 쓴 칭찬</CategoryName>
+                  <Counter>{writeCompCount}개</Counter>
+                </VerticalLayout>
+              </HorizontalLayout.Group>
+
+              <HorizontalLayout.Group gap={space.default}>
+                <StyledTakenHeartIcon />
+
+                <VerticalLayout>
+                  <CategoryName>내가 받은 칭찬</CategoryName>
+                  <Counter>{receiveCompCount}개</Counter>
+                </VerticalLayout>
+              </HorizontalLayout.Group>
+            </FillWithPoint>
+          </VerticalLayout>
+        </ProfileBox>
+      </PaddingLayout.SideDouble>
+    </>
   );
 };
+
+type FeedBodyProp = {
+  compliments: MyCompliment[];
+  comments: MyComment[];
+};
+
+const FeedBody = ({ compliments, comments }: FeedBodyProp) => {
+  return <FeedTab compliments={compliments} comments={comments} />;
+};
+
+export const MyFeedPage = () => {
+  const [meQuery, compCountQuery, complimentsQuery, commentsQuery] = useGetUserFeedData();
+
+  const isLoading =
+    meQuery.isPending ||
+    compCountQuery.isPending ||
+    complimentsQuery.isPending ||
+    commentsQuery.isPending;
+
+  if (isLoading) {
+    return;
+  }
+
+  const { data: userAuth } = meQuery;
+  const { data: compCount } = compCountQuery;
+  const { data: compliments } = complimentsQuery;
+  const { data: comments } = commentsQuery;
+
+  console.log({ userAuth, compCount });
+
+  const isLoaded = userAuth && compCount && compliments && comments;
+
+  return (
+    isLoaded && (
+      <PageLayout
+        head={<FeedHead {...userAuth} {...compCount} />}
+        body={<FeedBody compliments={compliments} comments={comments} />}
+      />
+    )
+  );
+};
+
+export const HeadTitle = styled.p({
+  ...fontSizes.menu,
+  fontWeight: '600',
+});
+
+export const ProfileImage = styled.div<{ url?: string }>(
+  {
+    ...radii.full,
+    display: 'inline-block',
+    width: sizes.profile.medium,
+    height: sizes.profile.medium,
+    overflow: 'hidden',
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+  },
+  ({ url }) => {
+    if (url) {
+      return { backgroundImage: `url('${url}')` };
+    }
+  }
+);
+
+export const ProfileBox = styled(PaddingLayout.Default)(
+  {
+    ...radii.small,
+  },
+  ({ theme }) => ({
+    border: `${theme.borderWidths.base._1} solid ${theme.colors.border.point}`,
+  })
+);
+
+export const Nickname = styled.p({ width: '100%', fontWeight: 600 });
+
+export const HandleId = styled.p({ width: '100%' }, ({ theme }) => ({
+  color: theme.colors.text.greyed,
+}));
+
+export const FillWithPoint = styled(HorizontalLayout.Root)({}, ({ theme }) => ({
+  color: theme.colors.text.point,
+}));
+
+export const StyledGiveHeartIcon = styled(GiveHeartIcon)({
+  width: sizes.icon.feedProfile,
+  height: sizes.icon.feedProfile,
+});
+
+export const StyledTakenHeartIcon = styled(TakenHeartIcon)({
+  width: sizes.icon.feedProfile,
+  height: sizes.icon.feedProfile,
+});
+
+export const CategoryName = styled.p({
+  ...fontSizes.default,
+  fontWeight: 600,
+});
+
+export const Counter = styled.p({
+  ...fontSizes.large,
+  fontWeight: 600,
+  width: '100%',
+});

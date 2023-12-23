@@ -3,6 +3,8 @@ import { Navigate, Outlet, redirect, useLoaderData } from 'react-router-dom';
 
 import * as API from '@API/index';
 
+import styled from '@emotion/styled';
+
 export const loader = (queryClient: QueryClient) => async () => {
   console.log('AppLayout Loader 옴');
   try {
@@ -25,16 +27,18 @@ export const AppLayout = () => {
   }
 
   const AnimatedOutlet = (
-    <div
-      style={{
-        width: '100dvw',
-        height: '100dvh',
-        boxShadow: '-50px 0 50px 1px rgba(0, 0, 0, .3)',
-      }}
-    >
+    <Background>
       <Outlet />
-    </div>
+    </Background>
   );
 
   return hasAuth || userAuth ? AnimatedOutlet : <Navigate to="/" replace />;
 };
+
+const Background = styled.div(
+  {
+    width: '100dvw',
+    height: '100dvh',
+  },
+  ({ theme }) => ({ background: theme.colors.background.default, color: theme.colors.text.default })
+);

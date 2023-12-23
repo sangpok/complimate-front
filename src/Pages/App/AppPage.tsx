@@ -64,7 +64,7 @@ const AppBody = () => {
 
   const { data: posts, isPending } = useGetPosts(lastViewId);
 
-  const [post, setPost] = useState<ComplementPost | null>(null);
+  const [post, setPost] = useState<ComplementPost | null>(posts ? posts[currentPostIndex] : null);
 
   useEffect(() => {
     if (posts === undefined) return;
@@ -75,7 +75,7 @@ const AppBody = () => {
     AppStore.setCurrentPostId(tmpPost.id);
   }, [posts, currentPostIndex]);
 
-  if (isPending || !posts || !post) {
+  if (isPending || !posts) {
     return <Skeleton />;
   }
 
@@ -89,7 +89,7 @@ const AppBody = () => {
     if (isPrev && isNotUnderflow) return AppStore.prevPost();
   };
 
-  return <PostCardWrapper post={post} onTransition={handleTransition} />;
+  return post && <PostCardWrapper post={post} onTransition={handleTransition} />;
 };
 
 export const AppPage = () => {
