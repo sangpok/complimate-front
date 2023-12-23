@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 type ContainerProp = {
   wFull?: boolean;
   hFull?: boolean;
+  gap?: string;
 };
 
 const Container = styled.div<ContainerProp>(
@@ -14,9 +15,10 @@ const Container = styled.div<ContainerProp>(
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  ({ wFull, hFull }) => ({
+  ({ wFull, hFull, gap }) => ({
     width: wFull ? '100%' : undefined,
     height: hFull ? '100%' : undefined,
+    gap: gap ? gap : undefined,
   })
 );
 

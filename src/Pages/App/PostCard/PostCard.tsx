@@ -84,6 +84,8 @@ const CardHeader = ({ post }: { post: ComplementPost }) => {
 const CardBody = ({ post }: { post: ComplementPost }) => {
   const { mutate } = useLikePost();
 
+  const hasMedia = post.mediaUrlList.length !== 0;
+
   const doubleTabCallback = useDoubleTap(() => {
     const prevLike = post.likeList.find(({ isLiked }) => isLiked);
 
@@ -105,7 +107,7 @@ const CardBody = ({ post }: { post: ComplementPost }) => {
     <>
       <div style={{ height: '100%' }} {...doubleTabCallback}>
         <DraggableComponent dragId="ContentBody" axis="y">
-          {post.mediaUrlList.length !== 0 && <PostImageList images={post.mediaUrlList} />}
+          {hasMedia && <PostImageList images={post.mediaUrlList} />}
 
           <S.PostTextContent>
             <p>{post.contents}</p>

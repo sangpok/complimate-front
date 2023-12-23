@@ -86,3 +86,21 @@ export type LikePostRequest = {
   postId: number;
   likeType: LikeType;
 };
+
+export type MyCompliment = {
+  id: number;
+  contents: string;
+  likeCount: number;
+  commentCount: number;
+};
+
+export type MyComment = {
+  id: number;
+  contents: string;
+  likeCount: number;
+};
+
+export type CompCount = {
+  writeCompCount: number;
+  receiveCompCount: number;
+};

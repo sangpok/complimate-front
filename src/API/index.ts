@@ -1,6 +1,7 @@
 import {
   CheckFieldResult,
   Comment,
+  CompCount,
   ComplementPost,
   CreateCommentRequest,
   CreateCommentResponse,
@@ -8,6 +9,8 @@ import {
   CreatePostResponse,
   LikePostRequest,
   MediaUrl,
+  MyComment,
+  MyCompliment,
   UserAuth,
 } from '@Types/index';
 
@@ -95,3 +98,7 @@ export const likePost = ({ postId, likeType }: LikePostRequest) =>
 
 export const likeComment = ({ postId, commentId }: { postId: number; commentId: number }) =>
   Fetcher.POST(`/complement/${postId}/comment/${commentId}/like`, { likeType: 'LIKE' });
+
+export const getCompCount = () => Fetcher.GET<CompCount>(`/mypage/compCount`);
+export const getMyCompliments = () => Fetcher.GET<MyCompliment[]>(`/mypage/compliment`);
+export const getMyComments = () => Fetcher.GET<MyComment[]>(`/mypage/_comment`); // TODO: EndPoint 바꾸기
