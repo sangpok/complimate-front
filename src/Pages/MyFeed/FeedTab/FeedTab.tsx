@@ -1,12 +1,9 @@
 import { MyComment, MyCompliment } from '@Types/index';
-import { ComponentType, useMemo, useRef } from 'react';
-import { Tab } from './Tab';
 import { AccordionList } from '../AccordionList';
-import DraggableComponent from '@Components/DraggableComponent';
+import { Tab } from './Tab';
 
-import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
-import useMeasure from 'react-use-measure';
+
 type TabContentProp<T> = { list: T[] };
 
 type FeedTabProp = {
