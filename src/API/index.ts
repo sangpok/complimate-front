@@ -102,3 +102,5 @@ export const likeComment = ({ postId, commentId }: { postId: number; commentId: 
 export const getCompCount = () => Fetcher.GET<CompCount>(`/mypage/compCount`);
 export const getMyCompliments = () => Fetcher.GET<MyCompliment[]>(`/mypage/compliment`);
 export const getMyComments = () => Fetcher.GET<MyComment[]>(`/mypage/_comment`); // TODO: EndPoint 바꾸기
+
+export const getPost = (postId: number) => Fetcher.GET<ComplementPost>(`/complement/${postId}`);

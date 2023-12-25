@@ -101,7 +101,7 @@ export const MyFeedPage = () => {
   const { data: compliments } = complimentsQuery;
   const { data: comments } = commentsQuery;
 
-  console.log({ userAuth, compCount });
+  console.log({ compliments, comments });
 
   const isLoaded = userAuth && compCount && compliments && comments;
 
