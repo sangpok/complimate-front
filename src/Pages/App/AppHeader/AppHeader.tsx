@@ -12,10 +12,23 @@ import {
 import { Tokens } from '@Styles/tokens';
 import { useNavigate } from 'react-router-dom';
 import { AppStore } from '@Store/AppStore';
+import { useQueryClient } from '@tanstack/react-query';
 const { space } = Tokens;
+
+import { motion, useAnimate } from 'framer-motion';
+import { useRef } from 'react';
 
 export const AppHeader = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [rotateScope, animateRotate] = useAnimate();
+  const rotateCount = useRef(0);
+
+  const handleRefresh = async () => {
+    queryClient.invalidateQueries({ queryKey: ['posts'] });
+    animateRotate(rotateScope.current, { rotate: `${360 * rotateCount.current}deg` });
+    rotateCount.current = rotateCount.current + 1;
+  };
 
   return (
     <PaddingLayout.Double wFull>
@@ -25,8 +38,10 @@ export const AppHeader = () => {
         </IconButton>
 
         <HorizontalLayout.Group gap={space.default}>
-          <IconButton onClick={() => {}}>
-            <RefreshIcon />
+          <IconButton onClick={() => handleRefresh()}>
+            <div ref={rotateScope} style={{ display: 'flex' }}>
+              <RefreshIcon />
+            </div>
           </IconButton>
 
           <IconButton onClick={() => navigate('/app/write', { replace: true })}>

@@ -35,6 +35,8 @@ const PostImageList = React.memo(({ images }: PostImageList) => {
     [gapVW, viewportWidth]
   ); // 100(vw) + 3.33(vw)
 
+  console.log({ viewportWidth, postImageWidth });
+
   const handleDragEnd = (_: unknown, panInfo: PanInfo) => {
     const { offset, velocity } = panInfo;
 
@@ -62,7 +64,7 @@ const PostImageList = React.memo(({ images }: PostImageList) => {
               <S.Image
                 key={`${image}-${index}`}
                 style={{
-                  backgroundImage: `url('${image.mediaUrl}')`,
+                  backgroundImage: `url('/${image.mediaUrl}')`,
                 }}
               />
             ))}

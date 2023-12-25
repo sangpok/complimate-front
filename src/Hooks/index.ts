@@ -1,7 +1,7 @@
 import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import * as API from '@API/index';
-import { SubmitCallbacks } from '@Types/index';
+import { ComplementPost, SubmitCallbacks } from '@Types/index';
 
 export const useCheckEmail = () => {
   const queryClient = useQueryClient();
@@ -188,6 +188,21 @@ export const useGetUserFeedData = () => {
       {
         queryKey: ['mypage', 'comments'],
         queryFn: API.getMyComments,
+      },
+    ],
+  });
+};
+
+export const useGetFeedPost = (postId: number) => {
+  return useQueries({
+    queries: [
+      {
+        queryKey: ['post', postId],
+        queryFn: () => API.getPost(postId),
+      },
+      {
+        queryKey: ['comments', postId],
+        queryFn: () => API.getComments(postId),
       },
     ],
   });
