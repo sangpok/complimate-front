@@ -15,7 +15,8 @@ import {
 } from '@Types/index';
 
 // const API_URI = 'http://localhost:3001' as const;
-const API_URI = 'http://172.30.1.12:3001' as const;
+// const API_URI = 'http://172.30.1.12:3001' as const;
+const API_URI = 'http://ec2-13-124-78-235.ap-northeast-2.compute.amazonaws.com:3001' as const;
 
 const handleResponse = async <T>(res: Response) => {
   if (res.ok) {
